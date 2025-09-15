@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Users table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -28,12 +29,14 @@ return new class extends Migration
             $table->timestamps(); // otomatis buat created_at & updated_at
         });
 
+        // Password reset tokens
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // Sessions
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -41,6 +44,16 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
+        });
+
+        // Events (fix duplikat)
+        Schema::create('events', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->date('event_date');
+            $table->string('location')->nullable();
+            $table->timestamps();
         });
     }
 
