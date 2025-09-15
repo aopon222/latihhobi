@@ -11,29 +11,33 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Users table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('nomor_telepon')->nullable(); // pakai underscore, bukan spasi
+            $table->string('nomor_telepon')->nullable();
             $table->date('tanggal_lahir')->nullable();
             $table->enum('role', ['admin', 'user'])->default('user');
+            $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
             $table->string('avatar')->nullable();
             $table->text('alamat')->nullable();
             $table->string('kota')->nullable();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
-            $table->timestamps(); // otomatis buat created_at & updated_at
+            $table->timestamps();
         });
 
+        // Password reset tokens
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // Sessions
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -41,6 +45,16 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
+        });
+
+        // Events (fix duplikat)
+        Schema::create('events', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->date('event_date');
+            $table->string('location')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -50,7 +64,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('sessions');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');
     }
 };
