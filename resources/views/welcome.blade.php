@@ -1,57 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latih Hobi - Landing Page</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-</head>
-<body>
-    <header>
-        <h1>Welcome to Latih Hobi</h1>
-        <nav>
-            <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
+@extends('layout.app')
+
+@section('title', 'LatihHobi - Platform Pembelajaran')
+
+@section('content')
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">LatihHobi</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="active">🏠 Home</a></li>
+                <li class="nav-item"><a href="#">📚 Ekskul Reguler</a></li>
+                <li class="nav-item"><a href="#">▶️ E-course</a></li>
+                <li class="nav-item"><a href="#">📅 Event</a></li>
             </ul>
+            <div class="auth-buttons">
+                <a href="#" class="btn-signin">Sign In</a>
+                <a href="#" class="btn-signup">Sign up</a>
+            </div>
         </nav>
     </header>
 
-    <main>
-        <section id="about">
-            <h2>About Us</h2>
-            <p>Latih Hobi is dedicated to helping you explore and develop your hobbies.</p>
-        </section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <h1>LATIH HOBI</h1>
+            <p>Merupakan platform pengembangan bakat yang membantu anak orang tua dan sekolah untuk mengembangkan potensi kemampuan anak di bidangnya masing-masing dengan ekosistem belajar yang lengkap, terukur dan tutor yang kompeten.</p>
+            <a href="#" class="btn-start">START E-COURSE</a>
+        </div>
+    </section>
 
-        <section id="services">
-            <h2>Our Services</h2>
-            <ul>
-                <li>Workshops</li>
-                <li>Online Courses</li>
-                <li>Community Events</li>
-            </ul>
-        </section>
+    <!-- Services Section -->
+    <section class="services">
+        <div class="services-container">
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">📚</div>
+                    <div class="service-title">Ekskul Reguler</div>
+                    <div class="service-subtitle">Sekolah</div>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">✅</div>
+                    <div class="service-title">E-Course</div>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">👥</div>
+                    <div class="service-title">Komunitas &</div>
+                    <div class="service-subtitle">Club</div>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">👨‍🏫</div>
+                    <div class="service-title">Private Class</div>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">👥</div>
+                    <div class="service-title">LHEC 2025</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <section id="contact">
-            <h2>Contact Us</h2>
-            <form action="#" method="POST">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-                
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" required></textarea>
-                
-                <button type="submit">Send Message</button>
-            </form>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2023 Latih Hobi. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+    <!-- About Section -->
+    <section class="about">
+        <div class="about-container">
+            <h2>Ekskul Reguler</h2>
+            <p>"Ekskul Reguler LatihHobi adalah program ekstrakurikuler mingguan berbasis proyek yang berlangsung berdasarkan silabus yang sistematis & berlevel. Program ini dirancang untuk anak-anak usia sekolah dan didampingi oleh tutor kompeten, serta melibatkan peran aktif orang tua dan sekolah. Dilaksanakan secara rutin setiap minggu, ekskul ini bisa dijalankan di sekolah mitra LatihHobi."</p>
+            <a href="#" class="btn-show-all">SHOW ALL EKSKUL</a>
+        </div>
+    </section>
+@endsection

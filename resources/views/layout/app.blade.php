@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'LatihHobi') }}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <title>@yield('title', 'LatihHobi - Platform Pembelajaran')</title>
     <style>
-        /* Reset */
         * {
             margin: 0;
             padding: 0;
@@ -15,400 +12,318 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #4a5568;
-            min-height: 100vh;
-            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #4a5568;
         }
 
-        /* Navbar Styles */
-        .navbar-custom {
+        /* Header Styles */
+        .header {
             background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
 
-        .navbar-custom .navbar-brand {
-            color: #1a202c !important;
-        }
-
-        /* Logo Styles */
-        .logo-container {
+        .navbar {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .logo-ai {
-            background: linear-gradient(45deg, #fbbf24, #f59e0b);
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 2px;
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #17a2b8;
         }
 
-        .logo-text {
-            color: #22d3ee;
-            font-weight: bold;
-            font-size: 1.3rem;
-            line-height: 1;
+        .logo::before {
+            content: "📚";
+            margin-right: 0.5rem;
         }
 
-        .logo-subtext {
-            display: block;
-            font-size: 0.7rem;
-            color: #f59e0b;
-            line-height: 1;
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
         }
 
-        /* Navigation Links */
-        .navbar-custom .nav-link {
-            color: #64748b !important;
+        .nav-item a {
+            text-decoration: none;
+            color: #666;
             font-weight: 500;
-            padding: 8px 16px !important;
-            border-radius: 6px;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
+            position: relative;
         }
 
-        .navbar-custom .nav-link:hover {
-            color: #f59e0b !important;
-            background-color: #fef3c7;
+        .nav-item a:hover,
+        .nav-item a.active {
+            color: #17a2b8;
         }
 
-        /* Specific nav link colors */
-        .nav-home.active {
-            color: #f59e0b !important;
-            background-color: #fef3c7;
+        .nav-item a.active::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #17a2b8;
         }
 
-        .nav-home.active .bi-house-door-fill {
-            color: #f59e0b;
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
         }
 
-        .nav-regular:hover {
-            color: #f59e0b !important;
+        .btn-signin {
+            color: #17a2b8;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
         }
 
-        .nav-ecourse .bi-play-fill {
-            color: #22d3ee;
+        .btn-signin:hover {
+            background: #e6f7ff;
         }
 
-        .nav-event .bi-calendar-event {
-            color: #f59e0b;
-        }
-
-        /* Right side icons */
-        .nav-search, .nav-cart {
-            color: #f59e0b !important;
-        }
-
-        .nav-signin {
-            color: #64748b !important;
-        }
-
-        .nav-signin:hover {
-            color: #f59e0b !important;
-        }
-
-        /* Sign up button */
         .btn-signup {
-            background-color: #22d3ee;
-            color: #fff;
-            font-weight: 600;
-            border-radius: 8px;
-            padding: 8px 16px;
-            border: none;
-            transition: all 0.3s ease;
+            background: #17a2b8;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
         }
 
         .btn-signup:hover {
-            background-color: #0891b2;
-            color: #fff;
-            transform: translateY(-1px);
-        }
-
-        /* Dropdown menu styling */
-        .dropdown-menu {
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .dropdown-item:hover {
-            background-color: #fef3c7;
-            color: #f59e0b;
+            background: #138496;
         }
 
         /* Hero Section */
-        .hero-section {
-            text-align: center;
-            padding: 100px 0 80px 0;
+        .hero {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 50%, #1a202c 100%);
             color: white;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            margin-top: 70px;
         }
 
-        .hero-title {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero-description {
-            font-size: 18px;
-            line-height: 1.8;
+        .hero-content {
             max-width: 800px;
-            margin: 0 auto 50px;
-            color: rgba(255, 255, 255, 0.9);
+            margin: 0 auto;
         }
 
-        .btn-cta {
-            display: inline-block;
-            background: #22d3ee;
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        .btn-start {
+            background: #17a2b8;
             color: white;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: 600;
             text-decoration: none;
+            padding: 1rem 2rem;
             border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: inline-block;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .btn-cta:hover {
-            background: #0891b2;
+        .btn-start:hover {
+            background: #138496;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(34, 211, 238, 0.4);
+            box-shadow: 0 10px 20px rgba(23, 162, 184, 0.3);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 4rem 5%;
+            background: #f8fafc;
+        }
+
+        .services-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: #17a2b8;
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.2);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(23, 162, 184, 0.3);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* About Section */
+        .about {
+            padding: 4rem 5%;
+            background: white;
+        }
+
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about h2 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 2rem;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .btn-show-all {
+            background: #2d3748;
             color: white;
             text-decoration: none;
+            padding: 0.8rem 2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            display: inline-block;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
 
-        /* Features Section */
-        .features-section {
-            padding: 60px 0;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-        .feature-card {
-            background: #22d3ee;
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            color: white;
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            background: #0891b2;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(34, 211, 238, 0.3);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 28px;
-        }
-
-        .feature-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(0, 0, 0, 0.2);
-            color: white;
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 80px;
+        .btn-show-all:hover {
+            background: #1a202c;
         }
 
         /* Responsive Design */
-        @media (max-width: 1024px) {
-            .features-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 15px;
-            }
-        }
-
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 36px;
+            .navbar {
+                padding: 1rem 3%;
             }
 
-            .hero-description {
-                font-size: 16px;
-                padding: 0 20px;
+            .nav-menu {
+                display: none;
             }
 
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
+            .hero {
+                padding: 6rem 3% 3rem;
             }
 
-            .feature-card {
-                padding: 25px 15px;
+            .hero h1 {
+                font-size: 2.2rem;
             }
 
-            .feature-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
+            .hero p {
+                font-size: 1rem;
             }
 
-            .feature-title {
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
             }
 
-            .hero-section {
-                padding: 60px 0;
+            .service-card {
+                padding: 1.5rem;
             }
 
-            .hero-title {
-                font-size: 28px;
-            }
-
-            .btn-cta {
-                padding: 12px 30px;
-                font-size: 16px;
+            .services, .about {
+                padding: 3rem 3%;
             }
         }
 
-        /* Override Bootstrap container */
-        .container {
-            max-width: 1200px;
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
         }
 
-        /* Remove Bootstrap's margin-top from container */
-        body > .container {
-            margin-top: 0 !important;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
-    @include('layout.navbar')
-
     @yield('content')
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Latihhobi. Semua hak dilindungi undang-undang.</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Smooth scrolling untuk navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Interactive Feature Cards
-        document.addEventListener('DOMContentLoaded', function() {
-            const featureCards = document.querySelectorAll('.feature-card');
-            const detailContents = document.querySelectorAll('.detail-content');
-            
-            // Show first detail by default
-            if (detailContents.length > 0) {
-                detailContents[0].style.display = 'block';
-                detailContents[0].classList.add('active');
-                featureCards[0].classList.add('active');
-            }
-            
-            featureCards.forEach((card, index) => {
-                card.addEventListener('click', function() {
-                    // Remove active class from all cards
-                    featureCards.forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked card
-                    this.classList.add('active');
-                    
-                    // Hide all detail contents
-                    detailContents.forEach(content => {
-                        content.classList.remove('active');
-                        setTimeout(() => {
-                            content.style.display = 'none';
-                        }, 300);
-                    });
-                    
-                    // Show corresponding detail content
-                    setTimeout(() => {
-                        if (detailContents[index]) {
-                            detailContents[index].style.display = 'block';
-                            setTimeout(() => {
-                                detailContents[index].classList.add('active');
-                            }, 50);
-                        }
-                    }, 300);
-                });
-                
-                // Hover effects
-                card.addEventListener('mouseenter', function() {
-                    if (!this.classList.contains('active')) {
-                        this.style.transform = 'translateY(-5px)';
-                    }
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    if (!this.classList.contains('active')) {
-                        this.style.transform = 'translateY(0)';
-                    }
-                });
-            });
-        });
-
-        // Scroll animations
+        // Simple scroll animation
         const observerOptions = {
-            threshold: 0.2,
+            threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver(function(entries) {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
         }, observerOptions);
 
-        // Observe detail sections
-        document.querySelectorAll('.detail-content').forEach(content => {
-            observer.observe(content);
-        });
-    </script>
-</body>
-</html>
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(e
