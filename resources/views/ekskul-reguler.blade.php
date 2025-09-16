@@ -51,15 +51,26 @@
             <div class="user-menu">
                 <a href="#" class="user-icon">🔍</a>
                 <a href="#" class="user-icon">🛒</a>
+                @php
+                    $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
+                    $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
+                    $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
+                @endphp
                 @auth
                     <span class="username">{{ auth()->user()->name }}</span>
+                    @if($hasLogoutRoute)
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="btn-signin">Logout</button>
                     </form>
+                    @endif
                 @else
+                    @if($hasLoginRoute)
                     <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
+                    @endif
+                    @if($hasRegisterRoute)
                     <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
+                    @endif
                 @endauth
             </div>
         </nav>

@@ -57,13 +57,103 @@
                 <li class="nav-item me-3">
                     <a class="nav-link nav-cart" href="#"><i class="bi bi-cart fs-5"></i></a>
                 </li>
-                <li class="nav-item me-3">
-                    <a class="nav-link nav-signin" href="{{ route('login') }}">Sign in</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-signup" href="{{ route('register') }}">Sign up</a>
-                </li>
+                @php
+                    $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
+                    $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
+                    $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
+                @endphp
+                @auth
+                    <li class="nav-item me-3">
+                        <span class="nav-link">{{ auth()->user()->name }}</span>
+                    </li>
+                    @if($hasLogoutRoute)
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="btn btn-signup" type="submit">Logout</button>
+                        </form>
+                    </li>
+                    @endif
+                @else
+                    @if($hasLoginRoute)
+                    <li class="nav-item me-3">
+                        <a class="nav-link nav-signin" href="{{ route('login') }}">Sign in</a>
+                    </li>
+                    @endif
+                    @if($hasRegisterRoute)
+                    <li class="nav-item">
+                        <a class="btn btn-signup" href="{{ route('register') }}">Sign up</a>
+                    </li>
+                    @endif
+                @endauth
             </ul>
         </div>
     </div>
+</nav>
+                        <li><a class="dropdown-item" href="#">Kursus B</a></li>
+
+                    </ul>
+
+                </li>
+
+
+
+                <!-- Dropdown Event -->
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle nav-event" href="#" role="button" data-bs-toggle="dropdown">
+
+                        <i class="bi bi-calendar-event me-1"></i> Event
+
+                    </a>
+
+                    <ul class="dropdown-menu">
+
+                        <li><a class="dropdown-item" href="#">Event A</a></li>
+
+                        <li><a class="dropdown-item" href="#">Event B</a></li>
+
+                    </ul>
+
+                </li>
+
+            </ul>
+
+
+
+            <!-- Right Side -->
+
+            <ul class="navbar-nav ms-auto align-items-center">
+
+                <li class="nav-item me-3">
+
+                    <a class="nav-link nav-search" href="#"><i class="bi bi-search fs-5"></i></a>
+
+                </li>
+
+                <li class="nav-item me-3">
+
+                    <a class="nav-link nav-cart" href="#"><i class="bi bi-cart fs-5"></i></a>
+
+                </li>
+
+                <li class="nav-item me-3">
+
+                    <a class="nav-link nav-signin" href="{{ route('login') }}">Sign in</a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="btn btn-signup" href="{{ route('register') }}">Sign up</a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
 </nav>

@@ -6,24 +6,8 @@
     <!-- Header -->
     <header class="header">
         <nav class="navbar">
-<<<<<<< HEAD
-            <div class="logo">
-                <i class="fas fa-graduation-cap"></i>
-                LATIHHOBI
-            </div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="#" class="active">Home</a></li>
-                <li class="nav-item"><a href="#">Courses</a></li>
-                <li class="nav-item"><a href="#">About</a></li>
-                <li class="nav-item"><a href="#">Contact</a></li>
-            </ul>
-            <div class="auth-buttons">
-                <a href="#" class="btn-signin">Login</a>
-                <a href="#" class="btn-signup">Register</a>
-=======
             <a href="/" class="logo">
                 <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-                
             </a>
             <ul class="nav-menu">
                 <li class="nav-item"><a href="#" class="active">Home</a></li>
@@ -66,17 +50,27 @@
             <div class="user-menu">
                 <a href="#" class="user-icon">🔍</a>
                 <a href="#" class="user-icon">🛒</a>
+                @php
+                    $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
+                    $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
+                    $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
+                @endphp
                 @auth
                     <span class="username">{{ auth()->user()->name }}</span>
+                    @if($hasLogoutRoute)
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="btn-signin">Logout</button>
                     </form>
+                    @endif
                 @else
+                    @if($hasLoginRoute)
                     <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
+                    @endif
+                    @if($hasRegisterRoute)
                     <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
+                    @endif
                 @endauth
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
             </div>
         </nav>
     </header>
@@ -85,13 +79,8 @@
     <section class="hero">
         <div class="hero-content fade-in">
             <h1>LATIH HOBI</h1>
-<<<<<<< HEAD
-            <p>Mari bergabung platform pembelajaran hobi online yang menyenangkan, mudah, dan hemat waktu! Dapatkan akses dengan akses menyeluruh berbagai mata pembelajaran dan berkembang tantalah dengan dukungan pengajar yang lengkap, berlisensi dan buku yang bergaransi.</p>
-            <a href="#" class="btn-start">START E-COURSE</a>
-=======
             <p>Merupakan platform pengembangan bakat, yang membantu anak, orang tua dan sekolah untuk mengembangkan potensi kemampuan anak di bidangnya masing-masing dengan ekosistem belajar yang lengkap, terukur dan tutor yang kompeten.</p>
             <a href="/ecourse" class="btn-start">START E-COURSE</a>
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
         </div>
     </section>
 

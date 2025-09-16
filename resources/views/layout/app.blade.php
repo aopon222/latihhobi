@@ -40,19 +40,6 @@
         .logo {
             display: flex;
             align-items: center;
-<<<<<<< HEAD
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .logo i {
-            margin-right: 10px;
-            background: white;
-            color: #00a8e6;
-            padding: 8px;
-            border-radius: 50%;
-=======
             text-decoration: none;
             transition: opacity 0.3s ease;
         }
@@ -77,7 +64,6 @@
             color: #666;
             font-weight: 500;
             margin-top: 2px;
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
         }
 
         .nav-menu {
@@ -90,10 +76,6 @@
         .nav-item a {
             color: white;
             text-decoration: none;
-<<<<<<< HEAD
-=======
-            color: #333;
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
             font-weight: 500;
             transition: color 0.3s;
             position: relative;
@@ -102,11 +84,7 @@
 
         .nav-item a:hover,
         .nav-item a.active {
-<<<<<<< HEAD
             color: #e0f7ff;
-=======
-            color: #007bff;
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
         }
 
         .nav-item a.active::after {
@@ -116,11 +94,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-<<<<<<< HEAD
             background: white;
-=======
-            background: #007bff;
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
         }
 
         .dropdown-arrow {
@@ -181,7 +155,17 @@
             gap: 1rem;
         }
 
-<<<<<<< HEAD
+        .user-icon {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .user-icon:hover {
+            color: #e0f7ff;
+        }
+
         .btn-signin, .btn-signup {
             padding: 8px 20px;
             border: 2px solid white;
@@ -189,26 +173,6 @@
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s;
-=======
-        .user-icon {
-            color: #333;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
-        }
-
-        .user-icon:hover {
-            color: #007bff;
-        }
-
-        .btn-signin {
-            color: #007bff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-            font-weight: 500;
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
         }
 
         .btn-signin {
@@ -217,7 +181,6 @@
         }
 
         .btn-signup {
-<<<<<<< HEAD
             background: white;
             color: #00a8e6;
         }
@@ -230,32 +193,15 @@
         .btn-signup:hover {
             background: transparent;
             color: white;
-=======
-            background: #007bff;
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-            font-weight: 500;
-        }
-
-        .btn-signup:hover {
-            background: #0056b3;
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
         }
 
         /* Hero Section */
         .hero {
-<<<<<<< HEAD
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-=======
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
                         url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
             color: white;
             text-align: center;
             padding: 100px 5% 80px;
@@ -286,33 +232,15 @@
         }
 
         .btn-start {
-<<<<<<< HEAD
-            background: #00a8e6;
-            color: white;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 30px;
-=======
             background: #007bff;
             color: white;
             text-decoration: none;
             padding: 1rem 2.5rem;
             border-radius: 8px;
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
             font-size: 1.1rem;
             font-weight: 600;
             text-decoration: none;
             display: inline-block;
-<<<<<<< HEAD
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0,168,230,0.3);
-        }
-
-        .btn-start:hover {
-            background: #0080b8;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,168,230,0.4);
-=======
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -323,7 +251,6 @@
             background: #0056b3;
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
->>>>>>> 3c314e66f12a1c0e3340ed87fd439ac02c758a6c
         }
 
         /* Services Section */
