@@ -19,6 +19,9 @@ Route::get('/event', function () {
     return view('event');
 });
 
+// E-Course: Film & Konten Kreator landing page
+Route::view('/course-film-konten-kreator', 'course-film-konten-kreator')->name('course.film_konten_kreator');
+
 // Auth pages (UI only) to resolve missing named routes and show sign-in/register screens
 Route::view('/login', 'auth.login')->name('login');
 Route::view('/register', 'auth.register')->name('register');
