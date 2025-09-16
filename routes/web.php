@@ -21,6 +21,9 @@ Route::get('/event', function () {
 
 // E-Course: Film & Konten Kreator landing page
 Route::view('/course-film-konten-kreator', 'course-film-konten-kreator')->name('course.film_konten_kreator');
+// Backward-compatible paths to avoid 404s from older links
+Route::redirect('/ecourse/film', '/course-film-konten-kreator');
+Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
 
 // Auth pages (UI only) to resolve missing named routes and show sign-in/register screens
 Route::view('/login', 'auth.login')->name('login');
