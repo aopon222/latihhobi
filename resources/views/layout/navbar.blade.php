@@ -32,8 +32,9 @@
                         <i class="bi bi-play-fill me-1"></i> Ecourse
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Kursus A</a></li>
-                        <li><a class="dropdown-item" href="#">Kursus B</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/ecourse') }}">Ecourse Robotik</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/course-film-konten-kreator') }}">Ecourse Film & Konten Kreator</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/ecourse') }}">Ecourse Komik</a></li>
                     </ul>
                 </li>
 

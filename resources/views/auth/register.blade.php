@@ -3,6 +3,7 @@
 @section('title', 'Sign up - LatihHobi')
 
 @section('content')
+<<<<<<< HEAD
     <section class="ecourse-hero">
         <div class="ecourse-hero-content">
             <h1>Sign up</h1>
@@ -36,7 +37,50 @@
                     <button class="btn-category" type="submit" style="width:100%">Create account</button>
                 </div>
             </form>
+=======
+    <section class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi" class="auth-logo">
+                <h2>Create an Account</h2>
+            </div>
+
+            <form method="POST" action="#">
+                @csrf
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Full Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input id="email" name="email" type="email" class="form-control" placeholder="Email Address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Confirm Password" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Sign up</button>
+            </form>
+
+            <div class="auth-footer">
+                <span>Already have an account?</span>
+                <a href="{{ route('login') }}" class="link">Sign in</a>
+            </div>
+>>>>>>> 6316f588acf8a25da91ca151a34aebd9f8379c00
         </div>
     </section>
 @endsection
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6316f588acf8a25da91ca151a34aebd9f8379c00

@@ -3,6 +3,7 @@
 @section('title', 'Sign in - LatihHobi')
 
 @section('content')
+<<<<<<< HEAD
     <section class="ecourse-hero">
         <div class="ecourse-hero-content">
             <h1>Sign in</h1>
@@ -38,7 +39,47 @@
                     <button class="btn-category" type="submit" style="width:100%">Sign in</button>
                 </div>
             </form>
+=======
+    <section class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi" class="auth-logo">
+                <h2>Sign in</h2>
+            </div>
+
+            <form method="POST" action="#">
+                @csrf
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input id="email" name="email" type="email" class="form-control" placeholder="Email Address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" required>
+                </div>
+
+                <div class="form-actions">
+                    <label class="checkbox">
+                        <input type="checkbox" name="remember"> Ingat Saya
+                    </label>
+                    <a href="#" class="link-small">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-primary">Log Masuk</button>
+            </form>
+
+            <div class="auth-footer">
+                <span>Don't have an account?</span>
+                <a href="{{ route('register') }}" class="link">Register Now</a>
+            </div>
+>>>>>>> 6316f588acf8a25da91ca151a34aebd9f8379c00
         </div>
     </section>
 @endsection
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6316f588acf8a25da91ca151a34aebd9f8379c00

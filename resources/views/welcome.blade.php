@@ -15,15 +15,15 @@
                 <li class="nav-item dropdown">
                     <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
                     <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">
+                        <a href="/ecourse" class="dropdown-item">
                             <span class="dropdown-icon">🤖</span>
                             Ecourse Robotik
                         </a>
-                        <a href="#" class="dropdown-item">
+                        <a href="/course-film-konten-kreator" class="dropdown-item">
                             <span class="dropdown-icon">🎬</span>
-                            Ecourse Film & Kont...
+                            Ecourse Film & Konten Kreator
                         </a>
-                        <a href="#" class="dropdown-item">
+                        <a href="/ecourse" class="dropdown-item">
                             <span class="dropdown-icon">📖</span>
                             Ecourse Komik
                         </a>
