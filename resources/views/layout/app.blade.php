@@ -20,7 +20,7 @@
 
         /* Header Styles */
         .header {
-            background: linear-gradient(135deg, #00a8e6 0%, #0080b8 100%);
+            background: #fff; /* putih */
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: fixed;
             width: 100%;
@@ -74,7 +74,7 @@
         }
 
         .nav-item a {
-            color: white;
+            color: #ffc107; /* kuning */
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
@@ -84,7 +84,7 @@
 
         .nav-item a:hover,
         .nav-item a.active {
-            color: #e0f7ff;
+            color: #ffeb3b; /* kuning lebih terang saat hover */
         }
 
         .nav-item a.active::after {
@@ -94,7 +94,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background: white;
+            background: #ffc107; /* underline kuning */
         }
 
         .dropdown-arrow {
@@ -150,7 +150,7 @@
         }
 
         .user-menu {
-            display: flex;
+            display: flex !important;
             align-items: center;
             gap: 1rem;
         }
@@ -168,7 +168,7 @@
 
         .btn-signin, .btn-signup {
             padding: 8px 20px;
-            border: 2px solid white;
+            border: 2px solid #ffc107;
             border-radius: 25px;
             text-decoration: none;
             font-weight: 500;
@@ -176,28 +176,29 @@
         }
 
         .btn-signin {
-            color: white;
+            color: #ffc107;
             background: transparent;
         }
 
         .btn-signup {
-            background: white;
-            color: #00a8e6;
+            background: #ffc107;
+            color: #fff;
         }
 
         .btn-signin:hover {
-            background: white;
-            color: #00a8e6;
+            background: #ffc107;
+            color: #fff;
         }
 
         .btn-signup:hover {
             background: transparent;
-            color: white;
+            color: #ffc107;
+            border: 2px solid #ffc107;
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
                         url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80');
             background-size: cover;
             background-position: center;
@@ -1622,7 +1623,7 @@
             card.addEventListener('mouseenter', function() {
                 this.style.background = '#0080b8';
             });
-            
+
             card.addEventListener('mouseleave', function() {
                 this.style.background = '#00a8e6';
             });

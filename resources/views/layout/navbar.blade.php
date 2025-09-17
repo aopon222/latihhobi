@@ -25,7 +25,7 @@
                 <li class="nav-item">
                     <a class="nav-link nav-regular" href="#program">Ekskul Reguler</a>
                 </li>
-                
+
                 <!-- Dropdown Ecourse -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle nav-ecourse" href="#" role="button" data-bs-toggle="dropdown">
@@ -53,10 +53,9 @@
             <!-- Right Side -->
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item me-3">
-                    <a class="nav-link nav-search" href="#"><i class="bi bi-search fs-5"></i></a>
-                </li>
-                <li class="nav-item me-3">
-                    <a class="nav-link nav-cart" href="#"><i class="bi bi-cart fs-5"></i></a>
+        </a>
+<a class="nav-link nav-search" href="#"><i class="fas fa-magnifying-glass fs-5"></i></a>
+<a class="nav-link nav-cart" href="#"><i class="fas fa-basket-shopping fs-5"></i></a>
                 </li>
                 @php
                     $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
