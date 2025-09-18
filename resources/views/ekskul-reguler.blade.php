@@ -161,27 +161,39 @@
     </section>
 
     <!-- Social Media Section -->
-    <section class="social-section">
-        <div class="social-container">
-            <h2>Ikuti Kami</h2>
-            <div class="social-icons">
-                <a href="#" class="social-icon instagram">📷</a>
-                <a href="#" class="social-icon facebook">📘</a>
-                <a href="#" class="social-icon youtube">📺</a>
-            </div>
+   <section class="social-section">
+    <div class="social-container">
+        <h2>Ikuti Kami</h2>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/latihhobi/" class="social-icon instagram">
+                <i class="fab fa-instagram" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="social-icon facebook">
+                <i class="fab fa-facebook" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.youtube.com/@latihhobi" class="social-icon youtube">
+                <i class="fab fa-youtube" style="font-size: 24px;"></i>
+            </a>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-left">
-                <p>© 2025 - Latihhobi</p>
+                <p>© 2025 - Latih hobi</p>
             </div>
             <div class="footer-right">
-                <a href="#" class="footer-social">📷</a>
-                <a href="#" class="footer-social">📘</a>
-                <a href="#" class="footer-social">📺</a>
+                <a href="https://www.instagram.com/latihhobi/" class="social-icon instagram">
+                <i class="fab fa-instagram" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="social-icon facebook">
+                <i class="fab fa-facebook" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.youtube.com/@latihhobi" class="social-icon youtube">
+                <i class="fab fa-youtube" style="font-size: 24px;"></i>
+            </a>
             </div>
         </div>
     </footer>
