@@ -8,7 +8,7 @@
         <nav class="navbar">
             <a href="/" class="logo">
                 <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-                
+
             </a>
             <ul class="nav-menu">
                 <li class="nav-item"><a href="/">Home</a></li>
@@ -89,49 +89,49 @@
             <div class="ekskul-grid">
                 <div class="ekskul-item">
                     <div class="ekskul-icon">
-                        <img src="{{ asset('images/placeholder-robotik.svg') }}" alt="Robotik" class="ekskul-icon-img">
+                        <img src="{{ asset('images/ROBONESIA.svg') }}" alt="ROBONESIA" class="ekskul-icon-img">
                     </div>
                     <h3>Robotik</h3>
                 </div>
                 <div class="ekskul-item">
                     <div class="ekskul-icon">
-                        <img src="{{ asset('images/placeholder-panahan.svg') }}" alt="Panahan" class="ekskul-icon-img">
+                        <img src="{{ asset('images/ARCHERY CLUB.svg') }}" alt="Archery" class="ekskul-icon-img">
                     </div>
                     <h3>Panahan</h3>
                 </div>
                 <div class="ekskul-item">
                     <div class="ekskul-icon">
-                        <img src="{{ asset('images/placeholder-komik.svg') }}" alt="Komik" class="ekskul-icon-img">
+                        <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="ekskul-icon-img">
                     </div>
                     <h3>Komik</h3>
                 </div>
                 <div class="ekskul-item">
                     <div class="ekskul-icon">
-                        <img src="{{ asset('images/placeholder-film.svg') }}" alt="Film & Konten Kreator" class="ekskul-icon-img">
+                        <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="ekskul-icon-img">
                     </div>
                     <h3>Film & Konten Kreator</h3>
                 </div>
                 <div class="ekskul-item">
                     <div class="ekskul-icon">
-                        <img src="{{ asset('images/placeholder-taekwondo.svg') }}" alt="Taekwondo" class="ekskul-icon-img">
+                        <img src="{{ asset('images/TAEKWONDO.svg') }}" alt="Taekwondo" class="ekskul-icon-img">
                     </div>
                     <h3>Taekwondo</h3>
                 </div>
                 <div class="ekskul-item">
                     <div class="ekskul-icon">
-                        <img src="{{ asset('images/placeholder-pencak-silat.svg') }}" alt="Pencak Silat" class="ekskul-icon-img">
+                        <img src="{{ asset('images/SILAT.svg') }}" alt="Pencak Silat" class="ekskul-icon-img">
                     </div>
                     <h3>Pencak Silat</h3>
                 </div>
                 <div class="ekskul-item">
                     <div class="ekskul-icon">
-                        <img src="{{ asset('images/placeholder-karate.svg') }}" alt="Karate" class="ekskul-icon-img">
+                        <img src="{{ asset('images/KARATE.svg') }}" alt="Karate" class="ekskul-icon-img">
                     </div>
                     <h3>Karate</h3>
                 </div>
                 <div class="ekskul-item">
                     <div class="ekskul-icon">
-                        <img src="{{ asset('images/placeholder-tahsin.svg') }}" alt="Tahsin & Tahfidz" class="ekskul-icon-img">
+                        <img src="{{ asset('images/TAHFIDZ.svg') }}" alt="Tahsin & Tahfidz" class="ekskul-icon-img">
                     </div>
                     <h3>Tahsin & Tahfidz</h3>
                 </div>
@@ -161,27 +161,39 @@
     </section>
 
     <!-- Social Media Section -->
-    <section class="social-section">
-        <div class="social-container">
-            <h2>Ikuti Kami</h2>
-            <div class="social-icons">
-                <a href="#" class="social-icon instagram">📷</a>
-                <a href="#" class="social-icon facebook">📘</a>
-                <a href="#" class="social-icon youtube">📺</a>
-            </div>
+   <section class="social-section">
+    <div class="social-container">
+        <h2>Ikuti Kami</h2>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/latihhobi/" class="social-icon instagram">
+                <i class="fab fa-instagram" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="social-icon facebook">
+                <i class="fab fa-facebook" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.youtube.com/@latihhobi" class="social-icon youtube">
+                <i class="fab fa-youtube" style="font-size: 24px;"></i>
+            </a>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-left">
-                <p>© 2025 - Latihhobi</p>
+                <p>© 2025 - Latih hobi</p>
             </div>
             <div class="footer-right">
-                <a href="#" class="footer-social">📷</a>
-                <a href="#" class="footer-social">📘</a>
-                <a href="#" class="footer-social">📺</a>
+                <a href="https://www.instagram.com/latihhobi/" class="social-icon instagram">
+                <i class="fab fa-instagram" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="social-icon facebook">
+                <i class="fab fa-facebook" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.youtube.com/@latihhobi" class="social-icon youtube">
+                <i class="fab fa-youtube" style="font-size: 24px;"></i>
+            </a>
             </div>
         </div>
     </footer>
