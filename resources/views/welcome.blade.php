@@ -167,15 +167,15 @@
             <p>E-Course Latihhobi adalah program terstruktur dengan durasi fleksibel sehingga memungkinkan peserta belajar sesuai dengan kebutuhan dan kemampuan masing-masing. Dengan materi yang terstruktur dan lengkap dalam bentuk video, audio, dan teks.</p>
 
             <div class="ecourse-cards">
-                <div class="ecourse-card fade-in">
+                <a href="/ecourse/robotik" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
                     <div class="ecourse-card-image robotik">ROBOTIK</div>
-                </div>
-                <div class="ecourse-card fade-in">
+                </a>
+                <a href="/ecourse-komik" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
                     <div class="ecourse-card-image komik">KOMIK</div>
-                </div>
-                <div class="ecourse-card fade-in">
+                </a>
+                <a href="/course-film-konten-kreator" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
                     <div class="ecourse-card-image film">FILM & CONTENT KREATOR</div>
-                </div>
+                </a>
             </div>
         </div>
     </section>

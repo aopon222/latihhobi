@@ -87,30 +87,30 @@
     <section class="ecourse-categories">
         <div class="ecourse-container">
             <div class="ecourse-grid">
-                <div class="ecourse-category">
+                <a href="/ecourse/robotik" class="ecourse-category" style="text-decoration:none;color:inherit;">
                     <div class="category-icon">
                         <img src="{{ asset('images/ROBONESIA.svg') }}" alt="Robotik" class="category-icon-img">
                     </div>
                     <h3>Ecourse Robotik</h3>
                     <p>Belajar robotik dengan proyek-proyek menarik dan interaktif</p>
-                    <a href="/ecourse/robotik" class="btn-category">Lihat Kursus</a>
-                </div>
-                <div class="ecourse-category">
+                    <span class="btn-category">Lihat Kursus</span>
+                </a>
+                <a href="/course-film-konten-kreator" class="ecourse-category" style="text-decoration:none;color:inherit;">
                     <div class="category-icon">
                         <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="category-icon-img">
                     </div>
                     <h3>Ecourse Film & Konten Kreator</h3>
                     <p>Kembangkan kreativitas dalam pembuatan film dan konten digital</p>
-                    <a href="/ecourse/film" class="btn-category">Lihat Kursus</a>
-                </div>
-                <div class="ecourse-category">
+                    <span class="btn-category">Lihat Kursus</span>
+                </a>
+                <a href="/ecourse-komik" class="ecourse-category" style="text-decoration:none;color:inherit;">
                     <div class="category-icon">
                         <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="category-icon-img">
                     </div>
                     <h3>Ecourse Komik</h3>
                     <p>Pelajari seni membuat komik dari dasar hingga mahir</p>
-                    <a href="/ecourse/komik" class="btn-category">Lihat Kursus</a>
-                </div>
+                    <span class="btn-category">Lihat Kursus</span>
+                </a>
             </div>
         </div>
     </section>
