@@ -16,7 +16,7 @@
                 <li class="nav-item dropdown">
                     <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
                     <div class="dropdown-menu">
-                        <a href="/ecourse-robotik" class="dropdown-item">
+                        <a href="/ecourse/robotik" class="dropdown-item">
                             <span class="dropdown-icon">🤖</span>
                             Ecourse Robotik
                         </a>
@@ -165,13 +165,13 @@
     <div class="social-container">
         <h2>Ikuti Kami</h2>
         <div class="social-icons">
-            <a href="https://www.instagram.com/latihhobi/" class="social-icon instagram">
+            <a href="https://www.instagram.com/latihhobi/" class="social-icon instagram" target="_blank">
                 <i class="fab fa-instagram" style="font-size: 24px;"></i>
             </a>
-            <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="social-icon facebook">
+            <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="social-icon facebook" target="_blank">
                 <i class="fab fa-facebook" style="font-size: 24px;"></i>
             </a>
-            <a href="https://www.youtube.com/@latihhobi" class="social-icon youtube">
+            <a href="https://www.youtube.com/@Latihhobi" class="social-icon youtube" target="_blank">
                 <i class="fab fa-youtube" style="font-size: 24px;"></i>
             </a>
         </div>

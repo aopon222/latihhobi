@@ -38,7 +38,7 @@
                 <li class="nav-item dropdown">
                     <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
                     <div class="dropdown-menu">
-                        <a href="/ecourse-robotik" class="dropdown-item">
+                        <a href="/ecourse/robotik" class="dropdown-item">
                             <span class="dropdown-icon">🤖</span>
                             Ecourse Robotik
                         </a>
