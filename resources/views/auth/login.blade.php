@@ -3,15 +3,13 @@
 @section('title', 'Sign in - LatihHobi')
 
 @section('content')
-<<<<<<< HEAD
-    <section class="ecourse-hero">
-        <div class="ecourse-hero-content">
-            <h1>Sign in</h1>
-        </div>
-    </section>
+    <section class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi" class="auth-logo">
+                <h2>Sign in</h2>
+            </div>
 
-    <section class="ecourse-categories">
-        <div class="ecourse-container" style="max-width:480px;margin:0 auto;">
             @if ($errors->any())
                 <div style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;">
                     <ul style="margin-left:1rem;">
@@ -30,39 +28,26 @@
 
             <form method="POST" action="{{ route('login.attempt') }}">
                 @csrf
-                <div style="display:flex;flex-direction:column;gap:1rem;">
-                    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required style="padding:0.8rem 1rem;border:1px solid #e5e7eb;border-radius:8px;">
-                    <input type="password" name="password" placeholder="Password" required style="padding:0.8rem 1rem;border:1px solid #e5e7eb;border-radius:8px;">
-                    <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:#374151;">
-                        <input type="checkbox" name="remember" value="1"> Remember me
-                    </label>
-                    <button class="btn-category" type="submit" style="width:100%">Sign in</button>
-                </div>
-            </form>
-=======
-    <section class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi" class="auth-logo">
-                <h2>Sign in</h2>
-            </div>
-
-            <form method="POST" action="#">
-                @csrf
 
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input id="email" name="email" type="email" class="form-control" placeholder="Email Address" required>
+                    <input id="email" name="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email Address" value="{{ old('email') }}" required autofocus>
+                    @error('email')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" required>
+                    <input id="password" name="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
+                    @error('password')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-actions">
                     <label class="checkbox">
-                        <input type="checkbox" name="remember"> Ingat Saya
+                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Ingat Saya
                     </label>
                     <a href="#" class="link-small">Forgot Password?</a>
                 </div>
@@ -74,12 +59,13 @@
                 <span>Don't have an account?</span>
                 <a href="{{ route('register') }}" class="link">Register Now</a>
             </div>
->>>>>>> 6316f588acf8a25da91ca151a34aebd9f8379c00
+
+            <div class="auth-footer" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                <a href="{{ route('home') }}" class="back-to-home">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </div>
         </div>
     </section>
 @endsection
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 6316f588acf8a25da91ca151a34aebd9f8379c00

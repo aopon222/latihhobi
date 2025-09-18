@@ -274,67 +274,223 @@
         <div class="podcast-container">
             <h2>TONTON PODCAST LATIHHOBI</h2>
             <div class="podcast-grid">
-                <div class="podcast-item">
+                @php
+                    $featuredPodcasts = \App\Models\Podcast::active()->featured()->ordered()->limit(4)->get();
+                @endphp
+                @foreach($featuredPodcasts as $podcast)
+                <div class="podcast-item" data-youtube-id="{{ $podcast->youtube_id }}">
                     <div class="podcast-thumbnail">
-                        <div class="play-button">▶️</div>
+                        <img src="{{ $podcast->thumbnail_url }}" alt="{{ $podcast->title }}" class="thumbnail-img">
+                        <div class="play-button"></div>
                         <div class="podcast-overlay">
-                            <h4>REVOLUSI PENDIDIKI</h4>
-                            <p>KURIKULUM ALAM RAYA</p>
-                            <span>WITH SEKOLAH ALAM GAHARI</span>
+                            <h4>{{ Str::limit($podcast->title, 20) }}</h4>
+                            <p>{{ Str::limit($podcast->description, 30) }}</p>
+                            <span>{{ $podcast->duration }}</span>
                         </div>
                     </div>
                     <div class="podcast-info">
-                        <h3>Revolusi Pendidikan - Kurikulum Alam Raya</h3>
-                        <p>Latih Hobi • 5,35 rb subscriber</p>
-                        <button class="btn-subscribe">Subscribe</button>
+                        <h3>{{ $podcast->title }}</h3>
+                        <p>{{ $podcast->host }} • {{ number_format($podcast->views) }} views</p>
+                        <a href="{{ route('podcasts.show', $podcast) }}" class="btn-subscribe">Tonton Sekarang</a>
                     </div>
                 </div>
-                <div class="podcast-item">
-                    <div class="podcast-thumbnail">
-                        <div class="play-button">▶️</div>
-                        <div class="podcast-overlay">
-                            <h4>PENTING BANGET!</h4>
-                            <p>BELAJAR TARTIL QURAN MERU</p>
-                            <span>WITH SDI ABU SENO</span>
-                        </div>
-                    </div>
-                    <div class="podcast-info">
-                        <h3>Penting Banget! - Belajar Tartil Quran Meru</h3>
-                        <p>Latih Hobi • 5,35 rb subscriber</p>
-                        <button class="btn-subscribe">Subscribe</button>
-                    </div>
-                </div>
-                <div class="podcast-item">
-                    <div class="podcast-thumbnail">
-                        <div class="play-button">▶️</div>
-                        <div class="podcast-overlay">
-                            <h4>TERNYATA BEGINI</h4>
-                            <p>KURIKULUM MERDEKA YANG</p>
-                            <span>GEMILANG MUTAFANNIN</span>
-                        </div>
-                    </div>
-                    <div class="podcast-info">
-                        <h3>Ternyata Begini - Kurikulum Merdeka yang Gemilang</h3>
-                        <p>Latih Hobi • 5,35 rb subscriber</p>
-                        <button class="btn-subscribe">Subscribe</button>
-                    </div>
-                </div>
-                <div class="podcast-item">
-                    <div class="podcast-thumbnail">
-                        <div class="play-button">▶️</div>
-                        <div class="podcast-overlay">
-                            <h4>BICARA PRESTASI</h4>
-                            <p>BAGAIMANA GENERASI ROB</p>
-                            <span>ROBOTIK INDONESIA</span>
-                        </div>
-                    </div>
-                    <div class="podcast-info">
-                        <h3>Bicara Prestasi - Bagaimana Generasi Robotik Indonesia</h3>
-                        <p>Latih Hobi • 5,35 rb subscriber</p>
-                        <button class="btn-subscribe">Subscribe</button>
-                    </div>
-                </div>
+                @endforeach
+            </div>
+            <div class="podcast-actions">
+                <a href="{{ route('podcasts.index') }}" class="btn-view-all">Lihat Semua Podcast</a>
             </div>
         </div>
     </section>
+
+    <!-- YouTube Modal Player -->
+    <div id="youtubeModal" class="youtube-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="video-container">
+                <iframe id="youtubePlayer" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* YouTube Modal Styles */
+        .youtube-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 2% auto;
+            width: 90%;
+            max-width: 1000px;
+            height: 90%;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(0,0,0,0.8);
+        }
+
+        .video-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Enhanced Play Button */
+        .podcast-item .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 0, 0, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            font-size: 0;
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .podcast-item .play-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: rgba(255, 0, 0, 1);
+            box-shadow: 0 6px 25px rgba(255, 0, 0, 0.5);
+        }
+
+        .podcast-item .play-button::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 24px solid white;
+            border-top: 14px solid transparent;
+            border-bottom: 14px solid transparent;
+            margin-left: 6px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                height: 70%;
+                margin: 10% auto;
+            }
+
+            .close-modal {
+                top: -40px;
+                font-size: 2rem;
+                width: 35px;
+                height: 35px;
+            }
+
+            .podcast-item .play-button {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .podcast-item .play-button::before {
+                border-left: 18px solid white;
+                border-top: 11px solid transparent;
+                border-bottom: 11px solid transparent;
+                margin-left: 4px;
+            }
+        }
+    </style>
+
+    <script>
+        // YouTube Modal functionality
+        const modal = document.getElementById('youtubeModal');
+        const player = document.getElementById('youtubePlayer');
+        const closeModal = document.querySelector('.close-modal');
+        const playButtons = document.querySelectorAll('.podcast-item .play-button');
+
+        // Add click event to all play buttons
+        playButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Get YouTube ID from parent element
+                const podcastItem = this.closest('.podcast-item');
+                const youtubeId = podcastItem.getAttribute('data-youtube-id');
+
+                if (youtubeId) {
+                    // Set video source with autoplay
+                    player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        // Close modal functionality
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+            player.src = '';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                player.src = '';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
+                player.src = '';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Pause video when modal is closed
+        function stopVideo() {
+            player.src = '';
+        }
+    </script>
 @endsection
