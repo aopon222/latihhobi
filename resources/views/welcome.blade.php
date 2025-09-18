@@ -127,7 +127,7 @@
         <div class="private-container">
             <h2>PRIVATE CLASS</h2>
             <p>Private Class Latihhobi adalah layanan pembelajaran privat dan berkelompok. Latihhobi private class memungkinkan pembelajaran menjadi lebih fokus karena participant dapat berkonsultasi lebih dalam dengan mentor yang mengajar dalam sesi pembelajaran private class. Berdasarkan data lapangan, private class adalah metode pembelajaran yang paling diminati yang dapat memiliki keefektifan waktu dan tempat belajar sekaligus dapat beradaptasi terhadap jadwal dan kondisi participant lebih dan tempat belajar sekaligus dapat beradaptasi terhadap jadwal dan kondisi participant yang menjalani kelas individual atau berkelompok level kecil adalah memberikan beberapa kepada peserta kursus yang ditulis.</p>
-            
+
             <div class="private-cards">
                 <div class="private-card fade-in">
                     <div class="private-card-image">
@@ -162,7 +162,7 @@
         <div class="ecourse-container">
             <h2>E-COURSE</h2>
             <p>E-Course Latihhobi adalah program terstruktur dengan durasi fleksibel sehingga memungkinkan peserta belajar sesuai dengan kebutuhan dan kemampuan masing-masing. Dengan materi yang terstruktur dan lengkap dalam bentuk video, audio, dan teks.</p>
-            
+
             <div class="ecourse-cards">
                 <div class="ecourse-card fade-in">
                     <div class="ecourse-card-image robotik">ROBOTIK</div>

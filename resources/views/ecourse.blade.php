@@ -89,7 +89,7 @@
             <div class="ecourse-grid">
                 <div class="ecourse-category">
                     <div class="category-icon">
-                        <img src="{{ asset('images/placeholder-robotik.svg') }}" alt="Robotik" class="category-icon-img">
+                        <img src="{{ asset('images/ROBONESIA.svg') }}" alt="Robotik" class="category-icon-img">
                     </div>
                     <h3>Ecourse Robotik</h3>
                     <p>Belajar robotik dengan proyek-proyek menarik dan interaktif</p>
@@ -97,7 +97,7 @@
                 </div>
                 <div class="ecourse-category">
                     <div class="category-icon">
-                        <img src="{{ asset('images/placeholder-film.svg') }}" alt="Film & Konten Kreator" class="category-icon-img">
+                        <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="category-icon-img">
                     </div>
                     <h3>Ecourse Film & Konten Kreator</h3>
                     <p>Kembangkan kreativitas dalam pembuatan film dan konten digital</p>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="ecourse-category">
                     <div class="category-icon">
-                        <img src="{{ asset('images/placeholder-komik.svg') }}" alt="Komik" class="category-icon-img">
+                        <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="category-icon-img">
                     </div>
                     <h3>Ecourse Komik</h3>
                     <p>Pelajari seni membuat komik dari dasar hingga mahir</p>
@@ -122,7 +122,7 @@
             <div class="products-grid">
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/placeholder-robotik.svg') }}" alt="Robot Robodust" class="product-img">
+                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-ROBODUST.svg') }}" alt="Robot Robodust" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>Robot Robodust</h3>
@@ -136,7 +136,7 @@
                 </div>
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/placeholder-robotik.svg') }}" alt="Robot Robofan" class="product-img">
+                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-ROBOFAN.svg') }}" alt="Robot Robofan" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>Robot Robofan</h3>
@@ -150,7 +150,7 @@
                 </div>
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/placeholder-robotik.svg') }}" alt="Robot Hemiptera" class="product-img">
+                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-HEMIPTERA.svg') }}" alt="Robot Hemiptera" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>Robot Hemiptera</h3>
@@ -179,6 +179,9 @@
                 </div>
                 <div class="coming-soon-card">
                     <div class="coming-soon-badge">COMING SOON</div>
+                    <div class="product-image">
+                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-AVOIDER.svg') }}" alt="Robot Hemiptera" class="product-img">
+                    </div>
                     <h3>Robot Avoider</h3>
                     <p>By Latihhobi</p>
                     <button class="btn-enroll" disabled>Enroll Course</button>
@@ -191,12 +194,18 @@
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-left">
-                <p>© 2025 - Latihhobi</p>
+                <p>© 2025 - Latih hobi</p>
             </div>
             <div class="footer-right">
-                <a href="#" class="footer-social">📷</a>
-                <a href="#" class="footer-social">📘</a>
-                <a href="#" class="footer-social">📺</a>
+                <a href="https://www.instagram.com/latihhobi/" class="social-icon instagram">
+                <i class="fab fa-instagram" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="social-icon facebook">
+                <i class="fab fa-facebook" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://www.youtube.com/@latihhobi" class="social-icon youtube">
+                <i class="fab fa-youtube" style="font-size: 24px;"></i>
+            </a>
             </div>
         </div>
     </footer>
