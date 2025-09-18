@@ -46,6 +46,15 @@
                         </a>
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a href="#"><span class="dropdown-icon">📷</span> Tentang Kami <span class="dropdown-arrow">▼</span></a>
+                    <div class="dropdown-menu">
+                        <a href="/karier" class="dropdown-item">Latih Hobi Karier</a>
+                        <a href="/magang" class="dropdown-item">Program Magang (Internship)</a>
+                        <a href="/profil" class="dropdown-item">PROFIL</a>
+                        <a href="/contact" class="dropdown-item">CONTACT</a>
+                    </div>
+                </li>
             </ul>
             <div class="user-menu">
                 <a href="#" class="user-icon">🔍</a>
@@ -56,13 +65,7 @@
                     $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
                 @endphp
                 @auth
-                    <span class="username">{{ auth()->user()->name }}</span>
-                    @if($hasLogoutRoute)
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn-signin">Logout</button>
-                    </form>
-                    @endif
+                    <!-- User dropdown dihilangkan sementara -->
                 @else
                     @if($hasLoginRoute)
                     <a href="{{ route('login') }}" class="btn-signin">Sign in</a>

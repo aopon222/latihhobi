@@ -1,3 +1,5 @@
+// E-Course Robotik landing page
+Route::view('/ecourse/robotik', 'ecourse-robotik')->name('course.robotik');
 <?php
 
 use Illuminate\Support\Facades\Route;
