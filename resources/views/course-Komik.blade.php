@@ -110,7 +110,7 @@
                 {{-- Card 1 --}}
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 1">
+                        <img class="thumb" src="{{ asset('images/E_COURSE_KEHIDUPAN_SEHARI_HARI_KOMIK.svg') }}" alt="Level 1">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -128,7 +128,7 @@
                 {{-- Card 2 --}}
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 2">
+                        <img class="thumb" src="{{ asset('images/E_COURSE_ISEKAI_KOMIK.svg') }}" alt="Level 2">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -146,7 +146,7 @@
                 {{-- Card 3 --}}
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 3">
+                        <img class="thumb" src="{{ asset('images/LV3_E_COURSE_HORROR_COMIC_KOMIK.svg') }}" alt="Level 3">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -160,7 +160,7 @@
                 {{-- Card 4 --}}
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 4">
+                        <img class="thumb" src="{{ asset('images/LV4_E_COURSE_COMIC_CONTENT_KOMIK.svg') }}" alt="Level 4">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
