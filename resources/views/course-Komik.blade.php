@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'E-COURSE Film & Konten Kreator - LatihHobi')
+@section('title', 'E-COURSE Komik - LatihHobi')
 
 @section('content')
     <style>
@@ -25,8 +25,6 @@
         .card-wrap { position:relative; border-radius:12px; overflow:hidden; }
     </style>
 
-
-    <!-- Header/Navbar -->
     <header class="header">
         <nav class="navbar">
             <a href="/" class="logo">
@@ -85,7 +83,6 @@
                 @php
                     $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
                     $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
-                    $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
                 @endphp
                 @auth
                     <!-- User dropdown dihilangkan sementara -->
@@ -103,21 +100,22 @@
 
     <section class="page-hero">
         <div class="container">
-            <h1>E-COURSE Film & Konten Kreator</h1>
+            <h1>E-COURSE KOMIK</h1>
         </div>
     </section>
 
     <section style="background:#04a6d6; padding:28px 0 56px;">
         <div class="container">
             <div class="grid">
+                {{-- Card 1 --}}
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 1">
+                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 1">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Kelas Film & Content Creator Level 1</h3>
-                        <p class="byline">By Latihhobi In Film & Konten Kreator</p>
+                        <h3 class="title">Kelas KOMIK Level 1</h3>
+                        <p class="byline">By Latihhobi In KOMIK</p>
                     </div>
                     <div class="footer">
                         <div>
@@ -127,15 +125,15 @@
                         <button class="btn-cart" type="button">🛒</button>
                     </div>
                 </article>
-
+                {{-- Card 2 --}}
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 2">
+                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 2">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Kelas Film & Content Creator Level 2</h3>
-                        <p class="byline">By Latihhobi In Film & Konten Kreator</p>
+                        <h3 class="title">Kelas KOMIK Level 2</h3>
+                        <p class="byline">By Latihhobi In KOMIK</p>
                     </div>
                     <div class="footer">
                         <div>
@@ -145,43 +143,43 @@
                         <button class="btn-cart" type="button">🛒</button>
                     </div>
                 </article>
-
+                {{-- Card 3 --}}
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 3">
+                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 3">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Photo Story & Video Product Level 3</h3>
-                        <p class="byline">By Latihhobi In Film & Konten Kreator</p>
+                        <h3 class="title">Terlindungi: (COMINGSOON) KOMIK Level 3</h3>
+                        <p class="byline">By Latihhobi In KOMIK</p>
                     </div>
                     <div class="footer">
                         <button class="btn-enroll" type="button">Enroll Course</button>
                     </div>
                 </article>
-
+                {{-- Card 4 --}}
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 4">
+                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 4">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Motion Photo & Video Essay Level 4</h3>
-                        <p class="byline">By Latihhobi In Film & Konten Kreator</p>
+                        <h3 class="title">Terlindungi: (COMINGSOON) KOMIK Level 4</h3>
+                        <p class="byline">By Latihhobi In KOMIK</p>
                     </div>
                     <div class="footer">
                         <button class="btn-enroll" type="button">Enroll Course</button>
                     </div>
                 </article>
-
+                {{-- Card 5 --}}
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 5">
+                        <img class="thumb" src="{{ asset('images/E-COURSE-KOMIK-DEPAN.svg') }}" alt="Level 5">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Film Pendek Level 5</h3>
-                        <p class="byline">By Latihhobi In Film & Konten Kreator</p>
+                        <h3 class="title">Terlindungi: (COMINGSOON) KOMIK Level 5</h3>
+                        <p class="byline">By Latihhobi In KOMIK</p>
                     </div>
                     <div class="footer">
                         <button class="btn-enroll" type="button">Enroll Course</button>
@@ -191,5 +189,3 @@
         </div>
     </section>
 @endsection
-
-
