@@ -13,17 +13,14 @@ return new class extends Migration
     {
         Schema::create('testimonials', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained(); // yang memberikan testimoni
-            $table->foreignId('program_id')->nullable()->constrained();
-            $table->foreignId('class_id')->nullable()->constrained();
-            $table->string('name'); // nama yang ditampilkan
-            $table->string('role')->nullable(); // misal: Orang tua siswa, Siswa
+            $table->string('name');
+            $table->string('position')->nullable();
+            $table->string('company')->nullable();
             $table->text('content');
-            $table->integer('rating')->default(5); // 1-5
+            $table->integer('rating')->default(5); // 1-5 stars
             $table->string('avatar')->nullable();
             $table->boolean('is_featured')->default(false);
-            $table->boolean('is_approved')->default(false);
-            $table->date('testimonial_date');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
