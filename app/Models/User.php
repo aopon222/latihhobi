@@ -6,13 +6,14 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -88,5 +89,85 @@ class User extends Authenticatable implements MustVerifyEmail
     public function communityMemberships()
     {
         return $this->hasMany(\App\Models\CommunityMember::class);
+    }
+
+    /**
+     * Get user's e-course enrollments
+     */
+    public function ecourseEnrollments()
+    {
+        return $this->hasMany(\App\Models\EcourseEnrollment::class);
+    }
+
+    /**
+     * Get user's event registrations
+     */
+    public function eventRegistrations()
+    {
+        return $this->hasMany(\App\Models\EventRegistration::class);
+    }
+
+    /**
+     * Get user's cart items
+     */
+    public function cartItems()
+    {
+        return $this->hasMany(\App\Models\Cart::class);
+    }
+
+    /**
+     * Get user's notifications
+     */
+    public function notifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class);
+    }
+
+    /**
+     * Get user's profile
+     */
+    public function profile()
+    {
+        return $this->hasOne(\App\Models\Profile::class);
+    }
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Check if user is a moderator
+     */
+    public function isModerator()
+    {
+        return $this->hasRole('moderator');
+    }
+
+    /**
+     * Check if user is a teacher/instructor
+     */
+    public function isTeacher()
+    {
+        return $this->hasRole('teacher');
+    }
+
+    /**
+     * Check if user is a parent
+     */
+    public function isParent()
+    {
+        return $this->hasRole('parent');
+    }
+
+    /**
+     * Check if user is a student
+     */
+    public function isStudent()
+    {
+        return $this->hasRole('student');
     }
 }

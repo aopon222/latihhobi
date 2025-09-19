@@ -14,32 +14,40 @@ class ProgramController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->get('per_page', 12);
-        $type = $request->get('type');
-        $categoryId = $request->get('category_id');
-        $search = $request->get('search');
+        try {
+            $perPage = $request->get('per_page', 12);
+            $type = $request->get('type');
+            $categoryId = $request->get('category_id');
+            $search = $request->get('search');
 
-        $programs = Program::active()
-            ->with('categories')
-            ->when($type, function ($query) use ($type) {
-                return $query->byType($type);
-            })
-            ->when($categoryId, function ($query) use ($categoryId) {
-                return $query->whereHas('categories', function ($q) use ($categoryId) {
-                    $q->where('categories.id', $categoryId);
-                });
-            })
-            ->when($search, function ($query) use ($search) {
-                return $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('description', 'like', '%' . $search . '%');
-            })
-            ->ordered()
-            ->paginate($perPage);
+            $programs = Program::active()
+                ->with('categories')
+                ->when($type, function ($query) use ($type) {
+                    return $query->byType($type);
+                })
+                ->when($categoryId, function ($query) use ($categoryId) {
+                    return $query->whereHas('categories', function ($q) use ($categoryId) {
+                        $q->where('categories.id', $categoryId);
+                    });
+                })
+                ->when($search, function ($query) use ($search) {
+                    return $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('description', 'like', '%' . $search . '%');
+                })
+                ->ordered()
+                ->paginate($perPage);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $programs
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'data' => $programs
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to retrieve programs',
+                'errors' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -47,14 +55,27 @@ class ProgramController extends Controller
      */
     public function show($id)
     {
-        $program = Program::active()
-            ->with('categories')
-            ->findOrFail($id);
+        try {
+            $program = Program::active()
+                ->with('categories')
+                ->findOrFail($id);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $program
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'data' => $program
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Program not found'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to retrieve program',
+                'errors' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -62,23 +83,36 @@ class ProgramController extends Controller
      */
     public function byCategory($categoryId)
     {
-        $category = Category::active()->findOrFail($categoryId);
+        try {
+            $category = Category::active()->findOrFail($categoryId);
 
-        $programs = Program::active()
-            ->whereHas('categories', function ($query) use ($categoryId) {
-                $query->where('categories.id', $categoryId);
-            })
-            ->with('categories')
-            ->ordered()
-            ->paginate(12);
+            $programs = Program::active()
+                ->whereHas('categories', function ($query) use ($categoryId) {
+                    $query->where('categories.id', $categoryId);
+                })
+                ->with('categories')
+                ->ordered()
+                ->paginate(12);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => [
-                'category' => $category,
-                'programs' => $programs
-            ]
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'category' => $category,
+                    'programs' => $programs
+                ]
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to retrieve programs by category',
+                'errors' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -86,25 +120,33 @@ class ProgramController extends Controller
      */
     public function search(Request $request)
     {
-        $search = $request->get('q');
+        try {
+            $search = $request->get('q');
 
-        if (!$search) {
+            if (!$search) {
+                return response()->json([
+                    'status' => 'success',
+                    'data' => []
+                ]);
+            }
+
+            $programs = Program::active()
+                ->where('name', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%')
+                ->with('categories')
+                ->ordered()
+                ->paginate(12);
+
             return response()->json([
                 'status' => 'success',
-                'data' => []
+                'data' => $programs
             ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to search programs',
+                'errors' => $e->getMessage()
+            ], 500);
         }
-
-        $programs = Program::active()
-            ->where('name', 'like', '%' . $search . '%')
-            ->orWhere('description', 'like', '%' . $search . '%')
-            ->with('categories')
-            ->ordered()
-            ->paginate(12);
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $programs
-        ]);
     }
 }

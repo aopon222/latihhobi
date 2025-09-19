@@ -4,36 +4,37 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Post;
 use App\Models\Community;
+use Illuminate\Support\Facades\Validator;
 
-class PostController extends Controller
+class PostController extends ApiBaseController
 {
     /**
      * Get all posts
      */
     public function index(Request $request)
     {
-        $perPage = $request->get('per_page', 12);
-        $communityId = $request->get('community_id');
-        $type = $request->get('type');
+        try {
+            $perPage = $request->get('per_page', 12);
+            $communityId = $request->get('community_id');
+            $search = $request->get('search');
 
-        $posts = Post::published()
-            ->with(['user', 'community'])
-            ->when($communityId, function ($query) use ($communityId) {
-                return $query->byCommunity($communityId);
-            })
-            ->when($type, function ($query) use ($type) {
-                return $query->byType($type);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+            $posts = Post::where('is_active', true)
+                ->when($communityId, function ($query) use ($communityId) {
+                    return $query->where('community_id', $communityId);
+                })
+                ->when($search, function ($query) use ($search) {
+                    return $query->where('content', 'like', '%' . $search . '%');
+                })
+                ->with(['user', 'community'])
+                ->orderBy('created_at', 'desc')
+                ->paginate($perPage);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $posts
-        ]);
+            return $this->success($posts, 'Posts retrieved successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to retrieve posts', $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -41,39 +42,17 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::published()
-            ->with(['user', 'community'])
-            ->findOrFail($id);
+        try {
+            $post = Post::where('is_active', true)
+                ->with(['user', 'community'])
+                ->findOrFail($id);
 
-        // Increment views
-        $post->increment('views_count');
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $post
-        ]);
-    }
-
-    /**
-     * Get posts by community
-     */
-    public function byCommunity($communityId)
-    {
-        $community = Community::active()->findOrFail($communityId);
-
-        $posts = Post::published()
-            ->byCommunity($communityId)
-            ->with(['user', 'community'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
-
-        return response()->json([
-            'status' => 'success',
-            'data' => [
-                'community' => $community,
-                'posts' => $posts
-            ]
-        ]);
+            return $this->success($post, 'Post retrieved successfully');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return $this->error('Post not found', null, 404);
+        } catch (\Exception $e) {
+            return $this->error('Failed to retrieve post', $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -81,46 +60,117 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            
+            $validator = Validator::make($request->all(), [
+                'community_id' => 'required|exists:communities,id',
+                'content' => 'required|string',
+                'image' => 'nullable|string',
+            ]);
 
-        $validator = Validator::make($request->all(), [
-            'community_id' => 'required|exists:communities,id',
-            'title' => 'nullable|string|max:255',
-            'content' => 'required|string',
-            'type' => 'required|in:showcase,discussion,announcement,question,achievement',
-        ]);
+            if ($validator->fails()) {
+                return $this->error('Validation failed', $validator->errors(), 422);
+            }
+            
+            $community = Community::where('is_active', true)
+                ->findOrFail($request->community_id);
+                
+            // Check if user is a member of the community
+            $membership = $user->communityMemberships()
+                ->where('community_id', $community->id)
+                ->where('status', 'active')
+                ->first();
+                
+            if (!$membership) {
+                return $this->error('You must be a member of this community to post', null, 403);
+            }
+            
+            $post = Post::create([
+                'user_id' => $user->id,
+                'community_id' => $request->community_id,
+                'content' => $request->content,
+                'image' => $request->image,
+                'is_active' => true,
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+            // Load relationships
+            $post->load(['user', 'community']);
+
+            return $this->success($post, 'Post created successfully', 201);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return $this->error('Community not found', null, 404);
+        } catch (\Exception $e) {
+            return $this->error('Failed to create post', $e->getMessage(), 500);
         }
+    }
 
-        // Check if community exists and is active
-        $community = Community::active()->findOrFail($request->community_id);
+    /**
+     * Update a post
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            $user = $request->user();
+            
+            $validator = Validator::make($request->all(), [
+                'content' => 'required|string',
+                'image' => 'nullable|string',
+            ]);
 
-        $post = new Post([
-            'user_id' => $user->id,
-            'community_id' => $community->id,
-            'title' => $request->title,
-            'content' => $request->content,
-            'type' => $request->type,
-            'status' => 'published',
-            'published_at' => now(),
-        ]);
+            if ($validator->fails()) {
+                return $this->error('Validation failed', $validator->errors(), 422);
+            }
+            
+            $post = Post::findOrFail($id);
+            
+            // Check if user owns the post
+            if ($post->user_id !== $user->id) {
+                return $this->error('You can only edit your own posts', null, 403);
+            }
+            
+            $post->update([
+                'content' => $request->content,
+                'image' => $request->image,
+            ]);
 
-        $post->save();
+            // Load relationships
+            $post->load(['user', 'community']);
 
-        // Update community post count
-        $community->increment('post_count');
+            return $this->success($post, 'Post updated successfully');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return $this->error('Post not found', null, 404);
+        } catch (\Exception $e) {
+            return $this->error('Failed to update post', $e->getMessage(), 500);
+        }
+    }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Post created successfully',
-            'data' => $post->load(['user', 'community'])
-        ], 201);
+    /**
+     * Delete a post
+     */
+    public function destroy(Request $request, $id)
+    {
+        try {
+            $user = $request->user();
+            
+            $post = Post::findOrFail($id);
+            
+            // Check if user owns the post or is community moderator
+            $isOwner = $post->user_id === $user->id;
+            $isModerator = $post->community->moderator_id === $user->id;
+            
+            if (!$isOwner && !$isModerator) {
+                return $this->error('You can only delete your own posts or posts in communities you moderate', null, 403);
+            }
+            
+            $post->update(['is_active' => false]);
+
+            return $this->success(null, 'Post deleted successfully');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return $this->error('Post not found', null, 404);
+        } catch (\Exception $e) {
+            return $this->error('Failed to delete post', $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -128,20 +178,83 @@ class PostController extends Controller
      */
     public function like(Request $request, $id)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            
+            $post = Post::where('is_active', true)
+                ->findOrFail($id);
+                
+            // Check if user has already liked the post
+            $existingLike = $post->likes()
+                ->where('user_id', $user->id)
+                ->first();
+                
+            if ($existingLike) {
+                // Unlike the post
+                $existingLike->delete();
+                $liked = false;
+            } else {
+                // Like the post
+                $post->likes()->create([
+                    'user_id' => $user->id,
+                ]);
+                $liked = true;
+            }
+            
+            // Get updated like count
+            $likeCount = $post->likes()->count();
 
-        $post = Post::published()->findOrFail($id);
+            return $this->success([
+                'liked' => $liked,
+                'like_count' => $likeCount
+            ], $liked ? 'Post liked successfully' : 'Post unliked successfully');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return $this->error('Post not found', null, 404);
+        } catch (\Exception $e) {
+            return $this->error('Failed to like post', $e->getMessage(), 500);
+        }
+    }
 
-        // For simplicity, we'll just increment the likes count
-        // In a real application, you might want to track who liked what
-        $post->increment('likes_count');
+    /**
+     * Get posts by community
+     */
+    public function byCommunity($communityId)
+    {
+        try {
+            $community = Community::where('is_active', true)
+                ->findOrFail($communityId);
+                
+            $posts = Post::where('community_id', $community->id)
+                ->where('is_active', true)
+                ->with(['user', 'community'])
+                ->orderBy('created_at', 'desc')
+                ->paginate(12);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Post liked successfully',
-            'data' => [
-                'likes_count' => $post->likes_count
-            ]
-        ]);
+            return $this->success($posts, 'Community posts retrieved successfully');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return $this->error('Community not found', null, 404);
+        } catch (\Exception $e) {
+            return $this->error('Failed to retrieve community posts', $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Get user's posts
+     */
+    public function myPosts(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            $posts = Post::where('user_id', $user->id)
+                ->where('is_active', true)
+                ->with(['user', 'community'])
+                ->orderBy('created_at', 'desc')
+                ->paginate(12);
+
+            return $this->success($posts, 'My posts retrieved successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to retrieve my posts', $e->getMessage(), 500);
+        }
     }
 }

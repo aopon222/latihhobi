@@ -4,35 +4,39 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Payment;
-use App\Models\Enrollment;
+use App\Models\EcourseEnrollment;
+use App\Models\Event;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Services\NotificationService;
 
-class PaymentController extends Controller
+class PaymentController extends ApiBaseController
 {
+    protected $notificationService;
+    
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+    
     /**
-     * Get user's payments
+     * Get all payments for the authenticated user
      */
     public function index(Request $request)
     {
-        $user = $request->user();
-        $perPage = $request->get('per_page', 12);
-        $status = $request->get('status');
+        try {
+            $user = $request->user();
+            
+            $payments = Payment::where('user_id', $user->id)
+                ->with(['ecourseEnrollment.ecourse', 'event'])
+                ->orderBy('created_at', 'desc')
+                ->paginate(12);
 
-        $payments = Payment::whereHas('enrollment', function ($query) use ($user) {
-                $query->where('student_id', $user->id);
-            })
-            ->with(['enrollment.classModel.program'])
-            ->when($status, function ($query) use ($status) {
-                return $query->byStatus($status);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $payments
-        ]);
+            return $this->success($payments, 'Payments retrieved successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to retrieve payments', $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -40,70 +44,168 @@ class PaymentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            
+            $payment = Payment::where('user_id', $user->id)
+                ->with(['ecourseEnrollment.ecourse', 'event'])
+                ->findOrFail($id);
 
-        $payment = Payment::whereHas('enrollment', function ($query) use ($user) {
-                $query->where('student_id', $user->id);
-            })
-            ->with(['enrollment.classModel.program'])
-            ->findOrFail($id);
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $payment
-        ]);
+            return $this->success($payment, 'Payment retrieved successfully');
+        } catch (\Exception $e) {
+            return $this->error('Payment not found', $e->getMessage(), 404);
+        }
     }
 
     /**
-     * Create a new payment
+     * Create a new payment for an e-course enrollment
      */
-    public function store(Request $request)
+    public function storeForEcourse(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            
+            $validator = Validator::make($request->all(), [
+                'ecourse_enrollment_id' => 'required|exists:ecourse_enrollments,id',
+                'amount' => 'required|numeric|min:0',
+                'payment_method' => 'required|string|in:bank_transfer,e_wallet,credit_card',
+                'transaction_id' => 'required|string|max:255',
+            ]);
 
-        $validator = Validator::make($request->all(), [
-            'enrollment_id' => 'required|exists:enrollments,id',
-            'amount' => 'required|numeric|min:0',
-            'payment_method' => 'required|in:bank_transfer',
-        ]);
+            if ($validator->fails()) {
+                return $this->error('Validation failed', $validator->errors(), 422);
+            }
+            
+            // Get the enrollment
+            $enrollment = EcourseEnrollment::findOrFail($request->ecourse_enrollment_id);
+            
+            // Verify the enrollment belongs to the user
+            if ($enrollment->user_id !== $user->id) {
+                return $this->error('Invalid enrollment', null, 403);
+            }
+            
+            // Check if enrollment is already paid
+            if ($enrollment->status !== 'pending_payment') {
+                return $this->error('This enrollment does not require payment');
+            }
+            
+            // Check if amount matches enrollment price
+            if ($request->amount != $enrollment->price) {
+                return $this->error('Payment amount does not match enrollment price');
+            }
+            
+            // Create payment record
+            $payment = Payment::create([
+                'user_id' => $user->id,
+                'ecourse_enrollment_id' => $enrollment->id,
+                'amount' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'transaction_id' => $request->transaction_id,
+                'status' => 'pending',
+                'paid_at' => now(),
+            ]);
+            
+            // Update enrollment status
+            $enrollment->update([
+                'status' => 'active',
+                'activated_at' => now(),
+            ]);
+            
+            // Send payment confirmation notification
+            $this->notificationService->sendPaymentConfirmation($user, $payment);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+            return $this->success($payment, 'Payment created successfully', 201);
+        } catch (\Exception $e) {
+            return $this->error('Failed to create payment', $e->getMessage(), 500);
         }
+    }
 
-        // Check if enrollment belongs to user
-        $enrollment = Enrollment::where('student_id', $user->id)
-            ->findOrFail($request->enrollment_id);
+    /**
+     * Create a new payment for an event registration
+     */
+    public function storeForEvent(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            $validator = Validator::make($request->all(), [
+                'event_id' => 'required|exists:events,id',
+                'amount' => 'required|numeric|min:0',
+                'payment_method' => 'required|string|in:bank_transfer,e_wallet,credit_card',
+                'transaction_id' => 'required|string|max:255',
+            ]);
 
-        // Check if payment amount is valid
-        $remainingAmount = $enrollment->final_price - $enrollment->paid_amount;
-        if ($request->amount > $remainingAmount) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Payment amount exceeds remaining balance'
-            ], 400);
+            if ($validator->fails()) {
+                return $this->error('Validation failed', $validator->errors(), 422);
+            }
+            
+            // Get the event
+            $event = Event::where('is_active', true)
+                ->where('status', 'open')
+                ->findOrFail($request->event_id);
+            
+            // Check if amount matches event price
+            if ($request->amount != $event->price) {
+                return $this->error('Payment amount does not match event price');
+            }
+            
+            // Check if user is registered for the event
+            $registration = $user->eventRegistrations()
+                ->where('event_id', $event->id)
+                ->where('status', 'pending')
+                ->first();
+                
+            if (!$registration) {
+                return $this->error('You are not registered for this event or payment has already been made');
+            }
+            
+            // Create payment record
+            $payment = Payment::create([
+                'user_id' => $user->id,
+                'event_id' => $event->id,
+                'amount' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'transaction_id' => $request->transaction_id,
+                'status' => 'pending',
+                'paid_at' => now(),
+            ]);
+            
+            // Update registration status
+            $registration->update([
+                'status' => 'confirmed',
+                'confirmed_at' => now(),
+            ]);
+            
+            // Send event registration notification
+            $this->notificationService->sendEventRegistration($user, $event);
+
+            return $this->success($payment, 'Payment created successfully', 201);
+        } catch (\Exception $e) {
+            return $this->error('Failed to create payment', $e->getMessage(), 500);
         }
+    }
 
-        // Create payment
-        $payment = new Payment([
-            'payment_number' => 'PAY-' . now()->format('Ymd') . '-' . strtoupper(uniqid()),
-            'enrollment_id' => $enrollment->id,
-            'amount' => $request->amount,
-            'payment_method' => $request->payment_method,
-            'status' => 'pending',
-        ]);
+    /**
+     * Confirm payment
+     */
+    public function confirm(Request $request, $id)
+    {
+        try {
+            $user = $request->user();
+            
+            $payment = Payment::where('user_id', $user->id)
+                ->findOrFail($id);
+                
+            // Update payment status
+            $payment->update([
+                'status' => 'completed',
+                'confirmed_at' => now(),
+            ]);
 
-        $payment->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Payment created successfully',
-            'data' => $payment->load('enrollment.classModel.program')
-        ], 201);
+            return $this->success($payment, 'Payment confirmed successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to confirm payment', $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -111,42 +213,29 @@ class PaymentController extends Controller
      */
     public function uploadProof(Request $request, $id)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            
+            $validator = Validator::make($request->all(), [
+                'payment_proof' => 'required|string', // In a real implementation, this would be a file upload
+            ]);
 
-        $validator = Validator::make($request->all(), [
-            'proof' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+            if ($validator->fails()) {
+                return $this->error('Validation failed', $validator->errors(), 422);
+            }
+            
+            $payment = Payment::where('user_id', $user->id)
+                ->findOrFail($id);
+                
+            // Update payment with proof
+            $payment->update([
+                'payment_proof' => $request->payment_proof,
+                'status' => 'pending_verification',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+            return $this->success($payment, 'Payment proof uploaded successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to upload payment proof', $e->getMessage(), 500);
         }
-
-        $payment = Payment::whereHas('enrollment', function ($query) use ($user) {
-                $query->where('student_id', $user->id);
-            })
-            ->findOrFail($id);
-
-        // Store the proof image
-        $proofPath = $request->file('proof')->store('payment_proofs', 'public');
-
-        // Update payment
-        $payment->proof_images = array_merge(
-            $payment->proof_images ?? [],
-            [$proofPath]
-        );
-        $payment->status = 'processing';
-        $payment->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Payment proof uploaded successfully',
-            'data' => [
-                'proof_url' => asset('storage/' . $proofPath)
-            ]
-        ]);
     }
 }

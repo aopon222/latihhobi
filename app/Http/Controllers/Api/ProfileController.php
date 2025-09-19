@@ -4,27 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Profile;
+use Illuminate\Support\Facades\Hash;
 
-class ProfileController extends Controller
+class ProfileController extends ApiBaseController
 {
     /**
      * Get user profile
      */
     public function show(Request $request)
     {
-        $user = $request->user();
-        $profile = $user->profile ?? new Profile(['user_id' => $user->id]);
+        try {
+            $user = $request->user();
+            
+            // Load additional profile information if exists
+            $user->load('profile');
 
-        return response()->json([
-            'status' => 'success',
-            'data' => [
-                'user' => $user,
-                'profile' => $profile
-            ]
-        ]);
+            return $this->success($user, 'Profile retrieved successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to retrieve profile', $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -32,73 +32,38 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
+            
+            $validator = Validator::make($request->all(), [
+                'name' => 'sometimes|string|max:255',
+                'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
+                'phone' => 'nullable|string|max:20',
+                'address' => 'nullable|string|max:500',
+                'date_of_birth' => 'nullable|date',
+            ]);
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:100',
-            'province' => 'nullable|string|max:100',
-            'postal_code' => 'nullable|string|max:10',
-            'date_of_birth' => 'nullable|date',
-            'gender' => 'nullable|in:male,female,other',
-            'bio' => 'nullable|string|max:500',
-            'occupation' => 'nullable|string|max:100',
-            'school' => 'nullable|string|max:100',
-            'grade' => 'nullable|string|max:20',
-            'parent_name' => 'nullable|string|max:100',
-            'parent_phone' => 'nullable|string|max:20',
-            'parent_email' => 'nullable|email|max:255',
-            'emergency_contact_name' => 'nullable|string|max:100',
-            'emergency_contact_phone' => 'nullable|string|max:20',
-            'special_needs' => 'nullable|array',
-        ]);
+            if ($validator->fails()) {
+                return $this->error('Validation failed', $validator->errors(), 422);
+            }
+            
+            // Update user information
+            $user->update($request->only(['name', 'email']));
+            
+            // Update or create profile
+            if ($user->profile) {
+                $user->profile->update($request->only(['phone', 'address', 'date_of_birth']));
+            } else {
+                $user->profile()->create($request->only(['phone', 'address', 'date_of_birth']));
+            }
+            
+            // Load updated profile
+            $user->load('profile');
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+            return $this->success($user, 'Profile updated successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to update profile', $e->getMessage(), 500);
         }
-
-        // Update user data
-        if ($request->has('name')) {
-            $user->name = $request->name;
-        }
-
-        if ($request->has('email')) {
-            $user->email = $request->email;
-        }
-
-        $user->save();
-
-        // Update or create profile
-        $profileData = $request->only([
-            'phone', 'address', 'city', 'province', 'postal_code', 'date_of_birth',
-            'gender', 'bio', 'occupation', 'school', 'grade', 'parent_name',
-            'parent_phone', 'parent_email', 'emergency_contact_name',
-            'emergency_contact_phone', 'special_needs'
-        ]);
-
-        $profile = $user->profile;
-        if (!$profile) {
-            $profile = new Profile(['user_id' => $user->id]);
-        }
-
-        $profile->fill($profileData);
-        $profile->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Profile updated successfully',
-            'data' => [
-                'user' => $user,
-                'profile' => $profile
-            ]
-        ]);
     }
 
     /**
@@ -106,36 +71,95 @@ class ProfileController extends Controller
      */
     public function updateAvatar(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        try {
+            $user = $request->user();
+            
+            $validator = Validator::make($request->all(), [
+                'avatar' => 'required|string', // In a real implementation, this would be a file upload
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+            if ($validator->fails()) {
+                return $this->error('Validation failed', $validator->errors(), 422);
+            }
+            
+            // Update user avatar
+            $user->update(['avatar' => $request->avatar]);
+
+            return $this->success($user, 'Avatar updated successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to update avatar', $e->getMessage(), 500);
         }
+    }
 
-        $user = $request->user();
-        $profile = $user->profile;
+    /**
+     * Change password
+     */
+    public function changePassword(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            $validator = Validator::make($request->all(), [
+                'current_password' => 'required|string',
+                'new_password' => 'required|string|min:8|confirmed',
+            ]);
 
-        if (!$profile) {
-            $profile = new Profile(['user_id' => $user->id]);
+            if ($validator->fails()) {
+                return $this->error('Validation failed', $validator->errors(), 422);
+            }
+            
+            // Check current password
+            if (!Hash::check($request->current_password, $user->password)) {
+                return $this->error('Current password is incorrect', null, 422);
+            }
+            
+            // Update password
+            $user->update([
+                'password' => Hash::make($request->new_password),
+            ]);
+
+            return $this->success(null, 'Password changed successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to change password', $e->getMessage(), 500);
         }
+    }
 
-        // Store the avatar
-        $avatarPath = $request->file('avatar')->store('avatars', 'public');
-        $profile->avatar = $avatarPath;
-        $profile->save();
+    /**
+     * Get user's enrollments
+     */
+    public function enrollments(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            $enrollments = $user->ecourseEnrollments()
+                ->with('ecourse')
+                ->orderBy('created_at', 'desc')
+                ->paginate(12);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Avatar updated successfully',
-            'data' => [
-                'avatar_url' => asset('storage/' . $avatarPath)
-            ]
-        ]);
+            return $this->success($enrollments, 'Enrollments retrieved successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to retrieve enrollments', $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Get user's community memberships
+     */
+    public function communities(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            $memberships = $user->communityMemberships()
+                ->with('community')
+                ->where('status', 'active')
+                ->orderBy('joined_at', 'desc')
+                ->paginate(12);
+
+            return $this->success($memberships, 'Communities retrieved successfully');
+        } catch (\Exception $e) {
+            return $this->error('Failed to retrieve communities', $e->getMessage(), 500);
+        }
     }
 }
