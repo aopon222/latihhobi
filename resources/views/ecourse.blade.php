@@ -122,7 +122,7 @@
             <div class="products-grid">
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-ROBODUST.svg') }}" alt="Robot Robodust" class="product-img">
+                        <img src="{{ asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="Robot Robodust" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>Robot Robodust</h3>
@@ -136,7 +136,7 @@
                 </div>
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-ROBOFAN.svg') }}" alt="Robot Robofan" class="product-img">
+                        <img src="{{ asset('images/THUMBNAIL E COURSE ROBOFAN.svg') }}" alt="Robot Robofan" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>Robot Robofan</h3>
@@ -150,7 +150,7 @@
                 </div>
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-HEMIPTERA.svg') }}" alt="Robot Hemiptera" class="product-img">
+                        <img src="{{ asset('images/THUMBNAIL E COURSE HEMIPTERA.svg') }}" alt="Robot Hemiptera" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>Robot Hemiptera</h3>
@@ -180,7 +180,7 @@
                 <div class="coming-soon-card">
                     <div class="coming-soon-badge">COMING SOON</div>
                     <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-AVOIDER.svg') }}" alt="Robot Hemiptera" class="product-img">
+                        <img src="{{ asset('images/THUMBNAIL E COURSE AVOIDER.svg') }}" alt="Robot Hemiptera" class="product-img">
                     </div>
                     <h3>Robot Avoider</h3>
                     <p>By Latihhobi</p>

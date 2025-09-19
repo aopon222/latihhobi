@@ -1,11 +1,13 @@
 <?php
-// E-Course Robotik landing page
-Route::view('/ecourse/robotik', 'ecourse-robotik')->name('course.robotik');
+
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PodcastController;
+
+// E-Course Robotik landing page
+Route::view('/ecourse/robotik', 'ecourse-robotik')->name('course.robotik');
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +35,11 @@ Route::view('/course-film-konten-kreator', 'course-film-konten-kreator')->name('
 Route::redirect('/ecourse/film', '/course-film-konten-kreator');
 Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
 
+// E-Course: Komik landing page
+Route::view('/ecourse-komik', 'course-Komik')->name('course.komik');
+Route::view('/course-komik', 'course-Komik');
+Route::redirect('/ecourse/komik', '/course-komik');
+
 // Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -43,12 +50,12 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     // Dashboard Routes
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
     Route::post('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
-    
+
     // Email Verification Routes
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])

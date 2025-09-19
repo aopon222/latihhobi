@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description');
             $table->text('short_description')->nullable();
+            $table->string('youtube_url')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->text('transcript')->nullable();
             $table->string('audio_url');
             $table->string('video_url')->nullable();
@@ -27,7 +29,10 @@ return new class extends Migration
             $table->integer('play_count')->default(0);
             $table->integer('download_count')->default(0);
             $table->date('published_at')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->boolean('is_featured')->default(false);
+            $table->integer('sort_order')->default(0);
+            $table->timestamp('published_date')->useCurrent();
             $table->json('guests')->nullable(); // info tamu podcast
             $table->json('topics')->nullable(); // topik yang dibahas
             $table->json('timestamps')->nullable(); // timestamp untuk setiap topik
