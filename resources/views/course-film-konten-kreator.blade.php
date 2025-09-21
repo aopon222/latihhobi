@@ -112,7 +112,7 @@
             <div class="grid">
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 1">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 1.svg') }}" alt="Level 1">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -130,7 +130,7 @@
 
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 2">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 2.svg') }}" alt="Level 2">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -148,7 +148,7 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 3">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 3.svg') }}" alt="Level 3">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -162,7 +162,7 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 4">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 4.svg') }}" alt="Level 4">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -176,7 +176,7 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E-COURSE-FKK-DEPAN_1.svg') }}" alt="Level 5">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 5.svg') }}" alt="Level 5">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
