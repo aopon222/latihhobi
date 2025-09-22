@@ -51,10 +51,15 @@ class VerifyEmail extends Notification
         }
 
         return (new MailMessage)
-            ->subject('Verifikasi Alamat Email')
-            ->line('Silakan klik tombol di bawah ini untuk memverifikasi alamat email Anda.')
-            ->action('Verifikasi Email', $verificationUrl)
-            ->line('Jika Anda tidak membuat akun, tidak perlu melakukan apa pun.');
+            ->subject('Verifikasi Email - LatihHobi')
+            ->greeting('Halo ' . $notifiable->name . '!')
+            ->line('Terima kasih telah mendaftar di LatihHobi - Platform Pembelajaran untuk mengembangkan bakat dan hobi Anda.')
+            ->line('Untuk mengaktifkan akun Anda, silakan klik tombol verifikasi di bawah ini:')
+            ->action('Verifikasi Email Saya', $verificationUrl)
+            ->line('Link verifikasi ini akan kedaluwarsa dalam 60 menit.')
+            ->line('Jika Anda tidak mendaftar akun di LatihHobi, abaikan email ini.')
+            ->salutation('Salam hangat,')
+            ->salutation('Tim LatihHobi');
     }
 
     /**

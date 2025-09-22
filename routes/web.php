@@ -51,12 +51,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Dashboard Routes
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
-    Route::post('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
-
-    // Email Verification Routes
+    // Email Verification Routes (must be accessible to authenticated but unverified users)
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
         ->middleware(['signed', 'throttle:6,1'])
@@ -64,7 +59,45 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verification-notification', [AuthController::class, 'resendVerification'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+
+    // Protected routes that require email verification
+    Route::middleware('verified')->group(function () {
+        // Dashboard Routes
+        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
+        Route::post('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
+    });
 });
 
 // LHEC 2025 landing page
 Route::view('/lhec2025', 'lhec2025')->name('lhec2025');
+
+// Manual email verification for testing (remove in production)
+Route::get('/manual-verify/{user}', function (App\Models\User $user) {
+    if (!$user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+        return redirect()->route('login')->with('success', 'Email berhasil diverifikasi secara manual! Silakan login.');
+    }
+    return redirect()->route('login')->with('info', 'Email sudah terverifikasi sebelumnya.');
+})->name('manual.verify');
+
+// Email configuration checker (development only)
+Route::get('/email-config-check', function () {
+    return view('email-config-check');
+})->name('email.config.check');
+
+// Test email sending
+Route::post('/test-email', function (Illuminate\Http\Request $request) {
+    try {
+        $testEmail = $request->input('email') ?: config('mail.mailers.smtp.username');
+        
+        Illuminate\Support\Facades\Mail::raw('Test email dari LatihHobi - ' . now(), function ($message) use ($testEmail) {
+            $message->to($testEmail)
+                    ->subject('LatihHobi - Test Email Configuration');
+        });
+        
+        return back()->with('success', "Test email berhasil dikirim ke: {$testEmail}. Silakan cek inbox Anda.");
+    } catch (Exception $e) {
+        return back()->with('error', 'Gagal mengirim test email: ' . $e->getMessage());
+    }
+})->name('test.email');

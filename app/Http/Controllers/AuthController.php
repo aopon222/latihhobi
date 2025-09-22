@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Notifications\VerifyEmail;
 
 class AuthController extends Controller
@@ -98,19 +99,35 @@ class AuthController extends Controller
                 ->withInput($request->except('password', 'password_confirmation'));
         }
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        // Send email verification
-        $user->sendEmailVerificationNotification();
+            // Send email verification
+            $user->sendEmailVerificationNotification();
 
-        Auth::login($user);
+            Auth::login($user);
 
-        return redirect()->route('verification.notice')
-            ->with('success', 'Akun berhasil dibuat! Silakan verifikasi email Anda.');
+            return redirect()->route('verification.notice')
+                ->with('success', 'Akun berhasil dibuat! Silakan verifikasi email Anda.');
+
+        } catch (\Exception $e) {
+            // If email sending fails, still create the user but show appropriate message
+            if (isset($user)) {
+                Auth::login($user);
+                
+                return redirect()->route('verification.notice')
+                    ->with('warning', 'Akun berhasil dibuat! Namun terjadi masalah saat mengirim email verifikasi. Silakan klik "Kirim Ulang Email Verifikasi" di bawah ini.');
+            }
+            
+            // If user creation also fails, show error
+            return redirect()->back()
+                ->withErrors(['email' => 'Terjadi kesalahan saat membuat akun. Silakan coba lagi.'])
+                ->withInput($request->except('password', 'password_confirmation'));
+        }
     }
 
     /**
@@ -157,8 +174,11 @@ class AuthController extends Controller
             return redirect('/');
         }
 
-        $request->user()->sendEmailVerificationNotification();
-
-        return back()->with('success', 'Link verifikasi baru telah dikirim ke email Anda.');
+        try {
+            $request->user()->sendEmailVerificationNotification();
+            return back()->with('success', 'Link verifikasi baru telah dikirim ke email Anda.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi masalah saat mengirim email verifikasi. Silakan coba lagi nanti atau hubungi administrator.');
+        }
     }
 }

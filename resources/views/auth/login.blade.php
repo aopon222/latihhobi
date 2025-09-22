@@ -26,6 +26,18 @@
                 </div>
             @endif
 
+            @if (session('success'))
+                <div style="background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('info'))
+                <div style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;">
+                    {{ session('info') }}
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('login.attempt') }}">
                 @csrf
 
