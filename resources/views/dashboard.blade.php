@@ -3,63 +3,6 @@
 @section('title', 'Dashboard - LatihHobi')
 
 @section('content')
-    <!-- Header -->
-    <header class="header">
-        <nav class="navbar">
-            <a href="/" class="logo">
-                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-            </a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/">Home</a></li>
-                <li class="nav-item"><a href="/ekskul-reguler">Ekskul Reguler</a></li>
-                <li class="nav-item dropdown">
-                    <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="/ecourse" class="dropdown-item">
-                            <span class="dropdown-icon">🤖</span>
-                            Ecourse Robotik
-                        </a>
-                        <a href="/course-film-konten-kreator" class="dropdown-item">
-                            <span class="dropdown-icon">🎬</span>
-                            Ecourse Film & Konten Kreator
-                        </a>
-                        <a href="/ecourse" class="dropdown-item">
-                            <span class="dropdown-icon">📖</span>
-                            Ecourse Komik
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="/event">Event <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🏆</span>
-                            LHEC IV 2025
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">💼</span>
-                            WORKSHOP & BOOTCAMP
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🎉</span>
-                            HOLIDAY FUN CLASS
-                        </a>
-                    </div>
-                </li>
-            </ul>
-            <div class="user-menu">
-                <a href="#" class="user-icon">🔍</a>
-                <a href="#" class="user-icon">🛒</a>
-                <span class="username">{{ $user->name }}</span>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-signin">Logout</button>
-                </form>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Dashboard Content -->
     <section class="dashboard-hero">
         <div class="dashboard-container">
             <div class="welcome-section">
@@ -113,7 +56,7 @@
                         <strong>Email:</strong> {{ $user->email }}
                     </div>
                     <div class="info-item">
-                        <strong>Status Email:</strong> 
+                        <strong>Status Email:</strong>
                         @if($user->hasVerifiedEmail())
                             <span class="status verified">✅ Terverifikasi</span>
                         @else
