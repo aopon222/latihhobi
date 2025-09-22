@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Notifications\VerifyEmail;
 
 class AuthController extends Controller
 {
@@ -74,7 +73,13 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
+            ],
         ], [
             'name.required' => 'Nama harus diisi.',
             'name.max' => 'Nama maksimal 255 karakter.',
@@ -82,8 +87,9 @@ class AuthController extends Controller
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah terdaftar.',
             'password.required' => 'Password harus diisi.',
-            'password.min' => 'Password minimal 6 karakter.',
+            'password.min' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'password.regex' => 'Password harus mengandung minimal 1 huruf besar, 1 huruf kecil, dan 1 angka.',
         ]);
 
         if ($validator->fails()) {
@@ -99,7 +105,7 @@ class AuthController extends Controller
         ]);
 
         // Send email verification
-        event(new Registered($user));
+        $user->sendEmailVerificationNotification();
 
         Auth::login($user);
 
@@ -139,7 +145,7 @@ class AuthController extends Controller
     {
         $request->fulfill();
 
-        return redirect('/')->with('success', 'Email berhasil diverifikasi!');
+        return redirect('/')->with('success', 'Email berhasil diverifikasi! Selamat datang di LatihHobi.');
     }
 
     /**
