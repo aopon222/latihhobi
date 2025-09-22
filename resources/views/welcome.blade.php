@@ -32,9 +32,9 @@
                 <li class="nav-item dropdown">
                     <a href="/event">Event <span class="dropdown-arrow">▼</span></a>
                     <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">
+                        <a href="{{ route('lhec2025') }}" class="dropdown-item">
                             <span class="dropdown-icon">🏆</span>
-                            LHEC IV 2025
+                            LHEC 2025
                         </a>
                         <a href="#" class="dropdown-item">
                             <span class="dropdown-icon">💼</span>
@@ -188,19 +188,19 @@
             <div class="private-class-grid">
                 <div class="private-class-item">
                     <div class="private-class-icon">
-                        <img src="{{ asset('images/placeholder-robotik.svg') }}" alt="Robotik" class="private-class-icon-img">
+                        <img src="{{ asset('images/ROBONESIA.svg') }}" alt="Robotik" class="private-class-icon-img">
                     </div>
                     <h3>Robotik</h3>
                 </div>
                 <div class="private-class-item">
                     <div class="private-class-icon">
-                        <img src="{{ asset('images/placeholder-film.svg') }}" alt="Film & Konten Kreator" class="private-class-icon-img">
+                        <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="private-class-icon-img">
                     </div>
                     <h3>Film & Konten Kreator</h3>
                 </div>
                 <div class="private-class-item">
                     <div class="private-class-icon">
-                        <img src="{{ asset('images/placeholder-komik.svg') }}" alt="Komik" class="private-class-icon-img">
+                        <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="private-class-icon-img">
                     </div>
                     <h3>Komik</h3>
                 </div>

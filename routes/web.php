@@ -65,3 +65,6 @@ Route::middleware('auth')->group(function () {
         ->middleware('throttle:6,1')
         ->name('verification.send');
 });
+
+// LHEC 2025 landing page
+Route::view('/lhec2025', 'lhec2025')->name('lhec2025');
