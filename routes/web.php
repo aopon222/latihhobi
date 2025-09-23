@@ -108,7 +108,7 @@ Route::middleware('auth')->group(function () {
         // Dashboard Routes
         Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
         Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
-        Route::post('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/profile/update', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
     });
 });
 
@@ -127,3 +127,4 @@ Route::get('/karier', function () {
 Route::view('/magang', 'podcasts.magang')->name('magang');
 Route::view('/profil', 'podcasts.profil')->name('profil');
 Route::view('/holiday-fun-class', 'podcasts.holiday-fun-class')->name('holiday-fun-class');
+Route::view('/contact', 'contact')->name('contact');
