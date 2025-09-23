@@ -24,6 +24,14 @@
                 </div>
             </li>
             <li class="nav-item dropdown">
+                <a href="/ecourse" class="{{ request()->is('ecourse*') ? 'active' : '' }}">E-Course <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="/ecourse/film-konten-kreator" class="dropdown-item">Film & Konten Kreator</a>
+                    <a href="/ecourse/komik" class="dropdown-item">Komik</a>
+                    <a href="/ecourse/robotik" class="dropdown-item">Robotik</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
                 <a href="#">Event <span class="dropdown-arrow">▼</span></a>
                 <div class="dropdown-menu">
                     <a href="{{ route('lhec2025') }}" class="dropdown-item">
@@ -41,7 +49,7 @@
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a href="#"><span class="dropdown-icon">📷</span> Tentang Kami <span class="dropdown-arrow">▼</span></a>
+                <a href="#"><span class="dropdown-icon"></span> Tentang Kami <span class="dropdown-arrow">▼</span></a>
                 <div class="dropdown-menu">
                     <a href="/karier" class="dropdown-item">Latih Hobi Karier</a>
                     <a href="/magang" class="dropdown-item">Program Magang (Internship)</a>
