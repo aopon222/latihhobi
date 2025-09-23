@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -22,7 +23,79 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
-        return view('dashboard', compact('user'));
+        // Mengambil statistik pengguna
+        $stats = [
+            'ecourses_enrolled' => 5, // Dummy data, nanti bisa diambil dari database
+            'events_attended' => 2,   // Dummy data, nanti bisa diambil dari database
+            'learning_progress' => 75 // Dummy data, nanti bisa diambil dari database
+        ];
+        
+        // Aktivitas terbaru pengguna
+        $recentActivities = [
+            [
+                'type' => 'login',
+                'description' => 'Login ke akun Anda',
+                'time' => '2 jam yang lalu'
+            ],
+            [
+                'type' => 'ecourse',
+                'description' => 'Mengakses e-course Robotik',
+                'time' => '1 hari yang lalu'
+            ],
+            [
+                'type' => 'profile',
+                'description' => 'Memperbarui informasi profil',
+                'time' => '3 hari yang lalu'
+            ]
+        ];
+        
+        // Quick access menu
+        $quickAccess = [
+            [
+                'title' => 'E-Course Robotik',
+                'icon' => '🤖',
+                'url' => '/ecourse/robotik'
+            ],
+            [
+                'title' => 'Film & Konten Kreator',
+                'icon' => '🎬',
+                'url' => '/course-film-konten-kreator'
+            ],
+            [
+                'title' => 'Event Mendatang',
+                'icon' => '📅',
+                'url' => '/event'
+            ],
+            [
+                'title' => 'Profil Saya',
+                'icon' => '👤',
+                'url' => '/profile'
+            ]
+        ];
+        
+        // Recommended content
+        $recommendedContent = [
+            [
+                'title' => 'Workshop Digital Marketing',
+                'type' => 'Workshop',
+                'description' => 'Pelajari strategi digital marketing terbaru',
+                'image' => 'digital-marketing'
+            ],
+            [
+                'title' => 'E-Course UI/UX Design',
+                'type' => 'E-Course',
+                'description' => 'Master desain antarmuka pengguna modern',
+                'image' => 'ui-ux'
+            ],
+            [
+                'title' => 'Kompetisi Robotik Nasional',
+                'type' => 'Event',
+                'description' => 'Ikuti kompetisi robotik tingkat nasional',
+                'image' => 'robotik'
+            ]
+        ];
+        
+        return view('dashboard', compact('user', 'stats', 'recentActivities', 'quickAccess', 'recommendedContent'));
     }
 
     /**

@@ -34,7 +34,6 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ url('/ecourse') }}">Ecourse Robotik</a></li>
                         <li><a class="dropdown-item" href="{{ url('/course-film-konten-kreator') }}">Ecourse Film & Konten Kreator</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/ecourse') }}">Ecourse Komik</a></li>
                     </ul>
                 </li>
 
@@ -53,9 +52,10 @@
             <!-- Right Side -->
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item me-3">
-        </a>
-<a class="nav-link nav-search" href="#"><i class="fas fa-magnifying-glass fs-5"></i></a>
-<a class="nav-link nav-cart" href="#"><i class="fas fa-basket-shopping fs-5"></i></a>
+                    <a class="nav-link nav-search" href="#"><i class="fas fa-magnifying-glass fs-5"></i></a>
+                </li>
+                <li class="nav-item me-3">
+                    <a class="nav-link nav-cart" href="#"><i class="fas fa-basket-shopping fs-5"></i></a>
                 </li>
                 @php
                     $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
@@ -89,71 +89,4 @@
             </ul>
         </div>
     </div>
-</nav>
-                        <li><a class="dropdown-item" href="#">Kursus B</a></li>
-
-                    </ul>
-
-                </li>
-
-
-
-                <!-- Dropdown Event -->
-
-                <li class="nav-item dropdown">
-
-                    <a class="nav-link dropdown-toggle nav-event" href="#" role="button" data-bs-toggle="dropdown">
-
-                        <i class="bi bi-calendar-event me-1"></i> Event
-
-                    </a>
-
-                    <ul class="dropdown-menu">
-
-                        <li><a class="dropdown-item" href="#">Event A</a></li>
-
-                        <li><a class="dropdown-item" href="#">Event B</a></li>
-
-                    </ul>
-
-                </li>
-
-            </ul>
-
-
-
-            <!-- Right Side -->
-
-            <ul class="navbar-nav ms-auto align-items-center">
-
-                <li class="nav-item me-3">
-
-                    <a class="nav-link nav-search" href="#"><i class="bi bi-search fs-5"></i></a>
-
-                </li>
-
-                <li class="nav-item me-3">
-
-                    <a class="nav-link nav-cart" href="#"><i class="bi bi-cart fs-5"></i></a>
-
-                </li>
-
-                <li class="nav-item me-3">
-
-                    <a class="nav-link nav-signin" href="{{ route('login') }}">Sign in</a>
-
-                </li>
-
-                <li class="nav-item">
-
-                    <a class="btn btn-signup" href="{{ route('register') }}">Sign up</a>
-
-                </li>
-
-            </ul>
-
-        </div>
-
-    </div>
-
 </nav>
