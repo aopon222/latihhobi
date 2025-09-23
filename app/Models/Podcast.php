@@ -49,6 +49,14 @@ class Podcast extends Model
     }
 
     /**
+     * Get YouTube URL for form input
+     */
+    public function getYoutubeUrlAttribute()
+    {
+        return $this->youtube_id ? "https://www.youtube.com/watch?v={$this->youtube_id}" : '';
+    }
+
+    /**
      * Get thumbnail URL from YouTube
      */
     public function getThumbnailUrlAttribute($value)

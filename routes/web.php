@@ -1,12 +1,25 @@
 <?php
+// Admin Dashboard Route
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PodcastController;
+use App\Http\Controllers\EcourseController;
+use Illuminate\Database\Schema\Blueprint;
 
-// E-Course Robotik landing page
-Route::view('/ecourse/robotik', 'ecourse-robotik')->name('course.robotik');
+Route::get('/manual-verify', function () {
+    return view('auth.manual-verify');
+})->name('manual.verify');
+Route::get('/workshop-bootcamp', function () {
+    return view('workshop-bootcamp');
+})->name('workshop-bootcamp');
+Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,12 +29,11 @@ Route::get('/ekskul-reguler', function () {
     return view('ekskul-reguler');
 });
 
-Route::get('/ecourse', function () {
-    return view('ecourse');
-});
+Route::get('/ecourse', [EcourseController::class, 'index']);
 
-Route::get('/event', [App\Http\Controllers\EventController::class, 'index'])->name('events.index');
-Route::get('/event/{event}', [App\Http\Controllers\EventController::class, 'show'])->name('events.show');
+Route::get('/event', function () {
+    return view('event');
+});
 
 // Podcast Routes
 Route::get('/podcasts', [PodcastController::class, 'index'])->name('podcasts.index');
@@ -30,58 +42,11 @@ Route::get('/podcasts/{podcast}', [PodcastController::class, 'show'])->name('pod
 // Search Route
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
 
-// Community Routes
-Route::get('/communities', [App\Http\Controllers\CommunityController::class, 'index'])->name('communities.index');
-Route::get('/communities/{community}', [App\Http\Controllers\CommunityController::class, 'show'])->name('communities.show');
-
 // E-Course: Film & Konten Kreator landing page
 Route::view('/course-film-konten-kreator', 'course-film-konten-kreator')->name('course.film_konten_kreator');
 // Backward-compatible paths to avoid 404s from older links
 Route::redirect('/ecourse/film', '/course-film-konten-kreator');
 Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
-
-// E-Course: Komik landing page
-Route::view('/ecourse-komik', 'ecourse-komik')->name('course.komik');
-// Backward-compatible paths to avoid 404s from older links
-Route::redirect('/ecourse/komik', '/ecourse-komik');
-
-// LHEC 2025 landing page
-Route::view('/lhec2025', 'lhec2025')->name('lhec2025');
-
-// Workshop & Bootcamp landing page
-Route::get('/workshop-bootcamp', function () {
-    return view('workshop-bootcamp');
-})->name('workshop-bootcamp');
-
-// Manual email verification for testing (remove in production)
-Route::get('/manual-verify/{user}', function (App\Models\User $user) {
-    if (!$user->hasVerifiedEmail()) {
-        $user->markEmailAsVerified();
-        return redirect()->route('login')->with('success', 'Email berhasil diverifikasi secara manual! Silakan login.');
-    }
-    return redirect()->route('login')->with('info', 'Email sudah terverifikasi sebelumnya.');
-})->name('manual.verify');
-
-// Email configuration checker (development only)
-Route::get('/email-config-check', function () {
-    return view('email-config-check');
-})->name('email.config.check');
-
-// Test email sending
-Route::post('/test-email', function (Illuminate\Http\Request $request) {
-    try {
-        $testEmail = $request->input('email') ?: config('mail.mailers.smtp.username');
-        
-        Illuminate\Support\Facades\Mail::raw('Test email dari LatihHobi - ' . now(), function ($message) use ($testEmail) {
-            $message->to($testEmail)
-                    ->subject('LatihHobi - Test Email Configuration');
-        });
-        
-        return back()->with('success', "Test email berhasil dikirim ke: {$testEmail}. Silakan cek inbox Anda.");
-    } catch (Exception $e) {
-        return back()->with('error', 'Gagal mengirim test email: ' . $e->getMessage());
-    }
-})->name('test.email');
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -91,10 +56,20 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 });
 
+// LHEC 2025 Route
+Route::get('/lhec2025', function () {
+    return view('lhec2025');
+})->name('lhec2025');
+
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-    // Email Verification Routes (must be accessible to authenticated but unverified users)
+    
+    // Dashboard Routes
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
+    Route::put('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
+    
+    // Email Verification Routes
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
         ->middleware(['signed', 'throttle:6,1'])
@@ -102,12 +77,35 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verification-notification', [AuthController::class, 'resendVerification'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+});
 
-    // Protected routes that require email verification
-    Route::middleware('verified')->group(function () {
-        // Dashboard Routes
-        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
-        Route::post('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
-    });
+// Podcast Schema (moved to migration files)
+// Schema::create('podcasts', function (Blueprint $table) {
+//     $table->id();
+//     $table->string('title');
+//     $table->boolean('is_active')->default(1);
+//     $table->boolean('is_featured')->default(0);
+//     $table->integer('sort_order')->default(0);
+//     $table->date('published_date')->nullable();
+//     $table->timestamps();
+// });
+
+// Admin E-course Routes - Separate group for admin access
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('ecourses', App\Http\Controllers\Admin\EcourseController::class);
+    Route::post('ecourses/{ecourse}/toggle-featured', [App\Http\Controllers\Admin\EcourseController::class, 'toggleFeatured'])
+        ->name('ecourses.toggle-featured');
+    Route::post('ecourses/{ecourse}/toggle-active', [App\Http\Controllers\Admin\EcourseController::class, 'toggleActive'])
+        ->name('ecourses.toggle-active');
+    
+    // Alternative delete route if resource route fails
+    Route::post('ecourses/{ecourse}/delete', [App\Http\Controllers\Admin\EcourseController::class, 'destroy'])
+        ->name('ecourses.delete');
+
+    // Podcast management routes
+    Route::resource('podcasts', App\Http\Controllers\Admin\PodcastController::class);
+    Route::post('podcasts/{podcast}/toggle-featured', [App\Http\Controllers\Admin\PodcastController::class, 'toggleFeatured'])
+        ->name('podcasts.toggle-featured');
+    Route::post('podcasts/{podcast}/toggle-active', [App\Http\Controllers\Admin\PodcastController::class, 'toggleActive'])
+        ->name('podcasts.toggle-active');
 });
