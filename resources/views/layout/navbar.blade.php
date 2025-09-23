@@ -7,6 +7,14 @@
             <li class="nav-item"><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
             <li class="nav-item"><a href="/ekskul-reguler" class="{{ request()->is('ekskul-reguler') ? 'active' : '' }}">Ekskul Reguler</a></li>
             <li class="nav-item dropdown">
+                <a href="/ecourse" class="{{ request()->is('ecourse*') ? 'active' : '' }}">E-Course <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu">
+                    <a href="/ecourse/film-konten-kreator" class="dropdown-item">Film & Konten Kreator</a>
+                    <a href="/ecourse/komik" class="dropdown-item">Komik</a>
+                    <a href="/ecourse/robotik" class="dropdown-item">Robotik</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
                 <a href="#">Event <span class="dropdown-arrow">▼</span></a>
                 <div class="dropdown-menu">
                     <a href="{{ route('lhec2025') }}" class="dropdown-item">
@@ -17,7 +25,7 @@
                         <span class="dropdown-icon">💼</span>
                         WORKSHOP & BOOTCAMP
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('holiday-fun-class') }}" class="dropdown-item">
                         <span class="dropdown-icon">🎉</span>
                         HOLIDAY FUN CLASS
                     </a>
