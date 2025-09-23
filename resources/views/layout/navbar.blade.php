@@ -34,14 +34,14 @@
                         <span class="dropdown-icon">💼</span>
                         WORKSHOP & BOOTCAMP
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('holiday-fun-class') }}" class="dropdown-item">
                         <span class="dropdown-icon">🎉</span>
                         HOLIDAY FUN CLASS
                     </a>
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a href="#"><span class="dropdown-icon">📷</span> Tentang Kami <span class="dropdown-arrow">▼</span></a>
+                <a href="#"><span class="dropdown-icon"></span> Tentang Kami <span class="dropdown-arrow">▼</span></a>
                 <div class="dropdown-menu">
                     <a href="/karier" class="dropdown-item">Latih Hobi Karier</a>
                     <a href="/magang" class="dropdown-item">Program Magang (Internship)</a>

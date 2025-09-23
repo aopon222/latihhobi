@@ -1,25 +1,14 @@
 <?php
-// Admin Dashboard Route
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-});
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\EcourseController;
-use Illuminate\Database\Schema\Blueprint;
 
 Route::get('/manual-verify', function () {
     return view('auth.manual-verify');
 })->name('manual.verify');
-Route::get('/workshop-bootcamp', function () {
-    return view('workshop-bootcamp');
-})->name('workshop-bootcamp');
-Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +19,7 @@ Route::get('/ekskul-reguler', function () {
 });
 
 Route::get('/ecourse', [EcourseController::class, 'index']);
+Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
 
 Route::get('/event', function () {
     return view('event');
@@ -61,13 +51,13 @@ Route::get('/lhec2025', function () {
     return view('lhec2025');
 })->name('lhec2025');
 
+// Workshop & Bootcamp landing page
+Route::get('/workshop-bootcamp', function () {
+    return view('workshop-bootcamp');
+})->name('workshop-bootcamp');
+
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
-    // Dashboard Routes
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
-    Route::put('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
     
     // Email Verification Routes
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');
@@ -77,18 +67,33 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verification-notification', [AuthController::class, 'resendVerification'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+    
+    // Protected routes that require email verification
+    Route::middleware('verified')->group(function () {
+        // Dashboard Routes
+        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
+        Route::post('/profile/update', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
+    });
 });
 
-// Podcast Schema (moved to migration files)
-// Schema::create('podcasts', function (Blueprint $table) {
-//     $table->id();
-//     $table->string('title');
-//     $table->boolean('is_active')->default(1);
-//     $table->boolean('is_featured')->default(0);
-//     $table->integer('sort_order')->default(0);
-//     $table->date('published_date')->nullable();
-//     $table->timestamps();
-// });
+// Additional Podcast Routes (from teammate's changes)
+Route::get('/karier', function () {
+    return view('podcasts.karier');
+});
+
+Route::view('/magang', 'podcasts.magang')->name('magang');
+Route::view('/profil', 'podcasts.profil')->name('profil');
+Route::view('/holiday-fun-class', 'podcasts.holiday-fun-class')->name('holiday-fun-class');
+Route::view('/contact', 'contact')->name('contact');
+
+// Admin Dashboard Route
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
 
 // Admin E-course Routes - Separate group for admin access
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
