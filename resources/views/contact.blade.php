@@ -4,135 +4,169 @@
 
 @section('content')
 <style>
+    :root {
+        --biru: #04a6d6;
+        --oren: #f9a51a;
+        --putih: #fff;
+        --hitam: #1a2330;
+    }
     .contact-main {
         max-width: 900px;
         margin: 0 auto;
-        padding: 32px 16px 0 16px;
+        padding: 40px 16px 0 16px;
+        background: var(--putih);
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(4,166,214,.08);
     }
     .contact-title {
-        font-size: 28px;
-        font-weight: 800;
-        color: #04a6d6;
+        font-size: 32px;
+        font-weight: 900;
+        color: var(--biru);
         text-align: center;
-        margin-bottom: 18px;
-        letter-spacing: 1px;
+        margin-bottom: 24px;
+        letter-spacing: 2px;
+        text-shadow: 0 2px 8px rgba(4,166,214,.08);
     }
-    .contact-row {
+    .contact-info-section {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 32px;
-        margin-bottom: 32px;
         align-items: flex-start;
-        justify-content: center;
+        margin-bottom: 40px;
     }
     .contact-col-info {
-        flex: 1 1 320px;
-        max-width: 400px;
-        background: #f5f7fa;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.04);
-        margin-bottom: 18px;
-    }
-    .contact-info-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #0f3d5c;
-        margin-bottom: 10px;
-    }
-    .contact-info-list {
-        font-size: 15px;
-        color: #222;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-    .contact-info-list li {
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .contact-col-form {
-        flex: 2 1 400px;
-        max-width: 500px;
-        background: #fff;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.04);
-    }
-    .contact-form-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #04a6d6;
-        margin-bottom: 10px;
-    }
-    .contact-form label {
-        font-size: 15px;
-        color: #0f3d5c;
-        font-weight: 600;
-        margin-bottom: 4px;
-        display: block;
-    }
-    .contact-form input,
-    .contact-form textarea {
         width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #e8eef4;
-        margin-bottom: 14px;
-        font-size: 15px;
-        background: #f5f7fa;
+        background: var(--putih);
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(249,165,26,.08);
+        padding: 32px 24px;
+        border: 2px solid var(--biru);
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
     }
-    .contact-form textarea {
-        min-height: 80px;
-        resize: vertical;
+    .contact-info-desc {
+        font-size: 17px;
+        color: var(--hitam);
+        margin-bottom: 12px;
+        font-weight: 500;
+        line-height: 1.6;
     }
-    .contact-form button {
-        background: #04a6d6;
-        color: #fff;
+    .contact-label {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--oren);
+        margin-bottom: 6px;
+        margin-top: 12px;
+        display: block;
+        letter-spacing: 1px;
+    }
+    .contact-btn {
+        background: var(--biru);
+        color: var(--putih);
         font-weight: 700;
         border: none;
         border-radius: 8px;
-        padding: 12px 24px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background .2s;
+        padding: 10px 22px;
+        font-size: 15px;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 8px;
+        margin-top: 8px;
+        transition: background .2s, box-shadow .2s;
+        box-shadow: 0 2px 8px rgba(4,166,214,.12);
+        border: 2px solid var(--oren);
     }
-    .contact-form button:hover {
-        background: #0f3d5c;
+    .contact-btn:hover {
+        background: var(--oren);
+        color: var(--putih);
+        border-color: var(--biru);
+        box-shadow: 0 4px 16px rgba(249,165,26,.18);
+    }
+    .contact-info-detail {
+        font-size: 15px;
+        color: var(--hitam);
+        margin-bottom: 0;
+        font-weight: 500;
+        padding-left: 2px;
+    }
+    .contact-social-title {
+        font-size: 24px;
+        font-weight: 900;
+        color: var(--hitam);
+        text-align: center;
+        margin: 48px 0 18px 0;
+        letter-spacing: 2px;
+        text-shadow: 0 2px 8px rgba(249,165,26,.08);
+    }
+    .contact-social-row {
+        display: flex;
+        gap: 56px;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+    .contact-social-link {
+        color: var(--biru);
+        font-size: 56px;
+        transition: color .2s, transform .2s;
+        text-decoration: none;
+        background: none;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+    }
+    .contact-social-link:hover {
+        color: var(--oren);
+        background: none;
+        transform: scale(1.12);
+        border: none;
     }
     @media (max-width: 900px) {
-        .contact-row { flex-direction: column; gap: 0; }
-        .contact-col-info, .contact-col-form { max-width: 100%; }
+        .contact-main { padding: 18px 4px 0 4px; }
+        .contact-info-section { gap: 18px; }
+        .contact-social-row { gap: 24px; }
     }
 </style>
 
+<!-- Font Awesome CDN for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 <div class="contact-main">
-    <div class="contact-title">Contact LatihHobi</div>
-    <div class="contact-row">
+    <div class="contact-title">CONTACT</div>
+    <div class="contact-info-section">
         <div class="contact-col-info">
-            <div class="contact-info-title">Info Kontak</div>
-            <ul class="contact-info-list">
-                <li>📍 Alamat: Jl. Cisaranten Kulon No.16, Arcamanik, Bandung</li>
-                <li>📞 Telp/WA: <a href="https://wa.me/6281222222222" target="_blank">0812-2222-2222</a></li>
-                <li>✉️ Email: <a href="mailto:info@latihhobi.id">info@latihhobi.id</a></li>
-                <li>🌐 Website: <a href="https://latihhobi.id" target="_blank">latihhobi.id</a></li>
-                <li>📸 Instagram: <a href="https://instagram.com/latihhobi" target="_blank">@latihhobi</a></li>
-            </ul>
+            <div class="contact-info-desc">
+                Untuk menyampaikan informasi, pertanyaan dan keluhan dapat melalui beberapa media komunikasi berikut:
+            </div>
+            <span class="contact-label"><i class="fa-solid fa-map-location-dot"></i> ALAMAT</span>
+            <a href="https://www.google.com/maps?ll=-6.930189,107.679565&z=13&t=m&hl=en-US&gl=US&mapclient=embed&q=Jl.+Cisaranten+Kulon+No.16+Cisaranten+Kulon+Kec.+Arcamanik+Kota+Bandung,+Jawa+Barat+40293" target="_blank" class="contact-btn">
+                <i class="fa-solid fa-location-dot"></i> Lihat di Google Maps
+            </a>
+            <div class="contact-info-detail">
+                Jl. Cisaranten Kulon No.16, Cisaranten Kulon, Kec. Arcamanik, Kota Bandung, Jawa Barat 40293
+            </div>
+            <span class="contact-label"><i class="fa-brands fa-whatsapp"></i> TELEPHONE</span>
+            <a href="https://api.whatsapp.com/send/?phone=62895401070197&text&type=phone_number&app_absent=0" target="_blank" class="contact-btn">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            </a>
+            <div class="contact-info-detail">
+                0895-4010-70197
+            </div>
         </div>
-        <div class="contact-col-form">
-            <div class="contact-form-title">Kirim Pesan</div>
-            <form class="contact-form" method="post" action="#">
-                <label for="name">Nama</label>
-                <input type="text" id="name" name="name" required>
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-                <label for="message">Pesan</label>
-                <textarea id="message" name="message" required></textarea>
-                <button type="submit">Kirim</button>
-            </form>
-        </div>
+    </div>
+    <div class="contact-social-title">SOSIAL MEDIA KAMI</div>
+    <div class="contact-social-row">
+        <a href="https://www.instagram.com/latihhobi/" class="contact-social-link" target="_blank" title="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.youtube.com/@Latihhobi" class="contact-social-link" target="_blank" title="YouTube">
+            <i class="fab fa-youtube"></i>
+        </a>
+        <a href="https://www.tiktok.com/@latihhobi" class="contact-social-link" target="_blank" title="TikTok">
+            <i class="fab fa-tiktok"></i>
+        </a>
     </div>
 </div>
 @endsection
