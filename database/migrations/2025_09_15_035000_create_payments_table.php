@@ -23,7 +23,6 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->json('proof_images')->nullable(); // untuk bank transfer
             $table->timestamps();
-            $table->timestamps();
         });
     }
 
