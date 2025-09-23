@@ -48,6 +48,9 @@
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input id="password" name="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
+                    <small class="form-text text-muted">
+                        Password harus mengandung minimal 8 karakter dengan kombinasi 1 huruf besar, 1 huruf kecil, dan 1 angka.
+                    </small>
                     @error('password')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
