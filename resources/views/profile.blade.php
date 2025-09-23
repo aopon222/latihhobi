@@ -64,6 +64,9 @@
                             @error('email')
                                 <div class="error-message">{{ $message }}</div>
                             @enderror
+                            <small style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 0.5rem; display: block;">
+                                ⚠️ Jika Anda mengubah email, verifikasi akan direset dan Anda perlu verifikasi email baru.
+                            </small>
                         </div>
 
                         <div class="form-group">
@@ -73,27 +76,15 @@
                                     <span class="status verified">✅ Email Terverifikasi</span>
                                 @else
                                     <span class="status unverified">❌ Email Belum Terverifikasi</span>
-                                    <a href="{{ route('verification.notice') }}" class="btn-verify">Verifikasi Email</a>
+                                    <a href="{{ route('manual.verify') }}" class="btn-verify">Verifikasi Manual</a>
                                 @endif
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Role</label>
-                            <div class="role-display">{{ ucfirst($user->role) }}</div>
                         </div>
 
                         <div class="form-group">
                             <label>Bergabung Sejak</label>
                             <div class="date-display">{{ $user->created_at->format('d M Y H:i') }}</div>
                         </div>
-
-                        @if($user->login_terakhir)
-                        <div class="form-group">
-                            <label>Login Terakhir</label>
-                            <div class="date-display">{{ $user->login_terakhir->format('d M Y H:i') }}</div>
-                        </div>
-                        @endif
 
                         <button type="submit" class="btn-primary">Perbarui Profil</button>
                     </form>
@@ -112,19 +103,19 @@
                     <div class="action-card">
                         <h3>Keamanan Akun</h3>
                         <p>Kelola keamanan dan privasi akun Anda</p>
-                        <a href="#" class="btn-secondary">Ubah Password</a>
+                        <a href="{{ route('password.change.form') }}" class="btn-secondary">🔐 Ubah Password</a>
                     </div>
 
                     <div class="action-card">
-                        <h3>Notifikasi</h3>
-                        <p>Atur preferensi notifikasi email</p>
-                        <a href="#" class="btn-secondary">Pengaturan Notifikasi</a>
+                        <h3>Email Status</h3>
+                        <p>Cek status email dan troubleshooting</p>
+                        <a href="{{ route('email.status') }}" class="btn-secondary">📧 Email Status</a>
                     </div>
 
                     <div class="action-card">
-                        <h3>Privasi</h3>
-                        <p>Kelola data dan privasi Anda</p>
-                        <a href="#" class="btn-secondary">Pengaturan Privasi</a>
+                        <h3>Verifikasi Manual</h3>
+                        <p>Jika email verifikasi tidak diterima</p>
+                        <a href="{{ route('manual.verify') }}" class="btn-secondary">✅ Verifikasi Manual</a>
                     </div>
                 </div>
             </div>
@@ -315,6 +306,16 @@
             background: rgba(16, 185, 129, 0.2);
             color: #10b981;
             border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .error-message {
+            color: #f87171;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .is-invalid {
+            border-color: rgba(248, 113, 113, 0.5) !important;
         }
 
         @media (max-width: 768px) {

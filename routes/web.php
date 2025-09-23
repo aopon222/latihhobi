@@ -5,10 +5,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\EcourseController;
+use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\EmailTestController;
 
-Route::get('/manual-verify', function () {
-    return view('auth.manual-verify');
-})->name('manual.verify');
+Route::get('/manual-verify', [EmailTestController::class, 'showManualVerify'])->name('manual.verify');
+Route::post('/manual-verify', [EmailTestController::class, 'manualVerify'])->name('manual.verify.submit');
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,6 +45,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+    
+    // Password Reset Routes
+    Route::get('/password/forgot', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
+    Route::post('/password/email', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/password/reset', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 });
 
 // LHEC 2025 Route
@@ -58,6 +65,14 @@ Route::get('/workshop-bootcamp', function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
+    // Email Testing Routes
+    Route::get('/email/status', [EmailTestController::class, 'showEmailStatus'])->name('email.status');
+    Route::post('/email/test', [EmailTestController::class, 'testEmail'])->name('email.test');
+    
+    // Change Password Routes (available to all authenticated users)
+    Route::get('/password/change', [PasswordResetController::class, 'showChangePasswordForm'])->name('password.change.form');
+    Route::post('/password/change', [PasswordResetController::class, 'changePassword'])->name('password.change');
     
     // Email Verification Routes
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');

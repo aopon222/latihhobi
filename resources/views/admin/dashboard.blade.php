@@ -11,8 +11,9 @@
         <nav style="width:100%;">
             <a href="{{ route('admin.dashboard') }}" style="display:block;padding:12px 32px;color:#2563eb;font-weight:600;text-decoration:none;border-radius:8px;margin-bottom:8px;background:#e0e7ff;">Dashboard</a>
             <a href="{{ route('admin.ecourses.index') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">E-course</a>
+            <a href="{{ route('admin.podcasts.index') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">Podcast</a>
             <a href="#" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">Event</a>
-            <a href="#" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">Podcast</a>
+            <a href="{{ route('password.change.form') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">🔐 Ganti Password</a>
             <a href="{{ route('home') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">Kembali ke Website</a>
         </nav>
     </aside>

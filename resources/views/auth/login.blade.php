@@ -40,7 +40,7 @@
                     <label style="display:flex;align-items:center;font-size:1rem;">
                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} style="margin-right:8px;"> Ingat Saya
                     </label>
-                    <a href="#" style="font-size:1rem;color:#2563eb;text-decoration:underline;">Forgot Password?</a>
+                    <a href="{{ route('password.request') }}" style="font-size:1rem;color:#2563eb;text-decoration:underline;">Lupa Password?</a>
                 </div>
                 <button type="submit" style="width:100%;background:#2563eb;color:#fff;padding:14px 0;border:none;border-radius:10px;font-weight:700;font-size:1.1rem;box-shadow:0 2px 8px rgba(37,99,235,0.08);margin-bottom:8px;">Log Masuk</button>
             </form>
