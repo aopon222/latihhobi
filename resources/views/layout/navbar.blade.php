@@ -7,30 +7,13 @@
             <li class="nav-item"><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
             <li class="nav-item"><a href="/ekskul-reguler" class="{{ request()->is('ekskul-reguler') ? 'active' : '' }}">Ekskul Reguler</a></li>
             <li class="nav-item dropdown">
-                <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
-                <div class="dropdown-menu">
-                    <a href="/ecourse" class="dropdown-item">
-                        <span class="dropdown-icon">🤖</span>
-                        Ecourse Robotik
-                    </a>
-                    <a href="/course-film-konten-kreator" class="dropdown-item">
-                        <span class="dropdown-icon">🎬</span>
-                        Ecourse Film & Konten Kreator
-                    </a>
-                    <a href="/ecourse" class="dropdown-item">
-                        <span class="dropdown-icon">📖</span>
-                        Ecourse Komik
-                    </a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a href="/event">Event <span class="dropdown-arrow">▼</span></a>
+                <a href="#">Event <span class="dropdown-arrow">▼</span></a>
                 <div class="dropdown-menu">
                     <a href="{{ route('lhec2025') }}" class="dropdown-item">
                         <span class="dropdown-icon">🏆</span>
                         LHEC 2025
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('workshop-bootcamp') }}" class="dropdown-item">
                         <span class="dropdown-icon">💼</span>
                         WORKSHOP & BOOTCAMP
                     </a>

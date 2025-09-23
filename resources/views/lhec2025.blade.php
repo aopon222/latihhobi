@@ -3,42 +3,14 @@
 @section('title', 'LHEC 2025 - LatihHobi Expo dan Competition')
 
 @section('content')
-    <!-- Header Section -->
-    <header class="header lhec-header">
-        <nav class="navbar">
-            <a href="/" class="logo">
-                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-            </a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/">Home</a></li>
-                <li class="nav-item"><a href="/ekskul-reguler">Ekskul Reguler</a></li>
-                <li class="nav-item"><a href="/ecourse">E-course</a></li>
-                <li class="nav-item active"><a href="/lhec2025">LHEC 2025</a></li>
-                <li class="nav-item"><a href="/event">Event</a></li>
-                <li class="nav-item"><a href="/profil">Tentang Kami</a></li>
-            </ul>
-            <div class="user-menu">
-                @php
-                    $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
-                    $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
-                @endphp
-                @auth
-                @else
-                    @if($hasLoginRoute)
-                        <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
-                    @endif
-                    @if($hasRegisterRoute)
-                        <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
-                    @endif
-                @endauth
-            </div>
-        </nav>
+    <!-- Hero Section -->
+    <section class="lhec-header">
         <div class="lhec-hero-content fade-in">
             <h1>LHEC 2025</h1>
             <p>LatihHobi Expo dan Competition 2025</p>
-            <a href="#lhec-registration" class="btn-start">DAFTAR SEKARANG</a>
+            <a href="#lhec-registration" class="btn-start">Daftar Sekarang</a>
         </div>
-    </header>
+    </section>
 
     <!-- Deskripsi Acara -->
     <section class="lhec-section lhec-description">
@@ -65,7 +37,7 @@
                 <ul>
                     <li>09:00 - 11:00: Workshop Desain</li>
                     <li>11:00 - 13:00: Kompetisi Film & Konten Kreator</li>
-                    <li>14:00 - 16:00: Penutupan dan Pengumuman Pemenang</li>
+                    <li>14:00 - 16:00: Penutupan & Pengumuman Pemenang</li>
                 </ul>
             </div>
         </div>
@@ -77,18 +49,18 @@
         <div class="speaker-list">
             <div class="speaker">
                 <img src="{{ asset('images/speaker1.png') }}" alt="Dr. Andi Setiawan" class="speaker-img">
-                <h3>Dr. Andi Setiawan</h3>
-                <p>Ahli Robotik dan Teknologi Pendidikan</p>
+                <div class="speaker-name">Dr. Andi Setiawan</div>
+                <div class="speaker-role">Ahli Robotik & Teknologi Pendidikan</div>
             </div>
             <div class="speaker">
                 <img src="{{ asset('images/speaker2.png') }}" alt="Ms. Rina Sari" class="speaker-img">
-                <h3>Ms. Rina Sari</h3>
-                <p>Penggiat Konten Kreator dan Media Sosial</p>
+                <div class="speaker-name">Ms. Rina Sari</div>
+                <div class="speaker-role">Penggiat Konten Kreator & Media Sosial</div>
             </div>
             <div class="speaker">
                 <img src="{{ asset('images/speaker3.png') }}" alt="Mr. Budi Santoso" class="speaker-img">
-                <h3>Mr. Budi Santoso</h3>
-                <p>Mentor Desain Grafis dan Kreatif</p>
+                <div class="speaker-name">Mr. Budi Santoso</div>
+                <div class="speaker-role">Mentor Desain Grafis & Kreatif</div>
             </div>
         </div>
     </section>
@@ -104,19 +76,20 @@
         .lhec-header {
             background: linear-gradient(120deg, #f44336 0%, #ff9800 100%);
             color: #fff;
-            padding-bottom: 40px;
+            padding: 56px 0 40px 0;
             text-align: center;
         }
         .lhec-hero-content {
-            margin-top: 40px;
+            margin-top: 24px;
         }
         .lhec-hero-content h1 {
-            font-size: 3rem;
-            font-weight: bold;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
         }
         .lhec-hero-content p {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
+            font-size: 1.25rem;
+            margin-bottom: 24px;
         }
         .btn-start, .btn-register {
             background: #fff;
@@ -127,6 +100,8 @@
             text-decoration: none;
             transition: background 0.2s, color 0.2s;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: inline-block;
+            margin-top: 8px;
         }
         .btn-start:hover, .btn-register:hover {
             background: #f44336;
@@ -141,28 +116,45 @@
             color: #f44336;
             margin-bottom: 18px;
             font-size: 2rem;
+            font-weight: 700;
+        }
+        .lhec-section p {
+            font-size: 1.08rem;
+            color: #333;
+            margin-bottom: 0;
         }
         .lhec-schedule-list {
             display: flex;
             flex-wrap: wrap;
             gap: 32px;
+            margin-top: 12px;
         }
         .lhec-schedule-day {
             background: #fff3e0;
             border-radius: 12px;
-            padding: 24px;
+            padding: 24px 28px;
             flex: 1 1 300px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            min-width: 260px;
         }
         .lhec-schedule-day h3 {
             margin-bottom: 10px;
             color: #ff9800;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+        .lhec-schedule-day ul {
+            padding-left: 18px;
+            margin: 0;
+            color: #444;
+            font-size: 1rem;
         }
         .speaker-list {
             display: flex;
             gap: 32px;
             flex-wrap: wrap;
             justify-content: center;
+            margin-top: 18px;
         }
         .speaker {
             background: #fff;
@@ -172,6 +164,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             flex: 1 1 220px;
             max-width: 240px;
+            min-width: 180px;
         }
         .speaker-img {
             width: 80px;
@@ -180,11 +173,48 @@
             object-fit: cover;
             margin-bottom: 12px;
             background: #ffe0b2;
+            border: 2px solid #ff9800;
+        }
+        .speaker-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            color: #f44336;
+        }
+        .speaker-role {
+            font-size: 0.98rem;
+            color: #444;
+        }
+        .lhec-registration {
+            text-align: center;
+        }
+        .lhec-registration p {
+            margin-bottom: 18px;
         }
         @media (max-width: 900px) {
             .lhec-schedule-list, .speaker-list {
                 flex-direction: column;
                 gap: 18px;
+            }
+            .lhec-section {
+                padding: 32px 8px 24px 8px;
+            }
+        }
+        @media (max-width: 600px) {
+            .lhec-header {
+                padding: 32px 0 24px 0;
+            }
+            .lhec-hero-content h1 {
+                font-size: 2rem;
+            }
+            .lhec-section h2 {
+                font-size: 1.3rem;
+            }
+            .lhec-schedule-day {
+                padding: 18px 10px;
+            }
+            .speaker {
+                padding: 16px 6px;
             }
         }
     </style>

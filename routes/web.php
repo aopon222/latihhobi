@@ -68,3 +68,8 @@ Route::middleware('auth')->group(function () {
 
 // LHEC 2025 landing page
 Route::view('/lhec2025', 'lhec2025')->name('lhec2025');
+
+// Workshop & Bootcamp landing page
+Route::get('/workshop-bootcamp', function () {
+    return view('workshop-bootcamp');
+})->name('workshop-bootcamp');
