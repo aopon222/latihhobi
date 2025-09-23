@@ -72,39 +72,7 @@ Route::middleware('auth')->group(function () {
 // LHEC 2025 landing page
 Route::view('/lhec2025', 'lhec2025')->name('lhec2025');
 
-<<<<<<< HEAD
 // Workshop & Bootcamp landing page
 Route::get('/workshop-bootcamp', function () {
     return view('workshop-bootcamp');
 })->name('workshop-bootcamp');
-=======
-// Manual email verification for testing (remove in production)
-Route::get('/manual-verify/{user}', function (App\Models\User $user) {
-    if (!$user->hasVerifiedEmail()) {
-        $user->markEmailAsVerified();
-        return redirect()->route('login')->with('success', 'Email berhasil diverifikasi secara manual! Silakan login.');
-    }
-    return redirect()->route('login')->with('info', 'Email sudah terverifikasi sebelumnya.');
-})->name('manual.verify');
-
-// Email configuration checker (development only)
-Route::get('/email-config-check', function () {
-    return view('email-config-check');
-})->name('email.config.check');
-
-// Test email sending
-Route::post('/test-email', function (Illuminate\Http\Request $request) {
-    try {
-        $testEmail = $request->input('email') ?: config('mail.mailers.smtp.username');
-        
-        Illuminate\Support\Facades\Mail::raw('Test email dari LatihHobi - ' . now(), function ($message) use ($testEmail) {
-            $message->to($testEmail)
-                    ->subject('LatihHobi - Test Email Configuration');
-        });
-        
-        return back()->with('success', "Test email berhasil dikirim ke: {$testEmail}. Silakan cek inbox Anda.");
-    } catch (Exception $e) {
-        return back()->with('error', 'Gagal mengirim test email: ' . $e->getMessage());
-    }
-})->name('test.email');
->>>>>>> 153e779752c0ccae2a23c8e18cd2ed148868adf2
