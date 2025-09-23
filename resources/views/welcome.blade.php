@@ -219,7 +219,7 @@
                     </div>
                     <div class="podcast-info">
                         <h3>{{ $podcast->title }}</h3>
-                        <p>{{ $podcast->host }} • {{ number_format($podcast->views) }} views</p>
+                        <p>{{ $podcast->host }}</p>
                         <a href="{{ route('podcasts.show', $podcast) }}" class="btn-subscribe">Tonton Sekarang</a>
                     </div>
                 </div>

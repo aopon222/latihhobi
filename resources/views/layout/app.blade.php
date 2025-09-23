@@ -1783,14 +1783,128 @@
                 transform: translateY(0);
             }
         }
+
+        /* Search Overlay */
+        .search-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        .search-overlay-content {
+            position: relative;
+            top: 50%;
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            transform: translateY(-50%);
+        }
+        .search-overlay-content form {
+            display: flex;
+        }
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+        .search-button {
+            background: #ffc107;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            border-radius: 0 5px 5px 0;
+        }
+        .search-button i {
+            color: #fff;
+            font-size: 1.2rem;
+        }
+        .close-search {
+            position: absolute;
+            top: 20px;
+            right: 45px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
+    @stack('styles')
 </head>
 <body>
     @include('layout.navbar')
 
+    <div id="search-overlay" class="search-overlay">
+        <span class="close-search">&times;</span>
+        <div class="search-overlay-content">
+            <form action="/search" method="GET">
+                <input type="text" name="query" placeholder="Search..." class="search-input">
+                <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+    </div>
     <main>
         @yield('content')
     </main>
-    <!-- ...footer dan script... -->
+    
+    <script>
+        // Simple scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Add hover effect to service cards
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.background = '#0080b8';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.background = '#00a8e6';
+            });
+        });
+
+        const searchLink = document.querySelector('.nav-search');
+        const searchOverlay = document.getElementById('search-overlay');
+        const closeSearch = document.querySelector('.close-search');
+
+        if (searchLink) {
+            searchLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchOverlay.style.display = 'block';
+            });
+        }
+
+        if (closeSearch) {
+            closeSearch.addEventListener('click', () => {
+                searchOverlay.style.display = 'none';
+            });
+        }
+    </script>
+    @stack('scripts')
 </body>
 </html>
