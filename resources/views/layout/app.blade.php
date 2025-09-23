@@ -2,8 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'LatihHobi - Platform Pembelajaran')</title>
+    <title>@yield('title')</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -393,7 +392,7 @@
             overflow: hidden;
             transition: all 0.3s;
             backdrop-filter: blur(10px);
-        }
+        }   
 
         .private-card:hover {
             transform: translateY(-5px);
@@ -1839,7 +1838,7 @@
     @stack('styles')
 </head>
 <body>
-    @yield('content')
+    @include('layout.navbar')
 
     <div id="search-overlay" class="search-overlay">
         <span class="close-search">&times;</span>
@@ -1850,6 +1849,10 @@
             </form>
         </div>
     </div>
+    <main>
+        @yield('content')
+    </main>
+    
     <script>
         // Simple scroll animation
         const observerOptions = {

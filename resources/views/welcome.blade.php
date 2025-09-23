@@ -3,80 +3,6 @@
 @section('title', 'LatihHobi - Platform Pembelajaran')
 
 @section('content')
-    <!-- Header -->
-    <header class="header">
-        <nav class="navbar">
-            <a href="/" class="logo">
-                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-            </a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="#" class="active">Home</a></li>
-                <li class="nav-item"><a href="/ekskul-reguler">Ekskul Reguler</a></li>
-                <li class="nav-item dropdown">
-                    <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="/ecourse" class="dropdown-item">
-                            <span class="dropdown-icon">🤖</span>
-                            Ecourse Robotik
-                        </a>
-                        <a href="/course-film-konten-kreator" class="dropdown-item">
-                            <span class="dropdown-icon">🎬</span>
-                            Ecourse Film & Konten Kreator
-                        </a>
-                        <a href="/ecourse" class="dropdown-item">
-                            <span class="dropdown-icon">📖</span>
-                            Ecourse Komik
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="/event">Event <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🏆</span>
-                            LHEC IV 2025
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">💼</span>
-                            WORKSHOP & BOOTCAMP
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🎉</span>
-                            HOLIDAY FUN CLASS
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#"><span class="dropdown-icon">📷</span> Tentang Kami <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="/karier" class="dropdown-item">Latih Hobi Karier</a>
-                        <a href="/magang" class="dropdown-item">Program Magang (Internship)</a>
-                        <a href="/profil" class="dropdown-item">PROFIL</a>
-                        <a href="/contact" class="dropdown-item">CONTACT</a>
-                    </div>
-                </li>
-            </ul>
-            <div class="user-menu">
-                <a href="#" class="user-icon">🔍</a>
-                <a href="#" class="user-icon">🛒</a>
-                @php
-                    $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
-                    $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
-                    $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
-                @endphp
-                @auth
-                    <!-- User dropdown dihilangkan sementara -->
-                @else
-                    @if($hasLoginRoute)
-                    <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
-                    @endif
-                    @if($hasRegisterRoute)
-                    <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
-                    @endif
-                @endauth
-            </div>
-        </nav>
-    </header>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -188,19 +114,19 @@
             <div class="private-class-grid">
                 <div class="private-class-item">
                     <div class="private-class-icon">
-                        <img src="{{ asset('images/placeholder-robotik.svg') }}" alt="Robotik" class="private-class-icon-img">
+                        <img src="{{ asset('images/ROBONESIA.svg') }}" alt="Robotik" class="private-class-icon-img">
                     </div>
                     <h3>Robotik</h3>
                 </div>
                 <div class="private-class-item">
                     <div class="private-class-icon">
-                        <img src="{{ asset('images/placeholder-film.svg') }}" alt="Film & Konten Kreator" class="private-class-icon-img">
+                        <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="private-class-icon-img">
                     </div>
                     <h3>Film & Konten Kreator</h3>
                 </div>
                 <div class="private-class-item">
                     <div class="private-class-icon">
-                        <img src="{{ asset('images/placeholder-komik.svg') }}" alt="Komik" class="private-class-icon-img">
+                        <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="private-class-icon-img">
                     </div>
                     <h3>Komik</h3>
                 </div>
