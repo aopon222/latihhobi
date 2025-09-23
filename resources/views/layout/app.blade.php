@@ -2,8 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'LatihHobi - Platform Pembelajaran')</title>
+    <title>@yield('title')</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -393,7 +392,7 @@
             overflow: hidden;
             transition: all 0.3s;
             backdrop-filter: blur(10px);
-        }
+        }   
 
         .private-card:hover {
             transform: translateY(-5px);
@@ -1787,42 +1786,11 @@
     </style>
 </head>
 <body>
-    @yield('content')
+    @include('layout.navbar')
 
-    <script>
-        // Simple scroll animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'all 0.6s ease';
-            observer.observe(el);
-        });
-
-        // Add hover effect to service cards
-        document.querySelectorAll('.service-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.background = '#0080b8';
-            });
-
-            card.addEventListener('mouseleave', function() {
-                this.style.background = '#00a8e6';
-            });
-        });
-    </script>
+    <main>
+        @yield('content')
+    </main>
+    <!-- ...footer dan script... -->
 </body>
 </html>

@@ -1,11 +1,13 @@
 <?php
-// E-Course Robotik landing page
-Route::view('/ecourse/robotik', 'ecourse-robotik')->name('course.robotik');
+
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PodcastController;
+
+// E-Course Robotik landing page
+Route::view('/ecourse/robotik', 'ecourse-robotik')->name('course.robotik');
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +35,11 @@ Route::view('/course-film-konten-kreator', 'course-film-konten-kreator')->name('
 Route::redirect('/ecourse/film', '/course-film-konten-kreator');
 Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
 
+// E-Course: Komik landing page
+Route::view('/ecourse-komik', 'course-Komik')->name('course.komik');
+Route::view('/course-komik', 'course-Komik');
+Route::redirect('/ecourse/komik', '/course-komik');
+
 // Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -43,13 +50,8 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
-    // Dashboard Routes
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
-    Route::post('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
-    
-    // Email Verification Routes
+
+    // Email Verification Routes (must be accessible to authenticated but unverified users)
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
         ->middleware(['signed', 'throttle:6,1'])
@@ -57,4 +59,52 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verification-notification', [AuthController::class, 'resendVerification'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+
+    // Protected routes that require email verification
+    Route::middleware('verified')->group(function () {
+        // Dashboard Routes
+        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('profile');
+        Route::post('/profile', [App\Http\Controllers\DashboardController::class, 'updateProfile'])->name('profile.update');
+    });
 });
+
+// LHEC 2025 landing page
+Route::view('/lhec2025', 'lhec2025')->name('lhec2025');
+
+<<<<<<< HEAD
+// Workshop & Bootcamp landing page
+Route::get('/workshop-bootcamp', function () {
+    return view('workshop-bootcamp');
+})->name('workshop-bootcamp');
+=======
+// Manual email verification for testing (remove in production)
+Route::get('/manual-verify/{user}', function (App\Models\User $user) {
+    if (!$user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+        return redirect()->route('login')->with('success', 'Email berhasil diverifikasi secara manual! Silakan login.');
+    }
+    return redirect()->route('login')->with('info', 'Email sudah terverifikasi sebelumnya.');
+})->name('manual.verify');
+
+// Email configuration checker (development only)
+Route::get('/email-config-check', function () {
+    return view('email-config-check');
+})->name('email.config.check');
+
+// Test email sending
+Route::post('/test-email', function (Illuminate\Http\Request $request) {
+    try {
+        $testEmail = $request->input('email') ?: config('mail.mailers.smtp.username');
+        
+        Illuminate\Support\Facades\Mail::raw('Test email dari LatihHobi - ' . now(), function ($message) use ($testEmail) {
+            $message->to($testEmail)
+                    ->subject('LatihHobi - Test Email Configuration');
+        });
+        
+        return back()->with('success', "Test email berhasil dikirim ke: {$testEmail}. Silakan cek inbox Anda.");
+    } catch (Exception $e) {
+        return back()->with('error', 'Gagal mengirim test email: ' . $e->getMessage());
+    }
+})->name('test.email');
+>>>>>>> 153e779752c0ccae2a23c8e18cd2ed148868adf2
