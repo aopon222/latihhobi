@@ -4,84 +4,116 @@
 
 @section('content')
 <style>
+    :root {
+        --biru: #04a6d6;
+        --oren: #f9a51a;
+        --putih: #fff;
+        --hitam: #1a2330;
+    }
+    .profil-hero-bg {
+        width: 100%;
+        height: 80px;
+        background: linear-gradient(90deg, var(--biru) 60%, var(--oren) 100%);
+        border-radius: 0 0 40px 40px;
+        position: relative;
+        z-index: 1;
+    }
     .profil-main {
-        max-width: 1100px;
+        max-width: 1200px;
         margin: 0 auto;
-        padding: 32px 16px 0 16px;
+        padding: 0 16px 0 16px;
+        margin-top: 48px; /* Tambahkan margin-top agar konten turun */
+        position: relative;
+        z-index: 2;
     }
     .profil-row {
         display: flex;
         flex-wrap: wrap;
         gap: 32px;
         margin-bottom: 32px;
+        justify-content: center;
     }
-    .profil-col-logo {
-        flex: 1 1 320px;
-        max-width: 340px;
+    .profil-card {
+        background: #f8fafc;
+        border-radius: 24px;
+        box-shadow: 0 4px 24px rgba(4,166,214,.08);
+        padding: 36px 32px 32px 32px;
+        flex: 1 1 380px;
+        min-width: 320px;
+        max-width: 480px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
     }
     .profil-logo-img {
-        width: 220px;
+        width: 110px;
         margin-bottom: 12px;
+        border-radius: 16px;
+        background: var(--putih);
+        box-shadow: 0 2px 8px rgba(4,166,214,.08);
+        padding: 8px;
+        object-fit: contain;
     }
     .profil-logo-title {
-        font-size: 32px;
+        font-size: 28px;
         font-weight: 800;
-        color: #04a6d6;
+        color: var(--biru);
         margin-bottom: 2px;
         text-align: center;
         letter-spacing: 1px;
     }
     .profil-logo-sub {
-        font-size: 18px;
-        color: #f9a51a;
+        font-size: 16px;
+        color: var(--oren);
         font-weight: 600;
         margin-bottom: 18px;
         text-align: center;
     }
     .profil-logo-desc {
         font-size: 15px;
-        color: #222;
+        color: var(--hitam);
         text-align: left;
         margin-bottom: 0;
+        line-height: 1.6;
     }
-    .profil-col-visi-misi {
-        flex: 2 1 400px;
-        max-width: 600px;
-        background: #f5f7fa;
-        border-radius: 12px;
-        padding: 24px 24px 24px 32px;
-        box-sizing: border-box;
-        box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    .profil-card-visi {
+        background: #f8fafc;
+        border-radius: 24px;
+        box-shadow: 0 4px 24px rgba(4,166,214,.08);
+        padding: 36px 32px 32px 32px;
+        flex: 1 1 380px;
+        min-width: 320px;
+        max-width: 480px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
     }
     .profil-visi-title {
         font-size: 22px;
         font-weight: 700;
-        color: #0f3d5c;
+        color: var(--biru);
         margin-bottom: 8px;
         letter-spacing: 1px;
     }
     .profil-visi-desc {
         font-size: 15px;
-        color: #222;
+        color: var(--hitam);
         margin-bottom: 18px;
     }
     .profil-misi-title {
         font-size: 20px;
         font-weight: 700;
-        color: #04a6d6;
+        color: var(--oren);
         margin-bottom: 8px;
         letter-spacing: 1px;
     }
     .profil-misi-list {
         font-size: 15px;
-        color: #222;
+        color: var(--hitam);
         margin: 0 0 0 18px;
         padding: 0;
         list-style: disc;
+        line-height: 1.7;
     }
     .profil-schools {
         margin-top: 32px;
@@ -92,16 +124,19 @@
         justify-content: flex-start;
     }
     .profil-schools-img {
-        width: 220px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        width: 180px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(4,166,214,.06);
+        background: #f8fafc;
+        padding: 8px;
+        object-fit: contain;
     }
     .profil-schools-logos {
         flex: 1 1 320px;
         min-width: 220px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        background: #f8fafc;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(4,166,214,.04);
         padding: 18px;
         display: flex;
         flex-direction: column;
@@ -110,20 +145,22 @@
     .profil-schools-title {
         font-size: 16px;
         font-weight: 700;
-        color: #0f3d5c;
+        color: var(--biru);
         margin-bottom: 10px;
     }
     @media (max-width: 900px) {
-        .profil-row { flex-direction: column; gap: 0; }
-        .profil-col-logo, .profil-col-visi-misi { max-width: 100%; }
+        .profil-row { flex-direction: column; gap: 0;}
+        .profil-card, .profil-card-visi { max-width: 100%; }
         .profil-schools { flex-direction: column; gap: 12px; }
         .profil-schools-img { width: 100%; }
+        .profil-main { margin-top: 24px; padding: 32px 4px 0 4px; }
     }
 </style>
 
+<div class="profil-hero-bg"></div>
 <div class="profil-main">
     <div class="profil-row">
-        <div class="profil-col-logo">
+        <div class="profil-card">
             <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="profil-logo-img">
             <div class="profil-logo-title">LatihHobi</div>
             <div class="profil-logo-sub">Pusat Bakat dan Hobi Indonesia</div>
@@ -131,7 +168,7 @@
                 Merupakan platform pengembangan bakat, yang membantu anak, orang tua dan sekolah untuk mengembangkan potensi kemampuan anak di bidangnya masing-masing dengan ekosistem belajar yang lengkap, terukur dan tutor yang kompeten. Lebih dari 60 sekolah di Jawa Barat yang telah bekerjasama.
             </div>
         </div>
-        <div class="profil-col-visi-misi">
+        <div class="profil-card-visi">
             <div class="profil-visi-title">VISI</div>
             <div class="profil-visi-desc">
                 Menjadi Platform Pengembangan hobi dan bakat anak yang Professional, Inspiratif, dan Kolaboratif secara Menyenangkan Nomor 1 di Indonesia
@@ -151,7 +188,7 @@
         <img src="{{ asset('images/profil-student.jpg') }}" alt="Student" class="profil-schools-img">
         <div class="profil-schools-logos">
             <div class="profil-schools-title">Sekolah yang sudah bekerjasama</div>
-            <img src="{{ asset('images/profil-schools.png') }}" alt="Logo Sekolah" style="width:100%;max-width:420px;">
+            <img src="{{ asset('images/sekolah.svg') }}" alt="Logo Sekolah" style="width:100%;max-width:420px;">
         </div>
     </div>
 </div>
