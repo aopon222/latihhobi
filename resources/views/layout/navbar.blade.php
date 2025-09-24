@@ -112,22 +112,34 @@
         const btn = pd.querySelector('.profile-btn');
         const menu = pd.querySelector('.dropdown-menu');
 
-        // Desktop: show on hover
-        pd.addEventListener('mouseenter', () => {
+        function openMenu(menu, btn){
             menu.style.display = 'block';
+            menu.style.position = 'fixed';
+            menu.style.right = 'auto';
+            const rect = btn.getBoundingClientRect();
+            const mRect = menu.getBoundingClientRect();
+            let left = rect.right - mRect.width;
+            if(left < 8) left = rect.left;
+            const top = rect.bottom + 8;
+            menu.style.left = left + 'px';
+            menu.style.top = top + 'px';
+            menu.style.zIndex = '999999';
             btn.setAttribute('aria-expanded', 'true');
-        });
-        pd.addEventListener('mouseleave', () => {
+        }
+        function closeMenu(menu, btn){
             menu.style.display = 'none';
             btn.setAttribute('aria-expanded', 'false');
-        });
+        }
+
+        // Desktop: show on hover
+        pd.addEventListener('mouseenter', () => openMenu(menu, btn));
+        pd.addEventListener('mouseleave', () => closeMenu(menu, btn));
 
         // Touch / click: toggle
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const isOpen = menu.style.display === 'block';
-            menu.style.display = isOpen ? 'none' : 'block';
-            btn.setAttribute('aria-expanded', String(!isOpen));
+            if(isOpen) closeMenu(menu, btn); else openMenu(menu, btn);
         });
 
         // Close on outside click

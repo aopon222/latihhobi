@@ -100,22 +100,37 @@
         const btn = pd.querySelector('.profile-btn');
         const menu = pd.querySelector('.dropdown-menu');
 
-        // Show on hover (desktop)
-        pd.addEventListener('mouseenter', () => {
+        // Helper to open menu using fixed positioning to avoid clipping by parents
+        function openMenu(menu, btn){
             menu.style.display = 'block';
+            menu.style.position = 'fixed';
+            menu.style.right = 'auto';
+            // compute position after element is visible
+            const rect = btn.getBoundingClientRect();
+            const mRect = menu.getBoundingClientRect();
+            // align right edge of menu to right edge of button when possible
+            let left = rect.right - mRect.width;
+            if(left < 8) left = rect.left;
+            const top = rect.bottom + 8;
+            menu.style.left = left + 'px';
+            menu.style.top = top + 'px';
+            menu.style.zIndex = '999999';
             btn.setAttribute('aria-expanded', 'true');
-        });
-        pd.addEventListener('mouseleave', () => {
+        }
+        function closeMenu(menu, btn){
             menu.style.display = 'none';
             btn.setAttribute('aria-expanded', 'false');
-        });
+        }
+
+        // Show on hover (desktop)
+        pd.addEventListener('mouseenter', () => openMenu(menu, btn));
+        pd.addEventListener('mouseleave', () => closeMenu(menu, btn));
 
         // Toggle on click (touch devices)
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const isOpen = menu.style.display === 'block';
-            menu.style.display = isOpen ? 'none' : 'block';
-            btn.setAttribute('aria-expanded', String(!isOpen));
+            if(isOpen) closeMenu(menu, btn); else openMenu(menu, btn);
         });
 
         // Close on outside click
