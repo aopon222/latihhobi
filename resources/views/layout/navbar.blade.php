@@ -63,25 +63,27 @@
                 $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
             @endphp
             @auth
-                <div class="user-dropdown" style="display:flex;align-items:center;gap:12px;">
-                    @if(auth()->user()->email === 'multimedia.latihhobi@gmail.com')
-                        <a href="{{ route('admin.dashboard') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
-                    @else
-                        <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
-                    @endif
+                <div class="profile-dropdown" style="position:relative;display:flex;align-items:center;gap:12px;">
+                    <button class="profile-btn" aria-haspopup="true" aria-expanded="false" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;cursor:pointer;padding:6px 8px;border-radius:8px;text-decoration:none;color:inherit;">
                         <span style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;">
                             <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
                         </span>
                         <span style="color:#ffc107;font-weight:600;font-size:1rem;">{{ Auth::user()->name ?? 'Profil' }}</span>
-                    </a>
-                    @if($hasLogoutRoute)
-                    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
-                        @csrf
-                        <button type="submit" style="background:#fff;border:none;color:#374151;font-weight:500;padding:8px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:pointer;transition:background 0.2s;">
-                            <i class="fas fa-sign-out-alt" style="margin-right:6px;"></i>Logout
-                        </button>
-                    </form>
-                    @endif
+                        <svg style="width:12px;height:12px;opacity:0.9;" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
+                    </button>
+
+                    <div class="dropdown-menu" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:6px 0;min-width:180px;z-index:1000;">
+                        @if(auth()->user()->email === 'multimedia.latihhobi@gmail.com')
+                            <a href="{{ route('admin.dashboard') }}" style="display:block;padding:10px 14px;color:#111827;text-decoration:none;font-weight:500;">Dashboard</a>
+                        @endif
+                        <a href="{{ route('profile') }}" style="display:block;padding:10px 14px;color:#111827;text-decoration:none;font-weight:500;">Profil</a>
+                        @if($hasLogoutRoute)
+                        <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+                            @csrf
+                            <button type="submit" style="width:100%;text-align:left;padding:10px 14px;background:transparent;border:0;color:#ef4444;font-weight:500;cursor:pointer;">Keluar</button>
+                        </form>
+                        @endif
+                    </div>
                 </div>
             @else
                 @if($hasLoginRoute)
@@ -94,3 +96,47 @@
         </div>
     </nav>
 </header>
+
+<script>
+    // Profile dropdown behavior for main navbar
+    (function(){
+        const pd = document.querySelector('.profile-dropdown');
+        if(!pd) return;
+        const btn = pd.querySelector('.profile-btn');
+        const menu = pd.querySelector('.dropdown-menu');
+
+        // Desktop: show on hover
+        pd.addEventListener('mouseenter', () => {
+            menu.style.display = 'block';
+            btn.setAttribute('aria-expanded', 'true');
+        });
+        pd.addEventListener('mouseleave', () => {
+            menu.style.display = 'none';
+            btn.setAttribute('aria-expanded', 'false');
+        });
+
+        // Touch / click: toggle
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isOpen = menu.style.display === 'block';
+            menu.style.display = isOpen ? 'none' : 'block';
+            btn.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if(!pd.contains(e.target)){
+                menu.style.display = 'none';
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                menu.style.display = 'none';
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+</script>
