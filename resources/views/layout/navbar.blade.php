@@ -74,14 +74,7 @@
                         </span>
                         <span class="profile-trigger" style="color:#ffc107;font-weight:600;font-size:1rem;cursor:pointer;">{{ Auth::user()->name ?? 'Profil' }}</span>
                     </a>
-                    @if($hasLogoutRoute)
-                    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
-                        @csrf
-                        <button type="submit" style="background:#fff;border:none;color:#374151;font-weight:500;padding:8px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:pointer;transition:background 0.2s;">
-                            <i class="fas fa-sign-out-alt" style="margin-right:6px;"></i>Logout
-                        </button>
-                    </form>
-                    @endif
+                    {{-- Logout moved into profile dropdown (kept in experimental fixed menu) --}}
                 </div>
                 
                     <script>
