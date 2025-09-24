@@ -23,6 +23,14 @@
     </aside>
     <!-- Main Content -->
     <main style="flex:1;padding:48px 32px;">
+        <!-- add small experimental profile trigger for fixed dropdown (local branch) -->
+        <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:16px;">
+            <span class="admin-profile-trigger" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
+                <img src="{{ asset('images/default-avatar.png') }}" alt="Profile" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
+                <span style="font-weight:600;color:#374151;">{{ Auth::user()->name ?? 'Admin' }}</span>
+            </span>
+        </div>
+
         @yield('admin-content')
     </main>
 </div>
@@ -65,4 +73,28 @@
     }, 5000);
 </script>
 @endif
+<script>
+    // Local branch: create fixed dropdown for admin profile trigger
+    (function(){
+        const trigger = document.querySelector('.admin-profile-trigger');
+        if(!trigger) return;
+        let menu = null;
+        function createMenu(){
+            if(menu) return menu;
+            menu = document.createElement('div');
+            Object.assign(menu.style, {position:'fixed', right:'16px', top:'64px', background:'#fff', borderRadius:'8px', boxShadow:'0 8px 24px rgba(0,0,0,0.12)', padding:'8px 0', minWidth:'180px', zIndex:2147483647, display:'none'});
+            const a = document.createElement('a'); a.href='{{ route('admin.dashboard') }}'; a.textContent='Dashboard'; a.style.display='block'; a.style.padding='10px 14px'; a.style.color='#111827'; a.style.textDecoration='none'; menu.appendChild(a);
+            const p = document.createElement('a'); p.href='{{ route('password.change.form') }}'; p.textContent='Ganti Password'; p.style.display='block'; p.style.padding='10px 14px'; p.style.color='#111827'; p.style.textDecoration='none'; menu.appendChild(p);
+            const form = document.createElement('form'); form.method='POST'; form.action='{{ route('logout') }}'; form.style.margin='0';
+            const csrf = document.createElement('input'); csrf.type='hidden'; csrf.name='_token'; csrf.value='{{ csrf_token() }}'; form.appendChild(csrf);
+            const btn = document.createElement('button'); btn.type='submit'; btn.textContent='Keluar'; Object.assign(btn.style,{width:'100%',textAlign:'left',padding:'10px 14px',background:'transparent',border:'0',color:'#ef4444',cursor:'pointer'}); form.appendChild(btn);
+            menu.appendChild(form);
+            document.body.appendChild(menu);
+            return menu;
+        }
+        trigger.addEventListener('click', (e)=>{ e.preventDefault(); const m = createMenu(); m.style.display = m.style.display === 'block' ? 'none' : 'block'; });
+        document.addEventListener('click', (e)=>{ if(menu && !menu.contains(e.target) && !trigger.contains(e.target)) menu.style.display='none'; });
+    })();
+</script>
+
 @endsection
