@@ -99,7 +99,7 @@
 
 <!-- CSS fallback: show dropdown on hover and ensure it stays on top -->
 <style>
-    .profile-dropdown .dropdown-menu{ display:none; pointer-events:auto; z-index:99999; }
+    .profile-dropdown .dropdown-menu{ display:none; pointer-events:auto; z-index:2147483647; position:fixed !important; right:16px !important; }
     .profile-dropdown:hover .dropdown-menu{ display:block !important; }
     .profile-btn{ background:transparent; }
 </style>
