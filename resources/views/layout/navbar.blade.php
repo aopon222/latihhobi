@@ -69,20 +69,75 @@
                     @else
                         <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
                     @endif
-                        <span style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;">
+                        <span class="profile-trigger" style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;cursor:pointer;">
                             <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
                         </span>
-                        <span style="color:#ffc107;font-weight:600;font-size:1rem;">{{ Auth::user()->name ?? 'Profil' }}</span>
+                        <span class="profile-trigger" style="color:#ffc107;font-weight:600;font-size:1rem;cursor:pointer;">{{ Auth::user()->name ?? 'Profil' }}</span>
                     </a>
-                    @if($hasLogoutRoute)
-                    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
-                        @csrf
-                        <button type="submit" style="background:#fff;border:none;color:#374151;font-weight:500;padding:8px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:pointer;transition:background 0.2s;">
-                            <i class="fas fa-sign-out-alt" style="margin-right:6px;"></i>Logout
-                        </button>
-                    </form>
-                    @endif
+                    {{-- Logout moved into profile dropdown (kept in experimental fixed menu) --}}
                 </div>
+                
+                    <script>
+                        // Experimental: append a fixed dropdown to body when profile-trigger is clicked (local branch)
+                        (function(){
+                            const triggers = document.querySelectorAll('.profile-trigger');
+                            if(!triggers.length) return;
+                            let menuEl = null;
+
+                            function createMenu(){
+                                if(menuEl) return menuEl;
+                                menuEl = document.createElement('div');
+                                menuEl.className = 'profile-fixed-menu';
+                                Object.assign(menuEl.style, {
+                                    position: 'fixed',
+                                    right: '16px',
+                                    top: '64px',
+                                    background: '#fff',
+                                    borderRadius: '8px',
+                                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                                    padding: '8px 0',
+                                    minWidth: '200px',
+                                    zIndex: 2147483647,
+                                    display: 'none'
+                                });
+
+                                // Build inner content (Dashboard if admin, Profile, Logout form)
+                                const isAdmin = {{ auth()->user() && auth()->user()->email === 'multimedia.latihhobi@gmail.com' ? 'true' : 'false' }};
+                                if(isAdmin){
+                                    const a = document.createElement('a');
+                                    a.href = '{{ route('admin.dashboard') }}';
+                                    a.textContent = 'Dashboard';
+                                    a.style.display = 'block'; a.style.padding = '10px 14px'; a.style.color = '#111827'; a.style.textDecoration='none';
+                                    menuEl.appendChild(a);
+                                }
+                                const p = document.createElement('a');
+                                p.href = '{{ route('profile') }}'; p.textContent = 'Profil';
+                                p.style.display = 'block'; p.style.padding = '10px 14px'; p.style.color = '#111827'; p.style.textDecoration='none';
+                                menuEl.appendChild(p);
+
+                                @if($hasLogoutRoute ?? true)
+                                const form = document.createElement('form'); form.method='POST'; form.action='{{ route('logout') }}'; form.style.margin='0';
+                                const csrf = document.createElement('input'); csrf.type='hidden'; csrf.name='_token'; csrf.value='{{ csrf_token() }}'; form.appendChild(csrf);
+                                const btn = document.createElement('button'); btn.type='submit'; btn.textContent='Keluar';
+                                Object.assign(btn.style, {width:'100%',textAlign:'left',padding:'10px 14px',background:'transparent',border:'0',color:'#ef4444',cursor:'pointer'});
+                                form.appendChild(btn);
+                                menuEl.appendChild(form);
+                                @endif
+
+                                document.body.appendChild(menuEl);
+                                return menuEl;
+                            }
+
+                            function toggleMenu(){
+                                const m = createMenu();
+                                if(m.style.display === 'block') { m.style.display='none'; }
+                                else { m.style.display='block'; }
+                            }
+
+                            triggers.forEach(t => t.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }));
+                            document.addEventListener('click', (e) => { if(menuEl && !menuEl.contains(e.target)) menuEl.style.display='none'; });
+                        })();
+                    </script>
             @else
                 @if($hasLoginRoute)
                 <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
