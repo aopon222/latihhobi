@@ -55,6 +55,13 @@
     </svg>
     {{ session('success') }}
 </div>
+<!-- Small CSS fallback: show dropdown on hover and ensure it stays on top -->
+<style>
+    .profile-dropdown .dropdown-menu{ display:none; pointer-events:auto; z-index:99999; }
+    .profile-dropdown:hover .dropdown-menu{ display:block !important; }
+    .profile-btn{ background:transparent; }
+</style>
+
 <script>
     setTimeout(() => {
         const toast = document.getElementById('toast');
