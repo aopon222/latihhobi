@@ -40,28 +40,36 @@
                     <h3>Film & Konten Kreator</h3>
                 </div>
                 <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/TAEKWONDO.svg') }}" alt="Taekwondo" class="ekskul-icon-img">
-                    </div>
-                    <h3>Taekwondo</h3>
+                    <a href="/ekskul/taekwondo" style="text-decoration:none; color:inherit;">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/TAEKWONDO.svg') }}" alt="Taekwondo" class="ekskul-icon-img">
+                        </div>
+                        <h3>Taekwondo</h3>
+                    </a>
                 </div>
                 <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/SILAT.svg') }}" alt="Pencak Silat" class="ekskul-icon-img">
-                    </div>
-                    <h3>Pencak Silat</h3>
+                    <a href="/ekskul/pencak-silat" style="text-decoration:none; color:inherit;">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/SILAT.svg') }}" alt="Pencak Silat" class="ekskul-icon-img">
+                        </div>
+                        <h3>Pencak Silat</h3>
+                    </a>
                 </div>
                 <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/KARATE.svg') }}" alt="Karate" class="ekskul-icon-img">
-                    </div>
-                    <h3>Karate</h3>
+                    <a href="/ekskul/karate" style="text-decoration:none; color:inherit;">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/KARATE.svg') }}" alt="Karate" class="ekskul-icon-img">
+                        </div>
+                        <h3>Karate</h3>
+                    </a>
                 </div>
                 <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/TAHFIDZ.svg') }}" alt="Tahsin & Tahfidz" class="ekskul-icon-img">
-                    </div>
-                    <h3>Tahsin & Tahfidz</h3>
+                    <a href="/ekskul/tahsin-tahfidz" style="text-decoration:none; color:inherit;">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/TAHFIDZ.svg') }}" alt="Tahsin & Tahfidz" class="ekskul-icon-img">
+                        </div>
+                        <h3>Tahsin & Tahfidz</h3>
+                    </a>
                 </div>
             </div>
         </div>

@@ -21,6 +21,9 @@ Route::get('/ekskul-reguler', function () {
 
 Route::get('/ecourse', [EcourseController::class, 'index']);
 Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
+Route::get('/ecourse-komik', function () {
+    return view('course-Komik');
+});
 
 Route::get('/event', function () {
     return view('event');
@@ -128,4 +131,30 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->name('podcasts.toggle-featured');
     Route::post('podcasts/{podcast}/toggle-active', [App\Http\Controllers\Admin\PodcastController::class, 'toggleActive'])
         ->name('podcasts.toggle-active');
+});
+
+// Ekskul Routes
+Route::get('/ekskul/robotik', function () {
+    return view('ekskul.robotik');
+});
+Route::get('/ekskul/panahan', function () {
+    return view('ekskul.panahan');
+});
+Route::get('/ekskul/komik', function () {
+    return view('ekskul.komik');
+});
+Route::get('/ekskul/film-konten-kreator', function () {
+    return view('ekskul.film-konten-kreator');
+});
+Route::get('/ekskul/taekwondo', function () {
+    return view('ekskul.taekwondo');
+});
+Route::get('/ekskul/pencak-silat', function () {
+    return view('ekskul.pencak-silat');
+});
+Route::get('/ekskul/karate', function () {
+    return view('ekskul.karate');
+});
+Route::get('/ekskul/tahsin-tahfidz', function () {
+    return view('ekskul.tahsin-tahfidz');
 });

@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'E-COURSE Komik - LatihHobi')
+@section('title', 'E-COURSE Komik')
 
 @section('content')
     <style>
@@ -36,7 +36,7 @@
             <div class="grid">
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/placeholder-komik.svg') }}" alt="Level 1">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 1.svg') }}" alt="Level 1">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -45,8 +45,8 @@
                     </div>
                     <div class="footer">
                         <div>
-                            <span class="price-current">Rp249,000</span>
-                            <span class="price-old">Rp280,000</span>
+                            <span class="price-current">Rp269,000</span>
+                            <span class="price-old">Rp300,000</span>
                         </div>
                         <button class="btn-cart" type="button">🛒</button>
                     </div>
@@ -54,7 +54,7 @@
 
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/placeholder-komik.svg') }}" alt="Level 2">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 2.svg') }}" alt="Level 2">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
@@ -63,8 +63,8 @@
                     </div>
                     <div class="footer">
                         <div>
-                            <span class="price-current">Rp249,000</span>
-                            <span class="price-old">Rp280,000</span>
+                            <span class="price-current">Rp269,000</span>
+                            <span class="price-old">Rp300,000</span>
                         </div>
                         <button class="btn-cart" type="button">🛒</button>
                     </div>
@@ -72,11 +72,11 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/placeholder-komik.svg') }}" alt="Level 3">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 3.svg') }}" alt="Level 3">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Level 3</h3>
+                        <h3 class="title">Terlindungi: (COMINGSOON) Komik Digital Level 3</h3>
                         <p class="byline">By Latihhobi In Komik</p>
                     </div>
                     <div class="footer">
@@ -86,11 +86,11 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/placeholder-komik.svg') }}" alt="Level 4">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 4.svg') }}" alt="Level 4">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Level 4</h3>
+                        <h3 class="title">Terlindungi: (COMINGSOON) Komik Animasi Level 4</h3>
                         <p class="byline">By Latihhobi In Komik</p>
                     </div>
                     <div class="footer">
@@ -100,11 +100,11 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/placeholder-komik.svg') }}" alt="Level 5">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 5.svg') }}" alt="Level 5">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Level 5</h3>
+                        <h3 class="title">Terlindungi: (COMINGSOON) Komik Profesional Level 5</h3>
                         <p class="byline">By Latihhobi In Komik</p>
                     </div>
                     <div class="footer">
