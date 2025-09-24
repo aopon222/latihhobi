@@ -26,13 +26,13 @@
         <!-- Admin Topbar with Profile Dropdown -->
         <header style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:24px;">
             <div class="profile-dropdown" style="position:relative;">
-                <button class="profile-btn" aria-haspopup="true" aria-expanded="false" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;cursor:pointer;padding:8px 12px;border-radius:8px;font-weight:600;color:#374151;">
+                <button type="button" class="profile-btn" aria-haspopup="true" aria-expanded="false" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;cursor:pointer;padding:8px 12px;border-radius:8px;font-weight:600;color:#374151;">
                     <img src="{{ asset('images/default-avatar.png') }}" alt="Profile" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
                     <span style="display:inline-block;">{{ Auth::user()->name ?? 'Admin' }}</span>
                     <svg style="width:14px;height:14px;opacity:0.8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
                 </button>
 
-                <div class="dropdown-menu" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:8px 0;min-width:160px;z-index:1000;">
+                <div class="dropdown-menu" style="display:none;position:absolute !important;right:0;top:calc(100% + 8px);background:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:8px 0;min-width:160px;z-index:99999;pointer-events:auto;">
                     <a href="{{ route('admin.dashboard') }}" style="display:block;padding:10px 16px;color:#111827;text-decoration:none;font-weight:500;">Dashboard</a>
                     <a href="{{ route('password.change.form') }}" style="display:block;padding:10px 16px;color:#111827;text-decoration:none;font-weight:500;">🔐 Ganti Password</a>
                     <form method="POST" action="{{ route('logout') }}">
