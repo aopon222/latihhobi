@@ -34,84 +34,47 @@
     <section style="background:#04a6d6; padding:28px 0 56px;">
         <div class="container">
             <div class="grid">
-                <article class="card">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ATHUTO.svg') }}" alt="Level 1">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Robo Athuro Level 1</h3>
-                        <p class="byline">By Latihhobi In ROBOTIK</p>
-                    </div>
-                    <div class="footer">
-                        <div>
-                            <span class="price-current">Rp269,000</span>
-                            <span class="price-old">Rp300,000</span>
+                @forelse($robotikCourses as $course)
+                    <article class="card {{ !$course->is_active || $course->title === 'Coming Soon' ? 'protected' : '' }}">
+                        <div class="card-wrap">
+                            <img class="thumb" src="{{ $course->thumbnail ? asset('storage/' . $course->thumbnail) : asset('images/THUMBNAIL E COURSE ATHUTO.svg') }}" alt="{{ $course->title }}">
+                            <div class="lock">🔖</div>
                         </div>
-                        <button class="btn-cart" type="button">🛒</button>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ROBOFAN.svg') }}" alt="Level 2">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Robo Fan Level 2</h3>
-                        <p class="byline">By Latihhobi In ROBOTIK</p>
-                    </div>
-                    <div class="footer">
-                        <div>
-                            <span class="price-current">Rp269,000</span>
-                            <span class="price-old">Rp300,000</span>
+                        <div class="body">
+                            <h3 class="title">
+                                {{ !$course->is_active ? 'Terlindungi: ' : '' }}{{ $course->title }}
+                            </h3>
+                            <p class="byline">By Latihhobi In {{ strtoupper($course->category) }}</p>
                         </div>
-                        <button class="btn-cart" type="button">🛒</button>
+                        <div class="footer">
+                            @if($course->is_active && $course->price)
+                                <div>
+                                    <span class="price-current">Rp{{ number_format($course->discount_price ?: $course->price, 0, ',', '.') }}</span>
+                                    @if($course->discount_price && $course->price > $course->discount_price)
+                                        <span class="price-old">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
+                                    @endif
+                                </div>
+                                <button class="btn-cart" type="button" onclick="addToCart('{{ $course->slug }}')">🛒</button>
+                            @else
+                                <button class="btn-enroll" type="button">{{ str_contains(strtolower($course->title), 'coming') ? 'Coming Soon' : 'Enroll Course' }}</button>
+                            @endif
+                        </div>
+                    </article>
+                @empty
+                    <div style="grid-column: 1/-1; text-align: center; color: white; padding: 40px;">
+                        <h3>Belum ada kursus robotik tersedia</h3>
+                        <p>Silakan cek kembali nanti untuk update terbaru!</p>
                     </div>
-                </article>
-
-                <article class="card protected">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="Level 3">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Robot Dust Level 3</h3>
-                        <p class="byline">By Latihhobi In ROBOTIK</p>
-                    </div>
-                    <div class="footer">
-                        <button class="btn-enroll" type="button">Enroll Course</button>
-                    </div>
-                </article>
-
-                <article class="card protected">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE HEMIPTERA.svg') }}" alt="Level 4">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Robot Hemiptera Level 4</h3>
-                        <p class="byline">By Latihhobi In ROBOTIK</p>
-                    </div>
-                    <div class="footer">
-                        <button class="btn-enroll" type="button">Enroll Course</button>
-                    </div>
-                </article>
-
-                <article class="card protected">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE AVOIDER.svg') }}" alt="Level 5">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON)  Robot Avoider Level 5</h3>
-                        <p class="byline">By Latihhobi In ROBOTIK</p>
-                    </div>
-                    <div class="footer">
-                        <button class="btn-enroll" type="button">Enroll Course</button>
-                    </div>
-                </article>
+                @endforelse
             </div>
         </div>
     </section>
+
+    <script>
+        function addToCart(courseSlug) {
+            // Add cart functionality here
+            alert('Menambahkan ke keranjang: ' + courseSlug);
+            // You can implement AJAX call to add to cart
+        }
+    </script>
 @endsection

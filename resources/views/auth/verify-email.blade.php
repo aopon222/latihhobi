@@ -82,7 +82,7 @@
                         <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 0.5rem;">
                             <strong>Mode Development:</strong> Untuk testing, Anda dapat memverifikasi email secara manual:
                         </p>
-                        <a href="{{ route('manual.verify', Auth::user()) }}" 
+                        <a href="{{ route('manual.verify') }}" 
                            style="display: inline-block; background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem;">
                             <i class="fas fa-check-circle"></i>
                             Verifikasi Manual (Testing Only)

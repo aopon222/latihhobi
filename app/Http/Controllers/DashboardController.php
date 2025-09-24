@@ -62,6 +62,16 @@ class DashboardController extends Controller
                 'url' => '/course-film-konten-kreator'
             ],
             [
+                'title' => 'Ganti Password',
+                'icon' => '🔐',
+                'url' => '/password/change'
+            ],
+            [
+                'title' => 'Email Status',
+                'icon' => '📧',
+                'url' => '/email/status'
+            ],
+            [
                 'title' => 'Event Mendatang',
                 'icon' => '📅',
                 'url' => '/event'
@@ -114,17 +124,38 @@ class DashboardController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $user->update([
+        $data = [
             'name' => $request->name,
-            'email' => $request->email,
-        ]);
+        ];
 
-        return redirect()->route('profile')->with('success', 'Profile berhasil diperbarui!');
+        // Check if email is being changed
+        $emailChanged = false;
+        if ($request->email !== $user->email) {
+            $data['email'] = $request->email;
+            $data['email_verified_at'] = null; // Reset email verification
+            $emailChanged = true;
+        }
+
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $avatarName = 'avatar_' . $user->id . '_' . time() . '.' . $avatar->getClientOriginalExtension();
+            $avatarPath = $avatar->storeAs('avatars', $avatarName, 'public');
+            $data['avatar'] = $avatarPath;
+        }
+
+        $user->update($data);
+
+        if ($emailChanged) {
+            return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui! Email Anda telah diubah dan perlu diverifikasi ulang. Silakan cek email baru Anda untuk verifikasi.');
+        }
+
+        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui!');
     }
 }

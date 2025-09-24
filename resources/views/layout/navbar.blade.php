@@ -59,15 +59,38 @@
             </li>
         </ul>
         <div class="user-menu">
-            <a href="#" class="user-icon">🔍</a>
-            <a href="#" class="user-icon">🛒</a>
+            <a href="#" class="user-icon"><i class="fas fa-search" style="color:#ffc107;font-size:1.5rem;"></i></a>
+            <a href="#" class="user-icon"><i class="fas fa-bell" style="color:#ffc107;font-size:1.5rem;"></i></a>
+            <a href="#" class="user-icon" style="position:relative;">
+                <i class="fas fa-shopping-cart" style="color:#ffc107;font-size:1.5rem;"></i>
+                <span style="position:absolute;top:-8px;right:-8px;background:#1e293b;color:#fff;font-size:0.8rem;padding:2px 7px;border-radius:50%;font-weight:700;">1</span>
+            </a>
             @php
                 $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
                 $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
                 $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
             @endphp
             @auth
-                <!-- User dropdown dihilangkan sementara -->
+                <div class="user-dropdown" style="display:flex;align-items:center;gap:12px;">
+                    @if(auth()->user()->email === 'multimedia.latihhobi@gmail.com')
+                        <a href="{{ route('admin.dashboard') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+                    @else
+                        <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+                    @endif
+                        <span style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;">
+                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
+                        </span>
+                        <span style="color:#ffc107;font-weight:600;font-size:1rem;">{{ Auth::user()->name ?? 'Profil' }}</span>
+                    </a>
+                    @if($hasLogoutRoute)
+                    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+                        @csrf
+                        <button type="submit" style="background:#fff;border:none;color:#374151;font-weight:500;padding:8px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:pointer;transition:background 0.2s;">
+                            <i class="fas fa-sign-out-alt" style="margin-right:6px;"></i>Logout
+                        </button>
+                    </form>
+                    @endif
+                </div>
             @else
                 @if($hasLoginRoute)
                 <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
