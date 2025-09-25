@@ -21,8 +21,13 @@ Route::get('/ekskul-reguler', function () {
 
 Route::get('/ecourse', [EcourseController::class, 'index']);
 Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
+// Backward-compatible alias: some links used a dashed path (/ecourse-robotik)
+Route::redirect('/ecourse-robotik', '/ecourse/robotik');
+use App\Models\Ecourse;
+
 Route::get('/ecourse-komik', function () {
-    return view('course-Komik');
+    $komikCourses = Ecourse::where('category', 'Komik')->get();
+    return view('ecourse-komik', compact('komikCourses'));
 });
 
 Route::get('/event', function () {
@@ -36,8 +41,11 @@ Route::get('/podcasts/{podcast}', [PodcastController::class, 'show'])->name('pod
 // Search Route
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
 
-// E-Course: Film & Konten Kreator landing page
-Route::view('/course-film-konten-kreator', 'course-film-konten-kreator')->name('course.film_konten_kreator');
+// E-Course: Film & Konten Kreator landing page (dynamic)
+Route::get('/course-film-konten-kreator', function () {
+    $filmCourses = Ecourse::where('category', 'Film')->get();
+    return view('course-film-konten-kreator', compact('filmCourses'));
+})->name('course.film_konten_kreator');
 // Backward-compatible paths to avoid 404s from older links
 Route::redirect('/ecourse/film', '/course-film-konten-kreator');
 Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
@@ -114,6 +122,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 // Admin E-course Routes - Separate group for admin access
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Backward-compatible singular path: /admin/event -> /admin/events
+    Route::get('event', function () {
+        return redirect()->route('admin.events.index');
+    })->name('events.redirect');
     Route::resource('ecourses', App\Http\Controllers\Admin\EcourseController::class);
     Route::post('ecourses/{ecourse}/toggle-featured', [App\Http\Controllers\Admin\EcourseController::class, 'toggleFeatured'])
         ->name('ecourses.toggle-featured');
@@ -130,6 +142,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->name('podcasts.toggle-featured');
     Route::post('podcasts/{podcast}/toggle-active', [App\Http\Controllers\Admin\PodcastController::class, 'toggleActive'])
         ->name('podcasts.toggle-active');
+
+    // Event management routes
+    Route::resource('events', App\Http\Controllers\Admin\EventController::class);
+    Route::post('events/{event}/toggle-featured', [App\Http\Controllers\Admin\EventController::class, 'toggleFeatured'])
+        ->name('events.toggle-featured');
+    Route::post('events/{event}/toggle-active', [App\Http\Controllers\Admin\EventController::class, 'toggleActive'])
+        ->name('events.toggle-active');
 });
 
 // Ekskul Routes

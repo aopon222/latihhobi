@@ -25,6 +25,7 @@
                 <div class="service-card fade-in">
                     <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
                     <div class="service-title">E-Design</div>
+                    <div class="service-subtitle">Design</div>
                 </div>
                 <div class="service-card fade-in">
                     <div class="service-icon"><i class="fas fa-users"></i></div>
@@ -110,26 +111,6 @@
     <section class="private-class">
         <div class="private-class-container">
             <h2>PRIVATE CLASS</h2>
-            <p>Private Class LatihHobi adalah layanan pengembangan bakat secara personal yang dirancang khusus sesuai minat, jadwal, dan kebutuhan unik setiap anak. Kelas ini memungkinkan siswa belajar satu-satu bersama tutor berpengalaman, dengan materi yang disesuaikan, bimbingan intensif, serta fleksibilitas waktu dan tempat—baik dilakukan secara daring maupun langsung di rumah. Cocok untuk anak yang ingin fokus mendalami bidang tertentu, menyiapkan kompetisi, atau memiliki kebutuhan belajar khusus di luar ekskul reguler</p>
-            <div class="private-class-grid">
-                <div class="private-class-item">
-                    <div class="private-class-icon">
-                        <img src="{{ asset('images/ROBONESIA.svg') }}" alt="Robotik" class="private-class-icon-img">
-                    </div>
-                    <h3>Robotik</h3>
-                </div>
-                <div class="private-class-item">
-                    <div class="private-class-icon">
-                        <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="private-class-icon-img">
-                    </div>
-                    <h3>Film & Konten Kreator</h3>
-                </div>
-                <div class="private-class-item">
-                    <div class="private-class-icon">
-                        <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="private-class-icon-img">
-                    </div>
-                    <h3>Komik</h3>
-                </div>
             </div>
         </div>
     </section>
@@ -209,13 +190,18 @@
                 @foreach($featuredPodcasts as $podcast)
                 <div class="podcast-item" data-youtube-id="{{ $podcast->youtube_id }}">
                     <div class="podcast-thumbnail">
-                        <img src="{{ $podcast->thumbnail_url }}" alt="{{ $podcast->title }}" class="thumbnail-img">
-                        <div class="play-button"></div>
-                        <div class="podcast-overlay">
-                            <h4>{{ Str::limit($podcast->title, 20) }}</h4>
-                            <p>{{ Str::limit($podcast->description, 30) }}</p>
-                            <span>{{ $podcast->duration }}</span>
-                        </div>
+                        @if($podcast->embed_url)
+                            <div class="video-embed-wrapper">
+                                <iframe src="{{ $podcast->embed_url }}" frameborder="0" allowfullscreen loading="lazy" title="{{ $podcast->title }}" class="embedded-podcast"></iframe>
+                            </div>
+                        @else
+                            <img src="{{ $podcast->thumbnail_url }}" alt="{{ $podcast->title }}" class="thumbnail-img">
+                            <div class="podcast-overlay">
+                                <h4>{{ Str::limit($podcast->title, 20) }}</h4>
+                                <p>{{ Str::limit($podcast->description, 30) }}</p>
+                                <span>{{ $podcast->duration }}</span>
+                            </div>
+                        @endif
                     </div>
                     <div class="podcast-info">
                         <h3>{{ $podcast->title }}</h3>
@@ -318,6 +304,21 @@
             color: white;
             box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
             border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Responsive embedded podcast iframe */
+        .video-embed-wrapper{
+            position:relative;
+            width:100%;
+            padding-bottom:56.25%; /* 16:9 */
+            background:#000;
+            border-radius:8px;
+            overflow:hidden;
+        }
+
+        .video-embed-wrapper .embedded-podcast{
+            position:absolute;
+            top:0;left:0;width:100%;height:100%;border:0;
         }
 
         .podcast-item .play-button:hover {
