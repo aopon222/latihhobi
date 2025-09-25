@@ -1,4 +1,4 @@
- @extends('layout.app')
+@extends('layout.app')
 
 @section('title', 'Latih Hobi Karier')
 
@@ -7,7 +7,7 @@
     .karier-banner {
         width: 100%;
         height: 280px;
-        background: #f5f7fa;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         position: relative;
         overflow: hidden;
         display: flex;
@@ -18,7 +18,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        filter: brightness(0.7);
+        filter: brightness(0.6);
     }
     .karier-banner-text {
         position: absolute;
@@ -36,129 +36,206 @@
         font-weight: 800;
         margin-bottom: 12px;
         letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     .karier-banner-text p {
         font-size: 18px;
         font-weight: 500;
         max-width: 600px;
         margin-bottom: 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
-.karier-section {
+
+    .karier-section {
         max-width: 1100px;
         margin: 120px auto 0 auto;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.06);
-        padding: 32px 24px;
+        background: #fefefe;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,.08);
+        padding: 40px 32px;
         margin-top: -40px;
         position: relative;
         z-index: 2;
+        border: 1px solid #e8f4f8;
     }
+
     .karier-title {
-        font-size: 22px;
+        font-size: 24px;
         font-weight: 700;
-        color: #0f3d5c;
+        color: #1e3a8a;
         text-align: center;
-        margin-bottom: 24px;
-        padding: 12px 0;
-        border-radius: 8px;
-        background: #f5f7fa;
-        border: 1px solid #e8eef4;
+        margin-bottom: 32px;
+        padding: 16px 0;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #fef3e2 0%, #e0f2fe 100%);
+        border: 2px solid #fed7aa;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 12px;
+        box-shadow: 0 2px 8px rgba(251, 146, 60, 0.15);
     }
+
     .karier-cards {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 24px;
-        margin-bottom: 32px;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 28px;
+        margin-bottom: 40px;
     }
-.karier-card {
-        background: #f9fafb;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.06);
-        padding: 24px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    .karier-card {
+        background: linear-gradient(135deg, #fefbf3 0%, #f0f9ff 100%);
+        border-radius: 16px;
+        box-shadow: 0 3px 12px rgba(0,0,0,.08);
+        padding: 28px;
+        transition: all 0.3s ease;
         display: flex;
         flex-direction: column;
-        gap: 12px;
-        border: 1px solid #d1d5db;
+        gap: 14px;
+        border: 2px solid #fed7aa;
+        position: relative;
+        overflow: hidden;
     }
+
+    .karier-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #fb923c 0%, #0ea5e9 100%);
+    }
+
     .karier-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 8px 20px rgba(0,0,0,.12);
-        border-color: #3b82f6;
-        background-color: #e0e7ff;
+        transform: translateY(-6px);
+        box-shadow: 0 12px 28px rgba(0,0,0,.15);
+        border-color: #fb923c;
+        background: linear-gradient(135deg, #fff7ed 0%, #e0f2fe 100%);
     }
-.karier-pos-title {
-        font-weight: 700;
-        color: #2563eb;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-.karier-pos-type {
-        font-size: 15px;
-        color: #4b5563;
-        margin-left: 24px;
-    }
-.karier-req-title {
+
+    .karier-pos-title {
         font-weight: 700;
         color: #1e40af;
-        font-size: 16px;
-        margin-top: 12px;
-    }
-.karier-req-list {
-        margin: 0;
-        padding-left: 20px;
-        color: #6b7280;
-        font-size: 15px;
-    }
-.karier-backoffice {
-        margin-top: 32px;
-        border-top: 1px solid #d1d5db;
-        padding-top: 24px;
-    }
-.karier-backoffice-title {
-        font-weight: 700;
-        color: #2563eb;
         font-size: 20px;
-        margin-bottom: 12px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
+        margin-bottom: 4px;
     }
-.karier-backoffice-list {
+
+    .karier-pos-type {
+        font-size: 15px;
+        color: #f97316;
+        margin-left: 32px;
+        font-weight: 600;
+        background: #fed7aa;
+        padding: 4px 12px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .karier-req-title {
+        font-weight: 700;
+        color: #0c4a6e;
+        font-size: 16px;
+        margin-top: 16px;
+        margin-bottom: 8px;
+    }
+
+    .karier-req-list {
         margin: 0;
         padding-left: 20px;
-        color: #6b7280;
+        color: #475569;
         font-size: 15px;
+        line-height: 1.6;
     }
+
+    .karier-req-list li {
+        margin-bottom: 6px;
+        position: relative;
+    }
+
+    .karier-req-list li::marker {
+        color: #fb923c;
+    }
+
+    .karier-backoffice {
+        margin-top: 40px;
+        border-top: 2px solid #fed7aa;
+        padding-top: 32px;
+        background: linear-gradient(135deg, #fefbf3 0%, #f0f9ff 100%);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 2px 8px rgba(251, 146, 60, 0.1);
+    }
+
+    .karier-backoffice-title {
+        font-weight: 700;
+        color: #1e40af;
+        font-size: 22px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .karier-backoffice-list {
+        margin: 0;
+        padding-left: 20px;
+        color: #475569;
+        font-size: 16px;
+        line-height: 1.8;
+    }
+
+    .karier-backoffice-list li {
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .karier-backoffice-list li::marker {
+        color: #0ea5e9;
+    }
+
     .btn-daftar {
         display: block;
-        width: 220px;
-        margin: 32px auto 0;
-        padding: 12px 0;
-        background-color: #04a6d6;
+        width: 240px;
+        margin: 40px auto 0;
+        padding: 14px 0;
+        background: linear-gradient(135deg, #fb923c 0%, #0ea5e9 100%);
         color: white;
         font-weight: 700;
         font-size: 16px;
         border: none;
-        border-radius: 8px;
+        border-radius: 12px;
         cursor: pointer;
         text-align: center;
         text-decoration: none;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
+
     .btn-daftar:hover {
-        background-color: #037aab;
+        background: linear-gradient(135deg, #ea580c 0%, #0284c7 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(251, 146, 60, 0.4);
     }
+
     @media (max-width: 900px) {
         .karier-cards {
             grid-template-columns: 1fr;
+        }
+        .karier-section {
+            margin: 80px 16px 0;
+            padding: 24px 20px;
+        }
+        .karier-banner-text h1 {
+            font-size: 28px;
+        }
+        .karier-banner-text p {
+            font-size: 16px;
         }
     }
 </style>
@@ -175,62 +252,73 @@
 
 <section class="karier-section">
     <div class="karier-title">
-        <span>🚀</span> LATIH HOBI KARIER
+        <span>🚀</span> PELUANG KARIER LATIH HOBI
     </div>
 
     <div class="karier-cards">
         <div class="karier-card">
-            <div class="karier-pos-title">🧑‍🔬 Tutor Robotik :</div>
-            <div class="karier-pos-type">Fulltime, Freelance</div>
+            <div class="karier-pos-title">🧑‍🔬 Tutor Robotik</div>
+            <div class="karier-pos-type">Fulltime • Freelance</div>
             <div class="karier-req-title">Persyaratan :</div>
             <ul class="karier-req-list">
-                <li>Min. Pendidikan S1 Teknik Elektro, Pendidikan Teknik Elektro</li>
-                <li>Muslim/Muslimah</li>
-                <li>Paham elektronika dasar</li>
+                <li>Minimal Pendidikan S1 Teknik Elektro atau Pendidikan Teknik Elektro</li>
+                <li>Muslim/Muslimah dengan akhlak yang baik</li>
+                <li>Memahami elektronika dasar dan pemrograman</li>
+                <li>Berpengalaman dalam bidang robotika (diutamakan)</li>
                 <li>Memiliki laptop dan kendaraan bermotor</li>
+                <li>Mampu berkomunikasi dengan baik kepada anak-anak</li>
             </ul>
         </div>
+
         <div class="karier-card">
-            <div class="karier-pos-title">🎬 Tutor Film dan Konten Kreator :</div>
-            <div class="karier-pos-type">Fulltime, Freelance</div>
+            <div class="karier-pos-title">🎬 Tutor Film dan Konten Kreator</div>
+            <div class="karier-pos-type">Fulltime • Freelance</div>
             <div class="karier-req-title">Persyaratan :</div>
             <ul class="karier-req-list">
-                <li>Min. Pendidikan S1 Teknologi Pendidikan, Pendidikan Film, Multimedia</li>
-                <li>Muslim/Muslimah</li>
-                <li>Paham dasar perfilman</li>
+                <li>Minimal Pendidikan S1 Teknologi Pendidikan, Film, atau Multimedia</li>
+                <li>Muslim/Muslimah dengan akhlak yang baik</li>
+                <li>Memahami dasar perfilman dan editing video</li>
+                <li>Kreatif dalam mengembangkan konten edukatif</li>
                 <li>Memiliki laptop dan kendaraan bermotor</li>
+                <li>Portfolio karya film atau konten digital</li>
             </ul>
         </div>
+
         <div class="karier-card">
-            <div class="karier-pos-title">🏹 Tutor Panahan :</div>
-            <div class="karier-pos-type">Fulltime, Freelance</div>
+            <div class="karier-pos-title">🏹 Tutor Panahan</div>
+            <div class="karier-pos-type">Fulltime • Freelance</div>
             <div class="karier-req-title">Persyaratan :</div>
             <ul class="karier-req-list">
-                <li>Min. Pendidikan S1 semua jurusan</li>
-                <li>Muslim/Muslimah</li>
-                <li>Paham dasar panahan</li>
+                <li>Minimal Pendidikan S1 semua jurusan</li>
+                <li>Muslim/Muslimah dengan akhlak yang baik</li>
+                <li>Memahami teknik dasar panahan dan keselamatan</li>
+                <li>Berpengalaman dalam olahraga panahan</li>
                 <li>Memiliki laptop dan kendaraan bermotor</li>
+                <li>Sabar dan teliti dalam mengajar</li>
             </ul>
         </div>
+
         <div class="karier-card">
-            <div class="karier-pos-title">🎨 Tutor Komik :</div>
-            <div class="karier-pos-type">Fulltime, Freelance</div>
+            <div class="karier-pos-title">🎨 Tutor Komik</div>
+            <div class="karier-pos-type">Fulltime • Freelance</div>
             <div class="karier-req-title">Persyaratan :</div>
             <ul class="karier-req-list">
-                <li>Min. Pendidikan S1 Pendidikan Seni Rupa, Design Grafis, Design Komunikasi Visual</li>
-                <li>Muslim/Muslimah</li>
-                <li>Paham Teknik Ilustrator</li>
+                <li>Minimal Pendidikan S1 Seni Rupa, Desain Grafis, atau DKV</li>
+                <li>Muslim/Muslimah dengan akhlak yang baik</li>
+                <li>Menguasai teknik ilustrasi dan storytelling</li>
+                <li>Kreatif dalam mengembangkan karakter dan cerita</li>
                 <li>Memiliki laptop dan kendaraan bermotor</li>
+                <li>Portfolio karya komik atau ilustrasi</li>
             </ul>
         </div>
     </div>
 
     <div class="karier-backoffice">
-        <div class="karier-backoffice-title">🗂️ BACK OFFICE</div>
+        <div class="karier-backoffice-title">🗂️ POSISI BACK OFFICE</div>
         <ul class="karier-backoffice-list">
-            <li>Admin Keuangan</li>
-            <li>Multimedia</li>
-            <li>HRD</li>
+            <li><strong>Admin Keuangan</strong> - Mengelola administrasi keuangan dan pembukuan</li>
+            <li><strong>Multimedia</strong> - Membuat konten visual dan materi pembelajaran digital</li>
+            <li><strong>HRD</strong> - Mengelola sumber daya manusia dan pengembangan tim</li>
         </ul>
     </div>
 
