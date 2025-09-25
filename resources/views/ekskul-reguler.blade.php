@@ -15,30 +15,38 @@
     <section class="ekskul-section">
         <div class="ekskul-container">
             <div class="ekskul-grid">
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/ROBONESIA.svg') }}" alt="ROBONESIA" class="ekskul-icon-img">
+                <a href="/ekskul/robotik" style="text-decoration:none; color:inherit;">
+                    <div class="ekskul-item">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/ROBONESIA.svg') }}" alt="ROBONESIA" class="ekskul-icon-img">
+                        </div>
+                        <h3>Robotik</h3>
                     </div>
-                    <h3>Robotik</h3>
-                </div>
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/ARCHERY CLUB.svg') }}" alt="Archery" class="ekskul-icon-img">
+                </a>
+                <a href="/ekskul/panahan" style="text-decoration:none; color:inherit;">
+                    <div class="ekskul-item">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/ARCHERY CLUB.svg') }}" alt="Archery" class="ekskul-icon-img">
+                        </div>
+                        <h3>Panahan</h3>
                     </div>
-                    <h3>Panahan</h3>
-                </div>
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="ekskul-icon-img">
+                </a>
+                <a href="/ekskul/komik" style="text-decoration:none; color:inherit;">
+                    <div class="ekskul-item">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="ekskul-icon-img">
+                        </div>
+                        <h3>Komik</h3>
                     </div>
-                    <h3>Komik</h3>
-                </div>
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="ekskul-icon-img">
+                </a>
+                <a href="/ekskul/film-konten-kreator" style="text-decoration:none; color:inherit;">
+                    <div class="ekskul-item">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="ekskul-icon-img">
+                        </div>
+                        <h3>Film & Konten Kreator</h3>
                     </div>
-                    <h3>Film & Konten Kreator</h3>
-                </div>
+                </a>
                 <div class="ekskul-item">
                     <a href="/ekskul/taekwondo" style="text-decoration:none; color:inherit;">
                         <div class="ekskul-icon">
