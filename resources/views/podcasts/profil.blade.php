@@ -124,7 +124,8 @@
         justify-content: flex-start;
     }
     .profil-schools-img {
-        width: 180px;
+        width: 100%;
+        max-width: none;
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(4,166,214,.06);
         background: #f8fafc;
@@ -185,10 +186,10 @@
         </div>
     </div>
     <div class="profil-schools">
-        <img src="{{ asset('images/profil-student.jpg') }}" alt="Student" class="profil-schools-img">
-        <div class="profil-schools-logos">
+        <!-- Removed the student image as requested -->
+        <div class="profil-schools-logos" style="width: 100%;">
             <div class="profil-schools-title">Sekolah yang sudah bekerjasama</div>
-            <img src="{{ asset('images/sekolah.svg') }}" alt="Logo Sekolah" style="width:100%;max-width:420px;">
+            <img src="{{ asset('images/sekolah.svg') }}" alt="Logo Sekolah" style="width:100%; height: auto; max-width:none;">
         </div>
     </div>
 </div>

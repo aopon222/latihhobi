@@ -96,9 +96,8 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// Additional Podcast Routes (from teammate's changes)
 Route::get('/karier', function () {
-    return view('podcasts.karier');
+    return view('karier');
 });
 
 Route::view('/magang', 'podcasts.magang')->name('magang');
