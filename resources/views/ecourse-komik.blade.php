@@ -54,7 +54,7 @@
 
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E COURSE lv 2.svg') }}" alt="Level 2">
+                        <img class="thumb" src="{{ asset('images/E_COURSE_ISEKAI_KOMIK.svg') }}" alt="Level 2">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
