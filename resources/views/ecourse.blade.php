@@ -3,78 +3,6 @@
 @section('title', 'E-Course - LatihHobi')
 
 @section('content')
-    <!-- Header -->
-    <header class="header">
-        <nav class="navbar">
-            <a href="/" class="logo">
-                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-            </a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/">Home</a></li>
-                <li class="nav-item"><a href="/ekskul-reguler">Ekskul Reguler</a></li>
-                <li class="nav-item dropdown">
-                    <a href="/ecourse" class="active">E-course <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="/ecourse/robotik" class="dropdown-item">
-                            <span class="dropdown-icon">🤖</span>
-                            Ecourse Robotik
-                        </a>
-                        <a href="/ecourse/film" class="dropdown-item">
-                            <span class="dropdown-icon">🎬</span>
-                            Ecourse Film & Konten Kreator
-                        </a>
-                        <a href="/ecourse/komik" class="dropdown-item">
-                            <span class="dropdown-icon">📖</span>
-                            Ecourse Komik
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="/event">Event <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🏆</span>
-                            LHEC IV 2025
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">💼</span>
-                            WORKSHOP & BOOTCAMP
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🎉</span>
-                            HOLIDAY FUN CLASS
-                        </a>
-                    </div>
-                </li>
-            </ul>
-            <div class="user-menu">
-                <a href="#" class="user-icon">🔍</a>
-                <a href="#" class="user-icon">🛒</a>
-                @php
-                    $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
-                    $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
-                    $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
-                @endphp
-                @auth
-                    <span class="username">{{ auth()->user()->name }}</span>
-                    @if($hasLogoutRoute)
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn-signin">Logout</button>
-                    </form>
-                    @endif
-                @else
-                    @if($hasLoginRoute)
-                    <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
-                    @endif
-                    @if($hasRegisterRoute)
-                    <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
-                    @endif
-                @endauth
-            </div>
-        </nav>
-    </header>
-
     <!-- Hero Section -->
     <section class="ecourse-hero">
         <div class="ecourse-hero-content">
@@ -120,48 +48,44 @@
         <div class="products-container">
             <h2>Produk Robotik Terpopuler</h2>
             <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-ROBODUST.svg') }}" alt="Robot Robodust" class="product-img">
-                    </div>
-                    <div class="product-info">
-                        <h3>Robot Robodust</h3>
-                        <p class="product-author">By Latihhobi</p>
-                        <div class="product-price">
-                            <span class="original-price">Rp500,000</span>
-                            <span class="current-price">Rp480,000</span>
+                @foreach($ecourses->where('category', 'Robotics')->where('is_featured', true)->take(3) as $course)
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="{{ $course->thumbnail ? asset('storage/' . $course->thumbnail) : asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="{{ $course->title }}" class="product-img">
                         </div>
-                        <button class="btn-add-cart">Tambah ke keranjang</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-ROBOFAN.svg') }}" alt="Robot Robofan" class="product-img">
-                    </div>
-                    <div class="product-info">
-                        <h3>Robot Robofan</h3>
-                        <p class="product-author">By Latihhobi</p>
-                        <div class="product-price">
-                            <span class="original-price">Rp350,000</span>
-                            <span class="current-price">Rp339,000</span>
+                        <div class="product-info">
+                            <h3>{{ $course->title }}</h3>
+                            <p class="product-author">By Latihhobi</p>
+                            <div class="product-price">
+                                @if($course->discount_price && $course->price > $course->discount_price)
+                                    <span class="original-price">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
+                                    <span class="current-price">Rp{{ number_format($course->discount_price, 0, ',', '.') }}</span>
+                                @else
+                                    <span class="current-price">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
+                                @endif
+                            </div>
+                            <button class="btn-add-cart" onclick="addToCart('{{ $course->slug }}')">Tambah ke keranjang</button>
                         </div>
-                        <button class="btn-add-cart">Tambah ke keranjang</button>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-HEMIPTERA.svg') }}" alt="Robot Hemiptera" class="product-img">
-                    </div>
-                    <div class="product-info">
-                        <h3>Robot Hemiptera</h3>
-                        <p class="product-author">By Latihhobi</p>
-                        <div class="product-price">
-                            <span class="original-price">Rp300,000</span>
-                            <span class="current-price">Rp289,000</span>
+                @endforeach
+                
+                @if($ecourses->where('category', 'Robotics')->where('is_featured', true)->count() < 3)
+                    @for($i = $ecourses->where('category', 'Robotics')->where('is_featured', true)->count(); $i < 3; $i++)
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="{{ asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="Coming Soon" class="product-img">
+                            </div>
+                            <div class="product-info">
+                                <h3>Segera Hadir</h3>
+                                <p class="product-author">By Latihhobi</p>
+                                <div class="product-price">
+                                    <span class="current-price">Coming Soon</span>
+                                </div>
+                                <button class="btn-add-cart" disabled>Coming Soon</button>
+                            </div>
                         </div>
-                        <button class="btn-add-cart">Tambah ke keranjang</button>
-                    </div>
-                </div>
+                    @endfor
+                @endif
             </div>
         </div>
     </section>
@@ -180,7 +104,7 @@
                 <div class="coming-soon-card">
                     <div class="coming-soon-badge">COMING SOON</div>
                     <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL-E-COURSE-AVOIDER.svg') }}" alt="Robot Hemiptera" class="product-img">
+                        <img src="{{ asset('images/THUMBNAIL E COURSE AVOIDER.svg') }}" alt="Robot Hemiptera" class="product-img">
                     </div>
                     <h3>Robot Avoider</h3>
                     <p>By Latihhobi</p>
@@ -209,4 +133,12 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function addToCart(courseSlug) {
+            // Add cart functionality here
+            alert('Menambahkan ke keranjang: ' + courseSlug);
+            // You can implement AJAX call to add to cart
+        }
+    </script>
 @endsection

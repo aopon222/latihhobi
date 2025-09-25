@@ -43,14 +43,7 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
-        Schema::create('events', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('description')->nullable();
-            $table->date('event_date');
-            $table->string('location')->nullable();
-            $table->timestamps();
-        });
+        
     }
 
     public function down(): void

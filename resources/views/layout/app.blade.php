@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'LatihHobi - Platform Pembelajaran')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title')</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    @yield('head')
     <style>
         * {
             margin: 0;
@@ -393,7 +395,7 @@
             overflow: hidden;
             transition: all 0.3s;
             backdrop-filter: blur(10px);
-        }
+        }   
 
         .private-card:hover {
             transform: translateY(-5px);
@@ -1784,11 +1786,78 @@
                 transform: translateY(0);
             }
         }
+
+        /* Search Overlay */
+        .search-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        .search-overlay-content {
+            position: relative;
+            top: 50%;
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            transform: translateY(-50%);
+        }
+        .search-overlay-content form {
+            display: flex;
+        }
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+        .search-button {
+            background: #ffc107;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            border-radius: 0 5px 5px 0;
+        }
+        .search-button i {
+            color: #fff;
+            font-size: 1.2rem;
+        }
+        .close-search {
+            position: absolute;
+            top: 20px;
+            right: 45px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
+    @stack('styles')
 </head>
 <body>
-    @yield('content')
+    @if(empty($hideNavbar))
+        @include('layout.navbar')
+    @endif
 
+    <div id="search-overlay" class="search-overlay">
+        <span class="close-search">&times;</span>
+        <div class="search-overlay-content">
+            <form action="/search" method="GET">
+                <input type="text" name="query" placeholder="Search..." class="search-input">
+                <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+    </div>
+    <main>
+        @yield('content')
+    </main>
+    
     <script>
         // Simple scroll animation
         const observerOptions = {
@@ -1823,6 +1892,24 @@
                 this.style.background = '#00a8e6';
             });
         });
+
+        const searchLink = document.querySelector('.nav-search');
+        const searchOverlay = document.getElementById('search-overlay');
+        const closeSearch = document.querySelector('.close-search');
+
+        if (searchLink) {
+            searchLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchOverlay.style.display = 'block';
+            });
+        }
+
+        if (closeSearch) {
+            closeSearch.addEventListener('click', () => {
+                searchOverlay.style.display = 'none';
+            });
+        }
     </script>
+    @stack('scripts')
 </body>
 </html>

@@ -3,78 +3,6 @@
 @section('title', 'Ekskul Reguler - LatihHobi')
 
 @section('content')
-    <!-- Header -->
-    <header class="header">
-        <nav class="navbar">
-            <a href="/" class="logo">
-                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-
-            </a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/">Home</a></li>
-                <li class="nav-item"><a href="/ekskul-reguler" class="active">Ekskul Reguler</a></li>
-                <li class="nav-item dropdown">
-                    <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="/ecourse/robotik" class="dropdown-item">
-                            <span class="dropdown-icon">🤖</span>
-                            Ecourse Robotik
-                        </a>
-                        <a href="/course-film-konten-kreator" class="dropdown-item">
-                            <span class="dropdown-icon">🎬</span>
-                            Ecourse Film & Konten Kreator
-                        </a>
-                        <a href="/ecourse-komik" class="dropdown-item">
-                            <span class="dropdown-icon">📖</span>
-                            Ecourse Komik
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="/event">Event <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🏆</span>
-                            LHEC IV 2025
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">💼</span>
-                            WORKSHOP & BOOTCAMP
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🎉</span>
-                            HOLIDAY FUN CLASS
-                        </a>
-                    </div>
-                </li>
-            </ul>
-            <div class="user-menu">
-                <a href="#" class="user-icon">🔍</a>
-                <a href="#" class="user-icon">🛒</a>
-                @php
-                    $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
-                    $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
-                    $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
-                @endphp
-                @auth
-                    <span class="username">{{ auth()->user()->name }}</span>
-                    @if($hasLogoutRoute)
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn-signin">Logout</button>
-                    </form>
-                    @endif
-                @else
-                    @if($hasLoginRoute)
-                    <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
-                    @endif
-                    @if($hasRegisterRoute)
-                    <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
-                    @endif
-                @endauth
-            </div>
-        </nav>
-    </header>
 
     <!-- Hero Section -->
     <section class="ekskul-hero">
@@ -87,53 +15,69 @@
     <section class="ekskul-section">
         <div class="ekskul-container">
             <div class="ekskul-grid">
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/ROBONESIA.svg') }}" alt="ROBONESIA" class="ekskul-icon-img">
+                <a href="/ekskul/robotik" style="text-decoration:none; color:inherit;">
+                    <div class="ekskul-item">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/ROBONESIA.svg') }}" alt="ROBONESIA" class="ekskul-icon-img">
+                        </div>
+                        <h3>Robotik</h3>
                     </div>
-                    <h3>Robotik</h3>
+                </a>
+                <a href="/ekskul/panahan" style="text-decoration:none; color:inherit;">
+                    <div class="ekskul-item">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/ARCHERY CLUB.svg') }}" alt="Archery" class="ekskul-icon-img">
+                        </div>
+                        <h3>Panahan</h3>
+                    </div>
+                </a>
+                <a href="/ekskul/komik" style="text-decoration:none; color:inherit;">
+                    <div class="ekskul-item">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="ekskul-icon-img">
+                        </div>
+                        <h3>Komik</h3>
+                    </div>
+                </a>
+                <a href="/ekskul/film-konten-kreator" style="text-decoration:none; color:inherit;">
+                    <div class="ekskul-item">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="ekskul-icon-img">
+                        </div>
+                        <h3>Film & Konten Kreator</h3>
+                    </div>
+                </a>
+                <div class="ekskul-item">
+                    <a href="/ekskul/taekwondo" style="text-decoration:none; color:inherit;">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/TAEKWONDO.svg') }}" alt="Taekwondo" class="ekskul-icon-img">
+                        </div>
+                        <h3>Taekwondo</h3>
+                    </a>
                 </div>
                 <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/ARCHERY CLUB.svg') }}" alt="Archery" class="ekskul-icon-img">
-                    </div>
-                    <h3>Panahan</h3>
+                    <a href="/ekskul/pencak-silat" style="text-decoration:none; color:inherit;">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/SILAT.svg') }}" alt="Pencak Silat" class="ekskul-icon-img">
+                        </div>
+                        <h3>Pencak Silat</h3>
+                    </a>
                 </div>
                 <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="ekskul-icon-img">
-                    </div>
-                    <h3>Komik</h3>
+                    <a href="/ekskul/karate" style="text-decoration:none; color:inherit;">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/KARATE.svg') }}" alt="Karate" class="ekskul-icon-img">
+                        </div>
+                        <h3>Karate</h3>
+                    </a>
                 </div>
                 <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="ekskul-icon-img">
-                    </div>
-                    <h3>Film & Konten Kreator</h3>
-                </div>
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/TAEKWONDO.svg') }}" alt="Taekwondo" class="ekskul-icon-img">
-                    </div>
-                    <h3>Taekwondo</h3>
-                </div>
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/SILAT.svg') }}" alt="Pencak Silat" class="ekskul-icon-img">
-                    </div>
-                    <h3>Pencak Silat</h3>
-                </div>
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/KARATE.svg') }}" alt="Karate" class="ekskul-icon-img">
-                    </div>
-                    <h3>Karate</h3>
-                </div>
-                <div class="ekskul-item">
-                    <div class="ekskul-icon">
-                        <img src="{{ asset('images/TAHFIDZ.svg') }}" alt="Tahsin & Tahfidz" class="ekskul-icon-img">
-                    </div>
-                    <h3>Tahsin & Tahfidz</h3>
+                    <a href="/ekskul/tahsin-tahfidz" style="text-decoration:none; color:inherit;">
+                        <div class="ekskul-icon">
+                            <img src="{{ asset('images/TAHFIDZ.svg') }}" alt="Tahsin & Tahfidz" class="ekskul-icon-img">
+                        </div>
+                        <h3>Tahsin & Tahfidz</h3>
+                    </a>
                 </div>
             </div>
         </div>

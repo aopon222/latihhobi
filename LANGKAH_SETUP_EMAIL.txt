@@ -1,0 +1,113 @@
+========================================
+LANGKAH SETUP EMAIL VERIFICATION
+========================================
+
+Email Anda: reksanjsg@gmail.com
+
+IKUTI LANGKAH INI UNTUK MENGAKTIFKAN EMAIL VERIFICATION:
+
+========================================
+LANGKAH 1: SETUP GMAIL APP PASSWORD
+========================================
+
+1. Buka browser dan pergi ke:
+   https://myaccount.google.com/security
+
+2. Login dengan akun Gmail Anda (reksanjsg@gmail.com)
+
+3. Cari "2-Step Verification" dan pastikan AKTIF
+   - Jika belum aktif, klik dan ikuti instruksi
+   - Masukkan nomor HP untuk verifikasi
+   - Simpan backup codes
+
+4. Setelah 2-Step Verification aktif, scroll ke bawah
+   Cari "App passwords" dan klik
+
+5. Pilih "Mail" dari dropdown
+   Klik "Generate"
+
+6. COPY password yang dihasilkan (16 karakter)
+   Contoh: abcd efgh ijkl mnop
+
+========================================
+LANGKAH 2: UPDATE FILE .ENV
+========================================
+
+1. Buka file .env di folder latihhobi
+
+2. Cari baris:
+   MAIL_PASSWORD=your-gmail-app-password
+
+3. Ganti dengan App Password yang baru:
+   MAIL_PASSWORD=abcd efgh ijkl mnop
+   (ganti dengan App Password Anda)
+
+4. Simpan file .env
+
+========================================
+LANGKAH 3: CLEAR CACHE & TEST
+========================================
+
+1. Buka Command Prompt/Terminal
+
+2. Masuk ke folder latihhobi:
+   cd c:\xampp\htdocs\latihhobi
+
+3. Clear Laravel cache:
+   php artisan config:clear
+
+4. Test email configuration:
+   php artisan app:test-email reksanjsg@gmail.com
+
+5. Jika berhasil, akan muncul pesan "Email sent successfully"
+
+========================================
+LANGKAH 4: TEST REGISTRATION
+========================================
+
+1. Buka browser: http://127.0.0.1:8000/register
+
+2. Daftar dengan email BARU (bukan reksanjsg@gmail.com)
+   Contoh: test@gmail.com
+
+3. Setelah registrasi, cek inbox email untuk verification link
+
+4. Klik link di email untuk verifikasi
+
+5. Email akan terverifikasi dan akun bisa digunakan
+
+========================================
+TROUBLESHOOTING
+========================================
+
+Problem: "Username and Password not accepted"
+Solusi:
+- Pastikan menggunakan App Password (16 karakter)
+- Pastikan 2-Step Verification sudah aktif
+- Generate App Password baru jika perlu
+
+Problem: Email tidak sampai
+Solusi:
+- Cek folder Spam/Junk
+- Tunggu beberapa menit
+- Pastikan internet connection stabil
+
+Problem: Masih error
+Solusi:
+- Gunakan "Verifikasi Manual" untuk testing
+- Cek file log: storage/logs/laravel.log
+
+========================================
+EXPECTED RESULT
+========================================
+
+Setelah setup berhasil:
+✅ Registration form berfungsi normal
+✅ Email verification otomatis terkirim
+✅ User menerima email di inbox
+✅ Klik link → email terverifikasi
+✅ User bisa akses dashboard
+
+========================================
+
+PENTING: Jangan share App Password dengan siapa pun!

@@ -1,77 +1,3 @@
-    <!-- Header/Navbar -->
-    <header class="header">
-        <nav class="navbar">
-            <a href="/" class="logo">
-                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-            </a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/" class="active">Home</a></li>
-                <li class="nav-item"><a href="/ekskul-reguler">Ekskul Reguler</a></li>
-                <li class="nav-item dropdown">
-                    <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="/ecourse/robotik" class="dropdown-item">
-                            <span class="dropdown-icon">🤖</span>
-                            Ecourse Robotik
-                        </a>
-                        <a href="/course-film-konten-kreator" class="dropdown-item">
-                            <span class="dropdown-icon">🎬</span>
-                            Ecourse Film & Konten Kreator
-                        </a>
-                        <a href="/ecourse-komik" class="dropdown-item">
-                            <span class="dropdown-icon">📖</span>
-                            Ecourse Komik
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="/event">Event <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🏆</span>
-                            LHEC IV 2025
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">💼</span>
-                            WORKSHOP & BOOTCAMP
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <span class="dropdown-icon">🎉</span>
-                            HOLIDAY FUN CLASS
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#"><span class="dropdown-icon">📷</span> Tentang Kami <span class="dropdown-arrow">▼</span></a>
-                    <div class="dropdown-menu">
-                        <a href="/karier" class="dropdown-item">Latih Hobi Karier</a>
-                        <a href="/magang" class="dropdown-item">Program Magang (Internship)</a>
-                        <a href="/profil" class="dropdown-item">PROFIL</a>
-                        <a href="/contact" class="dropdown-item">CONTACT</a>
-                    </div>
-                </li>
-            </ul>
-            <div class="user-menu">
-                <a href="#" class="user-icon">🔍</a>
-                <a href="#" class="user-icon">🛒</a>
-                @php
-                    $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
-                    $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
-                    $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
-                @endphp
-                @auth
-                    <!-- User dropdown dihilangkan sementara -->
-                @else
-                    @if($hasLoginRoute)
-                    <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
-                    @endif
-                    @if($hasRegisterRoute)
-                    <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
-                    @endif
-                @endauth
-            </div>
-        </nav>
-    </header>
 @extends('layout.app')
 
 @section('title', 'E-COURSE Robotik - LatihHobi')
@@ -93,6 +19,10 @@
         .price-current { font-weight:800; color:#0f3d5c; font-size:20px; margin-right:10px; }
         .price-old { color:#95a3b8; text-decoration:line-through; font-size:14px; }
         .btn-cart { border:2px solid #0f3d5c; color:#0f3d5c; background:#fff; border-radius:8px; padding:8px 10px; display:inline-flex; align-items:center; gap:8px; font-weight:600; }
+        .btn-enroll { width:100%; border:2px solid #ccd6e3; background:#fff; color:#0f3d5c; padding:12px 0; border-radius:10px; font-weight:700; }
+        .lock { position:absolute; right:12px; top:12px; background:#fff; border-radius:50%; width:34px; height:34px; display:grid; place-items:center; box-shadow:0 2px 6px rgba(0,0,0,.12); }
+        .card.protected .footer { padding:16px 18px; }
+        .card-wrap { position:relative; border-radius:12px; overflow:hidden; }
     </style>
 
     <section class="page-hero">
@@ -106,53 +36,81 @@
             <div class="grid">
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL-E-COURSE-ROBODUST.svg') }}" alt="Robot Robodust">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 1.svg') }}" alt="Level 1">
+                        <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Robot Robodust</h3>
+                        <h3 class="title">Kelas Robotik Level 1</h3>
                         <p class="byline">By Latihhobi In Robotik</p>
                     </div>
                     <div class="footer">
                         <div>
-                            <span class="price-current">Rp480,000</span>
-                            <span class="price-old">Rp500,000</span>
-                        </div>
-                        <button class="btn-cart" type="button">🛒</button>
-                    </div>
-                </article>
-                <article class="card">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL-E-COURSE-ROBOFAN.svg') }}" alt="Robot Robofan">
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Robot Robofan</h3>
-                        <p class="byline">By Latihhobi In Robotik</p>
-                    </div>
-                    <div class="footer">
-                        <div>
-                            <span class="price-current">Rp339,000</span>
-                            <span class="price-old">Rp350,000</span>
-                        </div>
-                        <button class="btn-cart" type="button">🛒</button>
-                    </div>
-                </article>
-                <article class="card">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL-E-COURSE-HEMIPTERA.svg') }}" alt="Robot Hemiptera">
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Robot Hemiptera</h3>
-                        <p class="byline">By Latihhobi In Robotik</p>
-                    </div>
-                    <div class="footer">
-                        <div>
-                            <span class="price-current">Rp289,000</span>
+                            <span class="price-current">Rp269,000</span>
                             <span class="price-old">Rp300,000</span>
                         </div>
                         <button class="btn-cart" type="button">🛒</button>
                     </div>
                 </article>
-                <!-- Tambahkan card produk robotik lain sesuai kebutuhan -->
+
+                <article class="card">
+                    <div class="card-wrap">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 2.svg') }}" alt="Level 2">
+                        <div class="lock">🔖</div>
+                    </div>
+                    <div class="body">
+                        <h3 class="title">Kelas Robotik Level 2</h3>
+                        <p class="byline">By Latihhobi In Robotik</p>
+                    </div>
+                    <div class="footer">
+                        <div>
+                            <span class="price-current">Rp269,000</span>
+                            <span class="price-old">Rp300,000</span>
+                        </div>
+                        <button class="btn-cart" type="button">🛒</button>
+                    </div>
+                </article>
+
+                <article class="card protected">
+                    <div class="card-wrap">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 3.svg') }}" alt="Level 3">
+                        <div class="lock">🔖</div>
+                    </div>
+                    <div class="body">
+                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Digital Level 3</h3>
+                        <p class="byline">By Latihhobi In Robotik</p>
+                    </div>
+                    <div class="footer">
+                        <button class="btn-enroll" type="button">Enroll Course</button>
+                    </div>
+                </article>
+
+                <article class="card protected">
+                    <div class="card-wrap">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 4.svg') }}" alt="Level 4">
+                        <div class="lock">🔖</div>
+                    </div>
+                    <div class="body">
+                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Animasi Level 4</h3>
+                        <p class="byline">By Latihhobi In Robotik</p>
+                    </div>
+                    <div class="footer">
+                        <button class="btn-enroll" type="button">Enroll Course</button>
+                    </div>
+                </article>
+
+                <article class="card protected">
+                    <div class="card-wrap">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 5.svg') }}" alt="Level 5">
+                        <div class="lock">🔖</div>
+                    </div>
+                    <div class="body">
+                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Profesional Level 5</h3>
+                        <p class="byline">By Latihhobi In Robotik</p>
+                    </div>
+                    <div class="footer">
+                        <button class="btn-enroll" type="button">Enroll Course</button>
+                    </div>
+                </article>
             </div>
         </div>
     </section>

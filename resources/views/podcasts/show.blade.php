@@ -3,33 +3,7 @@
 @section('title', $podcast->title . ' - Podcast LatihHobi')
 
 @section('content')
-    <!-- Header -->
-    <header class="header">
-        <nav class="navbar">
-            <a href="/" class="logo">
-                <img src="{{ asset('images/latihhobi-logo.png') }}" alt="LatihHobi Logo" class="logo-img">
-            </a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="/">Home</a></li>
-                <li class="nav-item"><a href="/ekskul-reguler">Ekskul Reguler</a></li>
-                <li class="nav-item"><a href="/ecourse">E-course</a></li>
-                <li class="nav-item"><a href="/event">Event</a></li>
-                <li class="nav-item"><a href="/podcasts" class="active">Podcast</a></li>
-            </ul>
-            <div class="user-menu">
-                @auth
-                    <span class="username">{{ auth()->user()->name }}</span>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn-signin">Logout</button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
-                    <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
-                @endauth
-            </div>
-        </nav>
-    </header>
+    @include('layout.navbar')
 
     <!-- Podcast Detail Section -->
     <section class="podcast-detail-section">
@@ -43,6 +17,7 @@
                             width="100%" 
                             height="100%" 
                             frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen>
                         </iframe>
                     </div>
@@ -50,7 +25,7 @@
                     <div class="video-info">
                         <h1 class="video-title">{{ $podcast->title }}</h1>
                         <div class="video-meta">
-                            <span class="views">👁 {{ number_format($podcast->views) }} views</span>
+                            <!-- views removed -->
                             <span class="duration">⏱ {{ $podcast->duration }}</span>
                             <span class="date">📅 {{ $podcast->published_date->format('d M Y') }}</span>
                         </div>
@@ -91,7 +66,7 @@
                             <h4><a href="{{ route('podcasts.show', $related) }}">{{ $related->title }}</a></h4>
                             <p>{{ Str::limit($related->description, 80) }}</p>
                             <div class="related-meta">
-                                <span>{{ $related->views }} views</span>
+                                <!-- views removed -->
                                 <span>{{ $related->published_date->format('d M Y') }}</span>
                             </div>
                         </div>
