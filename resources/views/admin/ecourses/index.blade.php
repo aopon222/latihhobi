@@ -27,9 +27,9 @@
             <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Kategori</label>
             <select name="category" style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;">
                 <option value="">Semua Kategori</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category }}" {{ request('category') == $category ? 'selected' : '' }}>
-                        {{ $category }}
+                @foreach($categories as $value => $label)
+                    <option value="{{ $value }}" {{ request('category') == $value ? 'selected' : '' }}>
+                        {{ $label }}
                     </option>
                 @endforeach
             </select>
@@ -106,7 +106,15 @@
                         </td>
                         <td style="padding:16px;">
                             <span style="background:#e0e7ff;color:#3730a3;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:500;">
-                                {{ $ecourse->category }}
+                                {{-- Show display label if mapping exists, otherwise show stored value --}}
+                                @php
+                                    // If this ecourse belongs to Film or Content Creation, show combined label
+                                    if (in_array($ecourse->category, ['Film', 'Content Creation'])) {
+                                        echo 'Film & Konten Kreator';
+                                    } else {
+                                        echo isset($categories[$ecourse->category]) ? $categories[$ecourse->category] : $ecourse->category;
+                                    }
+                                @endphp
                             </span>
                         </td>
                         <td style="padding:16px;">
