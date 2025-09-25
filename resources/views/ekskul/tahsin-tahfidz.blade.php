@@ -4,46 +4,52 @@
 
 @section('content')
 <style>
-    :root {
-        --biru: #04a6d6;
-        --oren: #f9a51a;
-        --putih: #fff;
-        --hitam: #1a2330;
-    }
-
+    /* Ekskul Hero V2 - lokal halaman */
     .ekskul-hero {
-        width: 100%;
-        height: 280px;
-        background: linear-gradient(135deg, var(--biru) 0%, #0284c7 100%);
         position: relative;
-        overflow: hidden;
+        width: 100%;
+        min-height: 70vh;
+        margin-top: 70px; /* offset header fixed dari layout */
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        background: var(--ekskul-bg, linear-gradient(180deg, #e5e7eb 0%, #d1d5db 100%)); /* fallback saat belum ada aset */
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+    }
+
+    .ekskul-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: min(700px, 60vw);
+        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.95) 60%, rgba(255,255,255,0) 100%);
+        z-index: 1;
     }
 
     .ekskul-hero-content {
-        text-align: center;
-        color: var(--putih);
+        position: relative;
         z-index: 2;
-        max-width: 800px;
-        padding: 0 20px;
+        text-align: left;
+        color: #111827;
+        max-width: 780px;
+        padding: 0 5%;
     }
 
     .ekskul-hero h1 {
-        font-size: 36px;
+        font-size: clamp(2rem, 4vw + 0.5rem, 4rem);
         font-weight: 800;
-        margin-bottom: 16px;
-        letter-spacing: 2px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
     }
 
     .ekskul-hero p {
-        font-size: 18px;
-        font-weight: 500;
-        margin-bottom: 0;
-        opacity: 0.95;
-        line-height: 1.6;
+        font-size: clamp(1rem, 1.2vw + 0.6rem, 1.25rem);
+        line-height: 1.8;
+        color: #374151;
+        max-width: 60ch;
+        margin: 0;
     }
 
     .ekskul-content {
@@ -60,31 +66,23 @@
     .ekskul-intro h2 {
         font-size: 28px;
         font-weight: 700;
-        color: var(--biru);
+        color: #04a6d6;
         margin-bottom: 20px;
         letter-spacing: 1px;
     }
 
     .ekskul-intro p {
         font-size: 16px;
-        color: var(--hitam);
+        color: #1a2330;
         line-height: 1.7;
         max-width: 800px;
         margin: 0 auto;
     }
 
     @media (max-width: 768px) {
-        .ekskul-hero h1 {
-            font-size: 28px;
-        }
-
-        .ekskul-hero p {
-            font-size: 16px;
-        }
-
-        .ekskul-content {
-            padding: 40px 15px;
-        }
+        .ekskul-hero { min-height: 60vh; }
+        .ekskul-hero::before { width: 100%; }
+        .ekskul-hero-content { padding: 2rem 1.25rem; }
     }
 </style>
 
