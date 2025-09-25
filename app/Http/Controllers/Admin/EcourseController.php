@@ -32,7 +32,12 @@ class EcourseController extends Controller
 
         // Filter berdasarkan kategori
         if ($request->filled('category')) {
-            $query->where('category', $request->category);
+            // Support combined 'Film & Konten Kreator' filter (maps to two DB categories)
+            if ($request->category === 'film_and_konten') {
+                $query->whereIn('category', ['Film', 'Content Creation']);
+            } else {
+                $query->where('category', $request->category);
+            }
         }
 
         // Filter berdasarkan level
@@ -52,8 +57,22 @@ class EcourseController extends Controller
 
         $ecourses = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        // Ambil data untuk filter dropdown
-        $categories = Ecourse::distinct()->pluck('category')->filter();
+        // Define canonical categories mapping (stored DB value => display label)
+        $categories = [
+            // combined option (non-destructive filtering)
+            'film_and_konten' => 'Film & Konten Kreator',
+            'Robotics' => 'Robotik',
+            'Film' => 'Film',
+            'Content Creation' => 'Konten Kreator',
+            'Programming' => 'Programming',
+            'Design' => 'Design',
+            'Marketing' => 'Marketing',
+            'Business' => 'Business',
+            'Photography' => 'Photography',
+            'Music' => 'Music',
+        ];
+
+        // Levels from DB (existing values)
         $levels = Ecourse::distinct()->pluck('level')->filter();
 
         return view('admin.ecourses.index', compact('ecourses', 'categories', 'levels'));
@@ -71,9 +90,10 @@ class EcourseController extends Controller
             'Business' => 'Business',
             'Photography' => 'Photography',
             'Music' => 'Music',
-            'Robotics' => 'Robotics',
+            // Stored DB value => Display label (Indonesian)
+            'Robotics' => 'Robotik',
             'Film' => 'Film',
-            'Content Creation' => 'Content Creation'
+            'Content Creation' => 'Konten Kreator'
         ];
 
         $levels = [
@@ -156,9 +176,10 @@ class EcourseController extends Controller
             'Business' => 'Business',
             'Photography' => 'Photography',
             'Music' => 'Music',
-            'Robotics' => 'Robotics',
+            // Stored DB value => Display label (Indonesian)
+            'Robotics' => 'Robotik',
             'Film' => 'Film',
-            'Content Creation' => 'Content Creation'
+            'Content Creation' => 'Konten Kreator'
         ];
 
         $levels = [
