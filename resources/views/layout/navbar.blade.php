@@ -30,10 +30,17 @@
                         <span class="dropdown-icon">🏆</span>
                         LHEC 2025
                     </a>
+                    @if(Route::has('workshop-bootcamp'))
                     <a href="{{ route('workshop-bootcamp') }}" class="dropdown-item">
                         <span class="dropdown-icon">💼</span>
                         WORKSHOP & BOOTCAMP
                     </a>
+                    @else
+                    <a href="#" class="dropdown-item" onclick="event.preventDefault(); alert('Route not configured in this environment')">
+                        <span class="dropdown-icon">💼</span>
+                        WORKSHOP & BOOTCAMP
+                    </a>
+                    @endif
                     <a href="{{ route('holiday-fun-class') }}" class="dropdown-item">
                         <span class="dropdown-icon">🎉</span>
                         HOLIDAY FUN CLASS
@@ -51,7 +58,12 @@
             </li>
         </ul>
         <div class="user-menu">
-            <a href="#" class="user-icon"><i class="fas fa-search" style="color:#ffc107;font-size:1.5rem;"></i></a>
+            <a href="#" class="user-icon nav-search" aria-label="Buka pencarian" title="Cari"><i class="fas fa-search" style="color:#ffc107;font-size:1.5rem;"></i></a>
+            <!-- Inline navbar search form (hidden by default; toggled with .open) -->
+            <form class="navbar-search-form" action="/search" method="GET">
+                <input type="text" name="query" class="navbar-search-input" placeholder="Cari..." aria-label="Cari">
+                <button type="submit" class="navbar-search-submit"><i class="fas fa-search"></i></button>
+            </form>
             <a href="#" class="user-icon"><i class="fas fa-bell" style="color:#ffc107;font-size:1.5rem;"></i></a>
             <a href="#" class="user-icon" style="position:relative;">
                 <i class="fas fa-shopping-cart" style="color:#ffc107;font-size:1.5rem;"></i>
@@ -61,9 +73,12 @@
                 $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
                 $hasRegisterRoute = \Illuminate\Support\Facades\Route::has('register');
                 $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
+                // Avoid trying to query the users table when it doesn't exist (local dev before migrations).
+                $usersTableExists = \Illuminate\Support\Facades\Schema::hasTable('users');
             @endphp
-            @auth
-                <div class="user-dropdown" style="display:flex;align-items:center;gap:12px;">
+
+            @if($usersTableExists && auth()->check())
+                <div class="user-dropdown" style="display:flex;align-items:center;gap:12px;position:relative;">
                     @if(auth()->user()->email === 'multimedia.latihhobi@gmail.com')
                         <a href="{{ route('admin.dashboard') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
                     @else
@@ -74,70 +89,27 @@
                         </span>
                         <span class="profile-trigger" style="color:#ffc107;font-weight:600;font-size:1rem;cursor:pointer;">{{ Auth::user()->name ?? 'Profil' }}</span>
                     </a>
-                    {{-- Logout moved into profile dropdown (kept in experimental fixed menu) --}}
-                </div>
-                
-                    <script>
-                        // Experimental: append a fixed dropdown to body when profile-trigger is clicked (local branch)
-                        (function(){
-                            const triggers = document.querySelectorAll('.profile-trigger');
-                            if(!triggers.length) return;
-                            let menuEl = null;
 
-                            function createMenu(){
-                                if(menuEl) return menuEl;
-                                menuEl = document.createElement('div');
-                                menuEl.className = 'profile-fixed-menu';
-                                Object.assign(menuEl.style, {
-                                    position: 'fixed',
-                                    right: '16px',
-                                    top: '64px',
-                                    background: '#fff',
-                                    borderRadius: '8px',
-                                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                                    padding: '8px 0',
-                                    minWidth: '200px',
-                                    zIndex: 2147483647,
-                                    display: 'none'
-                                });
-
-                                // Build inner content (Dashboard if admin, Profile, Logout form)
-                                const isAdmin = {{ auth()->user() && auth()->user()->email === 'multimedia.latihhobi@gmail.com' ? 'true' : 'false' }};
-                                if(isAdmin){
-                                    const a = document.createElement('a');
-                                    a.href = '{{ route('admin.dashboard') }}';
-                                    a.textContent = 'Dashboard';
-                                    a.style.display = 'block'; a.style.padding = '10px 14px'; a.style.color = '#111827'; a.style.textDecoration='none';
-                                    menuEl.appendChild(a);
-                                }
-                                const p = document.createElement('a');
-                                p.href = '{{ route('profile') }}'; p.textContent = 'Profil';
-                                p.style.display = 'block'; p.style.padding = '10px 14px'; p.style.color = '#111827'; p.style.textDecoration='none';
-                                menuEl.appendChild(p);
-
-                                @if($hasLogoutRoute ?? true)
-                                const form = document.createElement('form'); form.method='POST'; form.action='{{ route('logout') }}'; form.style.margin='0';
-                                const csrf = document.createElement('input'); csrf.type='hidden'; csrf.name='_token'; csrf.value='{{ csrf_token() }}'; form.appendChild(csrf);
-                                const btn = document.createElement('button'); btn.type='submit'; btn.textContent='Keluar';
-                                Object.assign(btn.style, {width:'100%',textAlign:'left',padding:'10px 14px',background:'transparent',border:'0',color:'#ef4444',cursor:'pointer'});
-                                form.appendChild(btn);
-                                menuEl.appendChild(form);
+                    {{-- Profile dropdown menu --}}
+                    <div class="user-profile-menu" aria-hidden="true" style="display:none;">
+                        <div class="profile-menu-inner">
+                            @if(auth()->user()->email === 'multimedia.latihhobi@gmail.com')
+                                @if(Route::has('admin.dashboard'))
+                                <a href="{{ route('admin.dashboard') }}" class="profile-item">Dashboard Admin</a>
                                 @endif
-
-                                document.body.appendChild(menuEl);
-                                return menuEl;
-                            }
-
-                            function toggleMenu(){
-                                const m = createMenu();
-                                if(m.style.display === 'block') { m.style.display='none'; }
-                                else { m.style.display='block'; }
-                            }
-
-                            triggers.forEach(t => t.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }));
-                            document.addEventListener('click', (e) => { if(menuEl && !menuEl.contains(e.target)) menuEl.style.display='none'; });
-                        })();
-                    </script>
+                            @else
+                                @if(Route::has('profile'))
+                                <a href="{{ route('profile') }}" class="profile-item">Profil Saya</a>
+                                @endif
+                            @endif
+                            @if($hasLogoutRoute)
+                            <a href="#" class="profile-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Keluar</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <!-- Profile menu initialization moved to layout/app.blade.php script to avoid Blade/JS render issues -->
             @else
                 @if($hasLoginRoute)
                 <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
@@ -145,7 +117,7 @@
                 @if($hasRegisterRoute)
                 <a href="{{ route('register') }}" class="btn-signup">Sign up</a>
                 @endif
-            @endauth
+            @endif
         </div>
     </nav>
 </header>

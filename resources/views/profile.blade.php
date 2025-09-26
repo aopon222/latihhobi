@@ -126,9 +126,9 @@
         .profile-hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 8rem 5% 4rem;
-            margin-top: 70px;
-            min-height: 100vh;
+            padding: 6.5rem 5% 4rem; /* account for fixed header */
+            margin-top: 0;
+            min-height: calc(100vh - var(--header-height));
         }
 
         .profile-container {

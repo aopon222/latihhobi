@@ -18,9 +18,7 @@ class PodcastController extends Controller
 
         // Search functionality
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%')
-                  ->orWhere('host', 'like', '%' . $request->search . '%')
-                  ->orWhere('guest', 'like', '%' . $request->search . '%');
+            $query->where('title', 'like', '%' . $request->search . '%');
         }
 
         // Filter by status
@@ -45,9 +43,7 @@ class PodcastController extends Controller
                          ->orderBy('published_date', 'desc')
                          ->paginate(10);
 
-        $hosts = Podcast::distinct()->pluck('host')->filter();
-        
-        return view('admin.podcasts.index', compact('podcasts', 'hosts'));
+    return view('admin.podcasts.index', compact('podcasts'));
     }
 
     /**
@@ -71,8 +67,7 @@ class PodcastController extends Controller
                 'url',
                 'regex:/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/',
             ],
-            'host' => 'required|string|max:255',
-            'guest' => 'nullable|string|max:255',
+            // host and guest removed
             'topics' => 'nullable|string',
             'published_date' => 'required|date',
             'duration' => 'nullable|string|max:20',
@@ -129,8 +124,7 @@ class PodcastController extends Controller
                 'url',
                 'regex:/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/',
             ],
-            'host' => 'required|string|max:255',
-            'guest' => 'nullable|string|max:255',
+            // host and guest removed
             'topics' => 'nullable|string',
             'published_date' => 'required|date',
             'duration' => 'nullable|string|max:20',

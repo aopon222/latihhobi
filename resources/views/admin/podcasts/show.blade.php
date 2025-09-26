@@ -78,19 +78,7 @@
         <h3 style="font-weight:700;color:#111827;margin-bottom:20px;">Informasi Podcast</h3>
         
         <div style="display:flex;flex-direction:column;gap:16px;">
-            <!-- Host -->
-            <div>
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:4px;">Host:</label>
-                <span style="color:#6b7280;">{{ $podcast->host }}</span>
-            </div>
-
-            <!-- Guest -->
-            @if($podcast->guest)
-            <div>
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:4px;">Guest:</label>
-                <span style="color:#6b7280;">{{ $podcast->guest }}</span>
-            </div>
-            @endif
+            {{-- Host and Guest info removed --}}
 
             <!-- Duration -->
             @if($podcast->duration)

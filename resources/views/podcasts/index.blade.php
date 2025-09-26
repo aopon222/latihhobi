@@ -38,12 +38,7 @@
                     <div class="podcast-info">
                         <h3 class="podcast-title">{{ $podcast->title }}</h3>
                         <p class="podcast-description">{{ Str::limit($podcast->description, 100) }}</p>
-                        <div class="podcast-meta">
-                            <span class="host">👤 {{ $podcast->host }}</span>
-                            @if($podcast->guest)
-                                <span class="guest">👥 {{ $podcast->guest }}</span>
-                            @endif
-                        </div>
+                        {{-- Host and Guest removed --}}
                         <div class="podcast-topics">
                             @if($podcast->topics)
                                 @foreach($podcast->topics as $topic)

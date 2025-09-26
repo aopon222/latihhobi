@@ -6,6 +6,7 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpFoundation\Response;
 
 class RedirectIfAuthenticated
@@ -19,9 +20,12 @@ class RedirectIfAuthenticated
     {
         $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect('/');
+        // If users table doesn't exist (migrations not run), skip auth checks to avoid QueryExceptions
+        if (Schema::hasTable('users')) {
+            foreach ($guards as $guard) {
+                if (Auth::guard($guard)->check()) {
+                    return redirect('/');
+                }
             }
         }
 

@@ -45,31 +45,7 @@
                 </p>
             </div>
 
-            <!-- Host -->
-            <div>
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">
-                    Host <span style="color:#ef4444;">*</span>
-                </label>
-                <input type="text" name="host" value="{{ old('host') }}" required
-                       placeholder="Nama host podcast..."
-                       style="width:100%;padding:12px;border:1px solid {{ $errors->has('host') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
-                @error('host')
-                    <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Guest -->
-            <div>
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">
-                    Guest
-                </label>
-                <input type="text" name="guest" value="{{ old('guest') }}"
-                       placeholder="Nama tamu (opsional)..."
-                       style="width:100%;padding:12px;border:1px solid {{ $errors->has('guest') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
-                @error('guest')
-                    <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                @enderror
-            </div>
+            {{-- Host and Guest fields removed --}}
 
             <!-- Tanggal Publikasi -->
             <div>

@@ -185,7 +185,17 @@
             <h2>TONTON PODCAST LATIHHOBI</h2>
             <div class="podcast-grid">
                 @php
-                    $featuredPodcasts = \App\Models\Podcast::active()->featured()->ordered()->limit(4)->get();
+                    use Illuminate\Support\Facades\Schema;
+                    $featuredPodcasts = collect();
+                    if (Schema::hasTable('podcasts')) {
+                        try {
+                            $featuredPodcasts = \App\Models\Podcast::active()->featured()->ordered()->limit(4)->get();
+                        } catch (\Illuminate\Database\QueryException $e) {
+                            // If something goes wrong (migrations not run or DB issues), leave featuredPodcasts empty to avoid a 500
+                            \Illuminate\Support\Facades\Log::warning('Failed to fetch featured podcasts on welcome page: '.$e->getMessage());
+                            $featuredPodcasts = collect();
+                        }
+                    }
                 @endphp
                 @foreach($featuredPodcasts as $podcast)
                 <div class="podcast-item" data-youtube-id="{{ $podcast->youtube_id }}">
@@ -205,14 +215,17 @@
                     </div>
                     <div class="podcast-info">
                         <h3>{{ $podcast->title }}</h3>
-                        <p>{{ $podcast->host }}</p>
                         <a href="{{ route('podcasts.show', $podcast) }}" class="btn-subscribe">Tonton Sekarang</a>
                     </div>
                 </div>
                 @endforeach
             </div>
             <div class="podcast-actions">
-                <a href="{{ route('podcasts.index') }}" class="btn-view-all">Lihat Semua Podcast</a>
+                @if (\Illuminate\Support\Facades\Route::has('podcasts.index'))
+                    <a href="{{ route('podcasts.index') }}" class="btn-view-all">Lihat Semua Podcast</a>
+                @else
+                    <a href="#" class="btn-view-all" aria-disabled="true">Lihat Semua Podcast</a>
+                @endif
             </div>
         </div>
     </section>

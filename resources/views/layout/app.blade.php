@@ -8,6 +8,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     @yield('head')
     <style>
+        :root {
+            --header-height: 72px; /* tune if header grows/shrinks */
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,6 +22,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
+            /* reserve space for the fixed header so content doesn't get hidden */
+            padding-top: var(--header-height);
         }
 
         /* Header Styles */
@@ -155,6 +161,53 @@
             display: flex !important;
             align-items: center;
             gap: 1rem;
+            /* make the user menu the positioning context for the inline search and profile menu */
+            position: relative;
+        }
+
+        /* Navbar inline search styling */
+        /* Inline navbar search: absolutely positioned so it won't push other nav items */
+        .navbar-search-form {
+            /* absolutely positioned relative to .user-menu so it stays near the icons */
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%) scale(0.98);
+            display: flex;
+            align-items: center;
+            gap: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease, transform 180ms ease;
+            z-index: 1100;
+            background: white;
+            padding: 6px;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            min-width: 260px;
+        }
+
+        .navbar-search-form.open {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+            pointer-events: auto;
+        }
+
+        .navbar-search-input {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px 0 0 6px;
+            min-width: 220px;
+            outline: none;
+        }
+
+        .navbar-search-submit {
+            background: #ffc107;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            color: #fff;
         }
 
         .user-icon {
@@ -166,6 +219,36 @@
 
         .user-icon:hover {
             color: #e0f7ff;
+        }
+
+        /* Profile dropdown menu */
+        .user-profile-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            min-width: 180px;
+            z-index: 1200;
+            overflow: hidden;
+        }
+
+        .user-profile-menu .profile-menu-inner {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-profile-menu .profile-item {
+            padding: 10px 14px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .user-profile-menu .profile-item:hover {
+            background: #f8fafc;
         }
 
         .btn-signin, .btn-signup {
@@ -208,7 +291,7 @@
             color: white;
             text-align: center;
             padding: 100px 5% 80px;
-            margin-top: 70px;
+            margin-top: 0; /* header space is handled by body padding-top */
             min-height: 80vh;
             display: flex;
             align-items: center;
@@ -1854,7 +1937,7 @@
             </form>
         </div>
     </div>
-    <main>
+    <main style="padding-top: 90px;">
         @yield('content')
     </main>
     
@@ -1893,20 +1976,125 @@
             });
         });
 
-        const searchLink = document.querySelector('.nav-search');
-        const searchOverlay = document.getElementById('search-overlay');
-        const closeSearch = document.querySelector('.close-search');
+    const searchLink = document.querySelector('.nav-search');
+    const searchOverlay = document.getElementById('search-overlay');
+    const closeSearch = document.querySelector('.close-search');
+    const navbarSearchForm = document.querySelector('.navbar-search-form');
+    const navbarSearchInput = document.querySelector('.navbar-search-input');
+    const userMenu = document.querySelector('.user-menu');
 
-        if (searchLink) {
-            searchLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                searchOverlay.style.display = 'block';
+    // Helper: show overlay for small screens
+    function openOverlaySearch() {
+        if (!searchOverlay) return;
+        searchOverlay.style.display = 'block';
+        const overlayInput = searchOverlay.querySelector('.search-input');
+        if (overlayInput) overlayInput.focus();
+    }
+
+    if (searchLink) {
+        searchLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            // On small screens, use the full-screen overlay for a better UX
+            if (window.innerWidth <= 768) {
+                openOverlaySearch();
+                return;
+            }
+
+            if (navbarSearchForm && userMenu) {
+                const isOpen = navbarSearchForm.classList.contains('open');
+                if (!isOpen) {
+                    // Position the inline form to align with the search icon
+                    try {
+                        const linkRect = searchLink.getBoundingClientRect();
+                        const parentRect = userMenu.getBoundingClientRect();
+                        const left = linkRect.left - parentRect.left; // position relative to .user-menu
+                        navbarSearchForm.style.left = `${left}px`;
+                        navbarSearchForm.style.right = 'auto';
+                    } catch (err) {
+                        // ignore positioning errors and use default CSS
+                    }
+
+                    navbarSearchForm.classList.add('open');
+                    setTimeout(() => { if (navbarSearchInput) navbarSearchInput.focus(); }, 80);
+                } else {
+                    navbarSearchForm.classList.remove('open');
+                }
+            } else {
+                openOverlaySearch();
+            }
+        });
+
+        // Close the inline search on Escape
+        document.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Escape') {
+                if (navbarSearchForm && navbarSearchForm.classList.contains('open')) {
+                    navbarSearchForm.classList.remove('open');
+                }
+                if (searchOverlay && searchOverlay.style.display === 'block') {
+                    searchOverlay.style.display = 'none';
+                }
+            }
+        });
+
+        // Click outside to close the inline search
+        document.addEventListener('click', (ev) => {
+            if (!navbarSearchForm) return;
+            if (!navbarSearchForm.classList.contains('open')) return;
+            const target = ev.target;
+            if (!navbarSearchForm.contains(target) && !userMenu.contains(target)) {
+                navbarSearchForm.classList.remove('open');
+            }
+        });
+
+        // Reposition on resize if open
+        window.addEventListener('resize', () => {
+            if (!navbarSearchForm || !navbarSearchForm.classList.contains('open')) return;
+            if (window.innerWidth <= 768) {
+                navbarSearchForm.classList.remove('open');
+                openOverlaySearch();
+                return;
+            }
+            try {
+                const linkRect = searchLink.getBoundingClientRect();
+                const parentRect = userMenu.getBoundingClientRect();
+                const left = linkRect.left - parentRect.left;
+                navbarSearchForm.style.left = `${left}px`;
+            } catch (err) {}
+        });
+
+        // Hide inline search on submit (let the navigation happen)
+        if (navbarSearchForm) {
+            navbarSearchForm.addEventListener('submit', () => {
+                navbarSearchForm.classList.remove('open');
             });
         }
+    }
 
-        if (closeSearch) {
-            closeSearch.addEventListener('click', () => {
-                searchOverlay.style.display = 'none';
+    if (closeSearch) {
+        closeSearch.addEventListener('click', () => {
+            if (searchOverlay) searchOverlay.style.display = 'none';
+        });
+    }
+
+        // Profile dropdown toggle
+        const profileTriggers = document.querySelectorAll('.profile-trigger');
+        const profileMenu = document.querySelector('.user-profile-menu');
+
+        if (profileTriggers.length && profileMenu) {
+            profileTriggers.forEach(t => t.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const isOpen = profileMenu.style.display === 'block';
+                profileMenu.style.display = isOpen ? 'none' : 'block';
+            }));
+
+            // Close profile menu when clicking outside
+            document.addEventListener('click', (ev) => {
+                if (!profileMenu) return;
+                const target = ev.target;
+                if (!profileMenu.contains(target) && !Array.from(profileTriggers).some(el => el.contains(target))) {
+                    profileMenu.style.display = 'none';
+                }
             });
         }
     </script>

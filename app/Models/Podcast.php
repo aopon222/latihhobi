@@ -15,8 +15,6 @@ class Podcast extends Model
         'youtube_id',
         'thumbnail_url',
         'duration',
-        'host',
-        'guest',
         'topics',
         'published_date',
         'views',

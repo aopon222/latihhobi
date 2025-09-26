@@ -32,16 +32,7 @@
                         <div class="video-description">
                             <p>{{ $podcast->description }}</p>
                         </div>
-                        <div class="video-participants">
-                            <div class="participant">
-                                <strong>Host:</strong> {{ $podcast->host }}
-                            </div>
-                            @if($podcast->guest)
-                            <div class="participant">
-                                <strong>Guest:</strong> {{ $podcast->guest }}
-                            </div>
-                            @endif
-                        </div>
+                        {{-- Host and Guest removed --}}
                         <div class="video-topics">
                             <strong>Topics:</strong>
                             @if($podcast->topics)
@@ -80,7 +71,7 @@
     <style>
         .podcast-detail-section {
             padding: 8rem 5% 4rem;
-            margin-top: 70px;
+            margin-top: 0;
             background: #f8f9fa;
             min-height: 100vh;
         }

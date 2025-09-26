@@ -83,6 +83,44 @@ return [
             ]) : [],
         ],
 
+        /*
+        |--------------------------------------------------------------------------
+        | Optional Search DB Connections
+        |--------------------------------------------------------------------------
+        |
+        | Define one or more optional connections that the site search can use.
+        | Set SEARCH_DB_CONNECTION in your `.env` to the connection name below
+        | (for example: "sqlite_search" or "mysql_search"). These are optional
+        | and will not affect the default application connection unless chosen.
+        |
+        */
+
+        'sqlite_search' => [
+            'driver' => 'sqlite',
+            'url' => env('SEARCH_DB_URL'),
+            // Use an absolute path on Windows if needed, e.g. C:\path\to\search.sqlite
+            'database' => env('SEARCH_DB_DATABASE', database_path('database.sqlite')),
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+        ],
+
+        'mysql_search' => [
+            'driver' => 'mysql',
+            'url' => env('SEARCH_DB_URL'),
+            'host' => env('SEARCH_DB_HOST', '127.0.0.1'),
+            'port' => env('SEARCH_DB_PORT', '3306'),
+            'database' => env('SEARCH_DB_DATABASE_NAME', 'latihhobi_search'),
+            'username' => env('SEARCH_DB_USERNAME', 'root'),
+            'password' => env('SEARCH_DB_PASSWORD', ''),
+            'unix_socket' => env('SEARCH_DB_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),

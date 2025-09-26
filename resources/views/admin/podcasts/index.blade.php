@@ -23,17 +23,7 @@
                    placeholder="Cari berdasarkan judul, host, atau guest..." 
                    style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;">
         </div>
-        <div style="min-width:150px;">
-            <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Host</label>
-            <select name="host" style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;">
-                <option value="">Semua Host</option>
-                @foreach($hosts as $host)
-                    <option value="{{ $host }}" {{ request('host') == $host ? 'selected' : '' }}>
-                        {{ $host }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+        {{-- Host filter removed --}}
         <div style="min-width:120px;">
             <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Status</label>
             <select name="status" style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;">
@@ -72,8 +62,7 @@
                     <tr>
                         <th style="padding:16px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Thumbnail</th>
                         <th style="padding:16px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Judul</th>
-                        <th style="padding:16px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Host</th>
-                        <th style="padding:16px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Guest</th>
+                        {{-- Host and Guest columns removed --}}
                         <th style="padding:16px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Tanggal</th>
                         <th style="padding:16px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Status</th>
                         <th style="padding:16px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Aksi</th>
@@ -96,12 +85,7 @@
                                 @endif
                             </div>
                         </td>
-                        <td style="padding:16px;">
-                            <span style="color:#374151;font-weight:500;">{{ $podcast->host }}</span>
-                        </td>
-                        <td style="padding:16px;">
-                            <span style="color:#6b7280;">{{ $podcast->guest ?: '-' }}</span>
-                        </td>
+                        {{-- Host and Guest cells removed --}}
                         <td style="padding:16px;">
                             <span style="color:#374151;">{{ $podcast->published_date->format('d M Y') }}</span>
                         </td>
