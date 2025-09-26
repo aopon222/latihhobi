@@ -34,83 +34,63 @@
     <section style="background:#04a6d6; padding:28px 0 56px;">
         <div class="container">
             <div class="grid">
-                <article class="card">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E COURSE lv 1.svg') }}" alt="Level 1">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Kelas Robotik Level 1</h3>
-                        <p class="byline">By Latihhobi In Robotik</p>
-                    </div>
-                    <div class="footer">
-                        <div>
-                            <span class="price-current">Rp269,000</span>
-                            <span class="price-old">Rp300,000</span>
-                        </div>
-                        <button class="btn-cart" type="button">🛒</button>
-                    </div>
-                </article>
-
-                <article class="card">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E COURSE lv 2.svg') }}" alt="Level 2">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Kelas Robotik Level 2</h3>
-                        <p class="byline">By Latihhobi In Robotik</p>
-                    </div>
-                    <div class="footer">
-                        <div>
-                            <span class="price-current">Rp269,000</span>
-                            <span class="price-old">Rp300,000</span>
-                        </div>
-                        <button class="btn-cart" type="button">🛒</button>
-                    </div>
-                </article>
-
-                <article class="card protected">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E COURSE lv 3.svg') }}" alt="Level 3">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Digital Level 3</h3>
-                        <p class="byline">By Latihhobi In Robotik</p>
-                    </div>
-                    <div class="footer">
-                        <button class="btn-enroll" type="button">Enroll Course</button>
-                    </div>
-                </article>
-
-                <article class="card protected">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E COURSE lv 4.svg') }}" alt="Level 4">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Animasi Level 4</h3>
-                        <p class="byline">By Latihhobi In Robotik</p>
-                    </div>
-                    <div class="footer">
-                        <button class="btn-enroll" type="button">Enroll Course</button>
-                    </div>
-                </article>
-
-                <article class="card protected">
-                    <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/E COURSE lv 5.svg') }}" alt="Level 5">
-                        <div class="lock">🔖</div>
-                    </div>
-                    <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Profesional Level 5</h3>
-                        <p class="byline">By Latihhobi In Robotik</p>
-                    </div>
-                    <div class="footer">
-                        <button class="btn-enroll" type="button">Enroll Course</button>
-                    </div>
-                </article>
+                @php $minCards = 3; @endphp
+                @if(isset($robotikCourses) && $robotikCourses->count() > 0)
+                    @foreach($robotikCourses as $course)
+                        <article class="card {{ $course->is_active ? '' : 'protected' }}">
+                            <div class="card-wrap">
+                                @if($course->thumbnail)
+                                    <img class="thumb" src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->title }}">
+                                @else
+                                    {{-- fallback image --}}
+                                    <img class="thumb" src="{{ asset('images/E COURSE lv 1.svg') }}" alt="{{ $course->title }}">
+                                @endif
+                                @if(!$course->is_active)
+                                    <div class="lock">🔖</div>
+                                @endif
+                            </div>
+                            <div class="body">
+                                <h3 class="title">{{ $course->title }}</h3>
+                                <p class="byline">By Latihhobi In {{ $course->category ?? 'Robotik' }}</p>
+                            </div>
+                            <div class="footer">
+                                <div>
+                                    @if($course->discount_price && $course->price > $course->discount_price)
+                                        <span class="price-current">Rp{{ number_format($course->discount_price, 0, ',', '.') }}</span>
+                                        <span class="price-old">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
+                                    @else
+                                        <span class="price-current">Rp{{ number_format($course->price ?? 0, 0, ',', '.') }}</span>
+                                    @endif
+                                </div>
+                                @if($course->is_active)
+                                    <button class="btn-cart" type="button">🛒</button>
+                                @else
+                                    <button class="btn-enroll" type="button" disabled>Enroll Course</button>
+                                @endif
+                            </div>
+                        </article>
+                    @endforeach
+                @else
+                    {{-- No courses at all: show placeholders --}}
+                    @for($i = 0; $i < $minCards; $i++)
+                        <article class="card protected">
+                            <div class="card-wrap">
+                                <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="Coming Soon">
+                                <div class="lock">🔖</div>
+                            </div>
+                            <div class="body">
+                                <h3 class="title">Segera Hadir</h3>
+                                <p class="byline">By Latihhobi</p>
+                            </div>
+                            <div class="footer">
+                                <div>
+                                    <span class="price-current">Coming Soon</span>
+                                </div>
+                                <button class="btn-enroll" type="button" disabled>Coming Soon</button>
+                            </div>
+                        </article>
+                    @endfor
+                @endif
             </div>
         </div>
     </section>
