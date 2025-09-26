@@ -400,7 +400,7 @@
             overflow: hidden;
             transition: all 0.3s;
             backdrop-filter: blur(10px);
-        }   
+        }
 
         .private-card:hover {
             transform: translateY(-5px);
@@ -1874,7 +1874,7 @@
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-left">
-                © 2025 - LatihHobi
+                © 2025 - Latih Hobi
             </div>
             <div class="footer-right">
                 <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="footer-social" aria-label="Facebook">
@@ -1890,7 +1890,7 @@
         </div>
     </footer>
     @endif
-    
+
     <script>
         // Simple scroll animation
         const observerOptions = {
