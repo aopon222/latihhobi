@@ -66,7 +66,11 @@ class PodcastController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'youtube_url' => 'required|url|regex:/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/',
+            'youtube_url' => [
+                'required',
+                'url',
+                'regex:/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/',
+            ],
             'host' => 'required|string|max:255',
             'guest' => 'nullable|string|max:255',
             'topics' => 'nullable|string',
@@ -120,7 +124,11 @@ class PodcastController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'youtube_url' => 'required|url|regex:/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/',
+            'youtube_url' => [
+                'required',
+                'url',
+                'regex:/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/',
+            ],
             'host' => 'required|string|max:255',
             'guest' => 'nullable|string|max:255',
             'topics' => 'nullable|string',

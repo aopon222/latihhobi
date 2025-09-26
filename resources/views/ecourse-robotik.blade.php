@@ -36,11 +36,11 @@
             <div class="grid">
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ATHUTO.svg') }}" alt="Level 1">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 1.svg') }}" alt="Level 1">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">ROBOT ATHURO Level 1</h3>
+                        <h3 class="title">Kelas Robotik Level 1</h3>
                         <p class="byline">By Latihhobi In Robotik</p>
                     </div>
                     <div class="footer">
@@ -54,11 +54,11 @@
 
                 <article class="card">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ROBOFAN.svg') }}" alt="Level 2">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 2.svg') }}" alt="Level 2">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">ROBOT ROBOFAN Level 2</h3>
+                        <h3 class="title">Kelas Robotik Level 2</h3>
                         <p class="byline">By Latihhobi In Robotik</p>
                     </div>
                     <div class="footer">
@@ -72,11 +72,11 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="Level 3">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 3.svg') }}" alt="Level 3">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) ROBOT ROBODUST Level 3</h3>
+                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Digital Level 3</h3>
                         <p class="byline">By Latihhobi In Robotik</p>
                     </div>
                     <div class="footer">
@@ -86,11 +86,11 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE HEMIPTERA.svg') }}" alt="Level 4">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 4.svg') }}" alt="Level 4">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) ROBOT HAMIPTERA Level 4</h3>
+                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Animasi Level 4</h3>
                         <p class="byline">By Latihhobi In Robotik</p>
                     </div>
                     <div class="footer">
@@ -100,11 +100,11 @@
 
                 <article class="card protected">
                     <div class="card-wrap">
-                        <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE AVOIDER.svg') }}" alt="Level 5">
+                        <img class="thumb" src="{{ asset('images/E COURSE lv 5.svg') }}" alt="Level 5">
                         <div class="lock">🔖</div>
                     </div>
                     <div class="body">
-                        <h3 class="title">Terlindungi: (COMINGSOON) ROBOT AVOIDER Level 5</h3>
+                        <h3 class="title">Terlindungi: (COMINGSOON) Robotik Profesional Level 5</h3>
                         <p class="byline">By Latihhobi In Robotik</p>
                     </div>
                     <div class="footer">

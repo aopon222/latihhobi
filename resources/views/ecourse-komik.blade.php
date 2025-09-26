@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'E-COURSE Film & Konten Kreator - LatihHobi')
+@section('title', 'E-COURSE Komik')
 
 @section('content')
     <style>
@@ -27,7 +27,7 @@
 
     <section class="page-hero">
         <div class="container">
-            <h1>E-COURSE Film & Konten Kreator</h1>
+            <h1>E-COURSE Komik</h1>
         </div>
     </section>
 
@@ -35,8 +35,8 @@
         <div class="container">
             <div class="grid">
                 @php $minCards = 3; @endphp
-                @if(isset($filmCourses) && $filmCourses->count() > 0)
-                    @foreach($filmCourses as $course)
+                @if(isset($komikCourses) && $komikCourses->count() > 0)
+                    @foreach($komikCourses as $course)
                         <article class="card {{ $course->is_active ? '' : 'protected' }}">
                             <div class="card-wrap">
                                 @if($course->thumbnail)
@@ -50,7 +50,7 @@
                             </div>
                             <div class="body">
                                 <h3 class="title">{{ $course->title }}</h3>
-                                <p class="byline">By Latihhobi In {{ $course->category ?? 'Film & Konten Kreator' }}</p>
+                                <p class="byline">By Latihhobi In {{ $course->category ?? 'Komik' }}</p>
                             </div>
                             <div class="footer">
                                 <div>
@@ -62,7 +62,7 @@
                                     @endif
                                 </div>
                                 @if($course->is_active)
-                                    <button class="btn-cart" type="button">�</button>
+                                    <button class="btn-cart" type="button">🛒</button>
                                 @else
                                     <button class="btn-enroll" type="button" disabled>Enroll Course</button>
                                 @endif
@@ -70,28 +70,25 @@
                         </article>
                     @endforeach
                 @else
-                    @for($i = 0; $i < $minCards; $i++)
-                        <article class="card protected">
-                            <div class="card-wrap">
-                                <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="Coming Soon">
-                                <div class="lock">🔖</div>
+                    {{-- Single empty-state placeholder when no Komik courses exist --}}
+                    <article class="card protected" style="max-width:520px; margin:auto;">
+                        <div class="card-wrap">
+                            <img class="thumb" src="{{ asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="Coming Soon">
+                            <div class="lock">🔖</div>
+                        </div>
+                        <div class="body">
+                            <h3 class="title">Segera Hadir</h3>
+                            <p class="byline">Belum ada e-course untuk kategori ini — pantau halaman untuk update.</p>
+                        </div>
+                        <div class="footer">
+                            <div>
+                                <span class="price-current">Coming Soon</span>
                             </div>
-                            <div class="body">
-                                <h3 class="title">Segera Hadir</h3>
-                                <p class="byline">By Latihhobi</p>
-                            </div>
-                            <div class="footer">
-                                <div>
-                                    <span class="price-current">Coming Soon</span>
-                                </div>
-                                <button class="btn-enroll" type="button" disabled>Coming Soon</button>
-                            </div>
-                        </article>
-                    @endfor
+                            <button class="btn-enroll" type="button" disabled>Coming Soon</button>
+                        </div>
+                    </article>
                 @endif
             </div>
         </div>
     </section>
 @endsection
-
-
