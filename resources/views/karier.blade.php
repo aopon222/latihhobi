@@ -19,44 +19,40 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
             <div class="service-card" style="background: #00a8e6; color: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,168,230,0.3); cursor: pointer; transition: all 0.3s; transform: translateY(0);">
                 <div class="service-icon" style="font-size: 2.5rem; margin-bottom: 0.8rem;">
-                    <i class="fas fa-laptop-code"></i>
+                    <i class="fas fa-robot"></i>
                 </div>
-                <h3 class="service-title" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">Developer</h3>
-                <p class="service-subtitle" style="opacity: 0.9; font-size: 0.95rem;">Berkontribusi dalam pengembangan aplikasi dan teknologi terbaru.</p>
+                <h3 class="service-title" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">Tutor Robotik</h3>
+                <p class="service-subtitle" style="opacity: 0.9; font-size: 0.95rem;">Mengajar robotika untuk berbagai tingkat usia.</p>
             </div>
             <div class="service-card" style="background: #ff6b35; color: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(255,107,53,0.3); cursor: pointer; transition: all 0.3s; transform: translateY(0);">
                 <div class="service-icon" style="font-size: 2.5rem; margin-bottom: 0.8rem;">
-                    <i class="fas fa-bullhorn"></i>
+                    <i class="fas fa-video"></i>
                 </div>
-                <h3 class="service-title" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">Marketing</h3>
-                <p class="service-subtitle" style="opacity: 0.9; font-size: 0.95rem;">Membangun strategi pemasaran yang efektif dan kreatif.</p>
+                <h3 class="service-title" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">Tutor Film dan Konten Kreator</h3>
+                <p class="service-subtitle" style="opacity: 0.9; font-size: 0.95rem;">Mengajar pembuatan film dan konten kreatif.</p>
             </div>
             <div class="service-card" style="background: #00a8e6; color: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,168,230,0.3); cursor: pointer; transition: all 0.3s; transform: translateY(0);">
                 <div class="service-icon" style="font-size: 2.5rem; margin-bottom: 0.8rem;">
-                    <i class="fas fa-chalkboard-teacher"></i>
+                    <i class="fas fa-bullseye"></i>
                 </div>
-                <h3 class="service-title" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">Instruktur</h3>
-                <p class="service-subtitle" style="opacity: 0.9; font-size: 0.95rem;">Membimbing dan menginspirasi peserta dalam berbagai bidang.</p>
+                <h3 class="service-title" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">Tutor Panahan</h3>
+                <p class="service-subtitle" style="opacity: 0.9; font-size: 0.95rem;">Membimbing teknik dasar hingga mahir panahan.</p>
+            </div>
+            <div class="service-card" style="background: #ff6b35; color: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(255,107,53,0.3); cursor: pointer; transition: all 0.3s; transform: translateY(0);">
+                <div class="service-icon" style="font-size: 2.5rem; margin-bottom: 0.8rem;">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="service-title" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">Tutor Komik</h3>
+                <p class="service-subtitle" style="opacity: 0.9; font-size: 0.95rem;">Mengajar ilustrasi dan penceritaan komik.</p>
+            </div>
+            <div class="service-card" style="background: #00a8e6; color: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,168,230,0.3); cursor: pointer; transition: all 0.3s; transform: translateY(0);">
+                <div class="service-icon" style="font-size: 2.5rem; margin-bottom: 0.8rem;">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3 class="service-title" style="font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">Back office</h3>
+                <p class="service-subtitle" style="opacity: 0.9; font-size: 0.95rem;">Mendukung operasional harian dan administrasi.</p>
             </div>
         </div>
-    </section>
-
-    <section id="benefits" style="background: #f8f9fa; padding: 3rem 5%; border-radius: 15px; max-width: 1200px; margin: 2rem auto;">
-        <h2 style="text-align: center; font-size: 2.2rem; color: #ff6b35; font-weight: 700; margin-bottom: 1.5rem;">Keuntungan Bergabung</h2>
-        <ul style="max-width: 800px; margin: 0 auto; list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-            <li style="background: white; padding: 1.2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; transition: transform 0.3s ease;">
-                <i class="fas fa-handshake" style="color: #00a8e6; font-size: 1.8rem;"></i>
-                <span style="font-weight: 600; font-size: 1rem;">Lingkungan Kerja Kolaboratif</span>
-            </li>
-            <li style="background: white; padding: 1.2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; transition: transform 0.3s ease;">
-                <i class="fas fa-graduation-cap" style="color: #ff6b35; font-size: 1.8rem;"></i>
-                <span style="font-weight: 600; font-size: 1rem;">Pengembangan Profesional</span>
-            </li>
-            <li style="background: white; padding: 1.2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; transition: transform 0.3s ease;">
-                <i class="fas fa-heart" style="color: #00a8e6; font-size: 1.8rem;"></i>
-                <span style="font-weight: 600; font-size: 1rem;">Keseimbangan Kerja dan Kehidupan</span>
-            </li>
-        </ul>
     </section>
 
     <section id="call-to-action" style="text-align: center; margin: 4rem 0;">
@@ -64,7 +60,7 @@
         <p style="max-width: 600px; margin: 0 auto 2rem; font-size: 1.1rem; color: #555;">
             Kirimkan lamaran Anda sekarang dan jadilah bagian dari tim kami yang luar biasa!
         </p>
-        <a href="/contact" class="btn-start" style="background: #ff6b35; color: white; padding: 1rem 3rem; border-radius: 30px; font-weight: 700; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255, 107, 53, 0.5); transition: all 0.3s ease;">
+        <a href="https://forms.gle/vgt5hqrRi2yzefGTA" class="btn-start" style="background: #ff6b35; color: white; padding: 1rem 3rem; border-radius: 30px; font-weight: 700; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255, 107, 53, 0.5); transition: all 0.3s ease;">
             Lamar Sekarang
         </a>
     </section>
