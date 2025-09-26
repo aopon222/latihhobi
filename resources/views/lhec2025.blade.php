@@ -2,6 +2,8 @@
 
 @section('content')
 <style>
+@push('styles')
+    <style>
     /* Warna Palet */
     :root {
         --color-primary: #0D3B66; /* biru tua */
@@ -124,6 +126,9 @@
         margin-top: 6px;
     }
 </style>
+    </style>
+@endpush
+@section('content')
 
 <!-- Banner -->
 <div class="banner">
