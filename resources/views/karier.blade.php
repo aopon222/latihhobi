@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('title', 'Latih Hobi Karier')
 @section('content')
-    <section class="hero" style="background: linear-gradient(135deg, #00a8e6 0%, #ff6b35 100%); color: white; padding: 4rem 5% 3rem; text-align: center; border-radius: 15px; margin-top: 70px; position: relative; overflow: hidden;">
+    <section class="hero" style="background: linear-gradient(135deg, #38547cff 0%, #0a2540 100%); color: white; padding: 4rem 5% 3rem; text-align: center; border-radius: 15px; margin-top: 70px; position: relative; overflow: hidden;">
         <div class="hero-content" style="position: relative; z-index: 2;">
             <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Karier di Latih Hobi</h1>
             <p style="font-size: 1.1rem; max-width: 700px; margin: 0 auto 1.5rem; opacity: 0.9;">

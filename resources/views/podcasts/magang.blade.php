@@ -7,7 +7,7 @@
     /* ====== HERO ====== */
     .magang-hero {
         position: relative;
-        background: linear-gradient(135deg, #00a8e6 0%, #7bdff2 30%, #b2f7ef 55%, #ffa69e 78%, #ff6b35 100%);
+        background: linear-gradient(135deg, #38547cff 0%, #0a2540 100%);
         color: #fff;
         padding: 90px 5% 110px;
         overflow: hidden;
@@ -24,13 +24,13 @@
         opacity: .28; z-index: 0;
     }
     .magang-hero:before { background: #ffffff; top: -130px; left: -150px; }
-    .magang-hero:after  { background: #ffe1d8; bottom: -160px; right: -160px; }
+    .magang-hero:after  { background: #40599dff; bottom: -160px; right: -160px; }
     .magang-hero .inner { position: relative; z-index: 1; text-align: center; max-width: 1000px; margin: 0 auto; }
     .magang-hero h1 { font-size: 42px; font-weight: 900; letter-spacing: .4px; margin: 0 0 14px; text-shadow: 0 6px 24px rgba(0,0,0,.2); }
     .magang-hero p { font-size: 18px; opacity: .95; max-width: 820px; margin: 0 auto; }
 
     /* ====== WRAPPER ====== */
-    .magang-wrapper { max-width: 1220px; margin: -70px auto 48px; position: relative; z-index: 2; padding: 0 5%; }
+    .magang-wrapper { max-width: 1220px; margin: 20px auto 48px; position: relative; z-index: 2; padding: 0 5%; }
 
     /* ====== DESCRIPTION SECTION (Neutral) ====== */
     .magang-desc-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; }
@@ -111,12 +111,46 @@
                 PERSYARATAN PESERTA MAGANG (INTERNSHIP)
             </button>
             <div class="magang-accordion-content">
-                <ul>
-                    <li>Mahasiswa/siswa aktif atau fresh graduate</li>
-                    <li>Minat pada divisi yang relevan dan siap belajar</li>
-                    <li>Mampu bekerja dalam tim serta berkomunikasi dengan baik</li>
-                    <li>Memiliki laptop pribadi</li>
-                </ul>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: start;">
+                    <div>
+                        <h4 style="margin: 0 0 .5rem; color: #0f3d5c; font-weight: 800;">SMK</h4>
+                        <ul style="margin: 0; padding-left: 1.2rem;">
+                            <li><strong>Tingkat Pendidikan</strong>: Minimal kelas 2.</li>
+                            <li><strong>Batas Waktu Pendaftaran</strong>: Disesuaikan periode penerimaan magang.</li>
+                            <li><strong>Jangka Waktu Magang</strong>: Minimal 1 bulan – maksimal 6 bulan.</li>
+                            <li>
+                                <strong>Administrasi Permohonan</strong>:
+                                <div>Surat pengantar dari sekolah/perguruan tinggi yang memuat:</div>
+                                <ul style="margin: .4rem 0 0 1rem; padding-left: 1rem; list-style: disc;">
+                                    <li>Data siswa/mahasiswa</li>
+                                    <li>Kontak siswa/mahasiswa</li>
+                                    <li>NIM</li>
+                                    <li>Jurusan/Program studi</li>
+                                    <li>Jangka waktu magang</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0 0 .5rem; color: #0f3d5c; font-weight: 800;">MAHASISWA (D3/D4/S1)</h4>
+                        <ul style="margin: 0; padding-left: 1.2rem;">
+                            <li><strong>Tingkat Pendidikan</strong>: Minimal semester 4.</li>
+                            <li><strong>Batas Waktu Pendaftaran</strong>: Disesuaikan periode penerimaan magang.</li>
+                            <li><strong>Jangka Waktu Magang</strong>: Minimal 1 bulan – maksimal 6 bulan.</li>
+                            <li>
+                                <strong>Administrasi Permohonan</strong>:
+                                <div>Surat pengantar dari sekolah/perguruan tinggi yang memuat:</div>
+                                <ul style="margin: .4rem 0 0 1rem; padding-left: 1rem; list-style: disc;">
+                                    <li>Data siswa/mahasiswa</li>
+                                    <li>Kontak siswa/mahasiswa</li>
+                                    <li>NIM</li>
+                                    <li>Jurusan/Program studi</li>
+                                    <li>Jangka waktu magang</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="magang-accordion-item">
@@ -126,10 +160,10 @@
             </button>
             <div class="magang-accordion-content">
                 <ul>
-                    <li>Mematuhi budaya kerja dan disiplin Latih Hobi</li>
-                    <li>Menjalani kegiatan magang pada hari kerja (Senin–Jumat)</li>
-                    <li>Bagi siswi/mahasiswi wajib berkerudung saat berada di area kantor</li>
-                    <li>Berpakaian rapi dan mengenakan sepatu selama magang</li>
+                    <li>Mengikuti peraturan disiplin dan budaya kerja yang berlaku di Latih Hobi;</li>
+                    <li>Mengikuti kegiatan magang setiap hari kerja (Senin – Jumat) mulai pukul 08.00 – 17.00</li>
+                    <li>Bagi siswi/mahasiswi wajib memakai kerudung ketika memasuki area kantor Latih Hobi.</li>
+                    <li>Mengenakan pakaian rapi dan sepatu selama pelaksanaan Magang (Internship);</li>
                 </ul>
                 <p style="margin-top:10px;">Mengisi logbook dan menyusun laporan magang setelah berdiskusi dengan pembimbing.</p>
             </div>
@@ -141,9 +175,11 @@
             </button>
             <div class="magang-accordion-content">
                 <ul>
-                    <li>Pengalaman kerja nyata pada proyek langsung</li>
-                    <li>Sertifikat magang setelah program selesai</li>
-                    <li>Pendampingan mentor selama program</li>
+                    <li>Memperoleh pengumuman penerimaan/persetujuan pelaksanaan Magang (Internship);</li>
+                    <li>Dalam hal jumlah peserta Magang (Internship) telah melewati kuota yang telah ditetapkan, maka peserta yang ditolak akan menjadi kandidat Magang (Internship) cadangan dan akan menjadi prioritas utama pada pelaksanaan Magang (Internship) periode selanjutnya;</li>
+                    <li>Memperoleh penjelasan tentang peran dan tugas, serta ruang lingkup tugas di divisi terkait;</li>
+                    <li>Memperoleh bimbingan dalam pelaksanaan praktek kerja; dan
+Memperoleh surat keterangan pelaksanaan Magang (Internship) setelah peserta Magang (Internship) menyelesaikan seluruh kewajiban.</li>
                 </ul>
             </div>
         </div>
