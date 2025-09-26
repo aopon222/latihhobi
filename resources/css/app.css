@@ -29,11 +29,7 @@
     color: #222;
     font-weight: 600;
 }
-.user-dropdown-avatar {
-    font-size: 24px;
-    margin-right: 4px;
-    color: #04a6d6;
-}
+/* avatar styles removed - profile photo feature disabled */
 .user-dropdown-menu {
     display: none;
     position: absolute;

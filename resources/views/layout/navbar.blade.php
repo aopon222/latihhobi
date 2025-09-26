@@ -7,17 +7,17 @@
             <li class="nav-item"><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
             <li class="nav-item"><a href="/ekskul-reguler" class="{{ request()->is('ekskul-reguler') ? 'active' : '' }}">Ekskul Reguler</a></li>
             <li class="nav-item dropdown">
-                <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
+                <a href="{{ route('course.robotik') }}">E-course <span class="dropdown-arrow">▼</span></a>
                 <div class="dropdown-menu">
-                    <a href="/ecourse/robotik" class="dropdown-item">
+                    <a href="{{ route('course.robotik') }}" class="dropdown-item">
                         <span class="dropdown-icon">🤖</span>
                         Ecourse Robotik
                     </a>
-                    <a href="/course-film-konten-kreator" class="dropdown-item">
+                    <a href="{{ route('course.film_konten_kreator') }}" class="dropdown-item">
                         <span class="dropdown-icon">🎬</span>
                         Ecourse Film & Konten Kreator
                     </a>
-                    <a href="/ecourse-komik" class="dropdown-item">
+                    <a href="/ecourse/komik" class="dropdown-item">
                         <span class="dropdown-icon">📖</span>
                         Ecourse Komik
                     </a>
@@ -69,8 +69,9 @@
                     @else
                         <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
                     @endif
-                        <span class="profile-trigger" style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;cursor:pointer;">
-                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
+                        <span class="profile-trigger" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#f3f4f6;color:#111827;font-weight:700;overflow:hidden;text-align:center;cursor:pointer;">
+                            {{-- Avatar feature removed: show user initial instead --}}
+                            {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                         </span>
                         <span class="profile-trigger" style="color:#ffc107;font-weight:600;font-size:1rem;cursor:pointer;">{{ Auth::user()->name ?? 'Profil' }}</span>
                     </a>

@@ -128,7 +128,6 @@ class DashboardController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = [
@@ -143,12 +142,7 @@ class DashboardController extends Controller
             $emailChanged = true;
         }
 
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-            $avatarName = 'avatar_' . $user->id . '_' . time() . '.' . $avatar->getClientOriginalExtension();
-            $avatarPath = $avatar->storeAs('avatars', $avatarName, 'public');
-            $data['avatar'] = $avatarPath;
-        }
+        // Avatar upload/handling removed as the feature has been disabled
 
         $user->update($data);
 

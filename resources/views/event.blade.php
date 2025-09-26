@@ -86,18 +86,5 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-left">
-                <p>© 2025 - Latihhobi</p>
-            </div>
-            <div class="footer-right">
-                <a href="#" class="footer-social">📷</a>
-                <a href="#" class="footer-social">📘</a>
-                <a href="#" class="footer-social">📺</a>
-            </div>
-        </div>
-    </footer>
-@endsection
+    @endsection
 

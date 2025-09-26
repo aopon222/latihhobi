@@ -71,24 +71,8 @@ class ProfileController extends ApiBaseController
      */
     public function updateAvatar(Request $request)
     {
-        try {
-            $user = $request->user();
-            
-            $validator = Validator::make($request->all(), [
-                'avatar' => 'required|string', // In a real implementation, this would be a file upload
-            ]);
-
-            if ($validator->fails()) {
-                return $this->error('Validation failed', $validator->errors(), 422);
-            }
-            
-            // Update user avatar
-            $user->update(['avatar' => $request->avatar]);
-
-            return $this->success($user, 'Avatar updated successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to update avatar', $e->getMessage(), 500);
-        }
+        // Avatar API removed: profile photo feature disabled
+        return $this->error('Avatar update functionality has been disabled', null, 410);
     }
 
     /**

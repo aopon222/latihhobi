@@ -31,7 +31,7 @@
                     <p>Kembangkan kreativitas dalam pembuatan film dan konten digital</p>
                     <span class="btn-category">Lihat Kursus</span>
                 </a>
-                <a href="/ecourse-komik" class="ecourse-category" style="text-decoration:none;color:inherit;">
+                <a href="/ecourse/komik" class="ecourse-category" style="text-decoration:none;color:inherit;">
                     <div class="category-icon">
                         <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="category-icon-img">
                     </div>
@@ -114,26 +114,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-left">
-                <p>© 2025 - Latih hobi</p>
-            </div>
-            <div class="footer-right">
-                <a href="https://www.instagram.com/latihhobi/" class="social-icon instagram">
-                <i class="fab fa-instagram" style="font-size: 24px;"></i>
-            </a>
-            <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="social-icon facebook">
-                <i class="fab fa-facebook" style="font-size: 24px;"></i>
-            </a>
-            <a href="https://www.youtube.com/@latihhobi" class="social-icon youtube">
-                <i class="fab fa-youtube" style="font-size: 24px;"></i>
-            </a>
-            </div>
-        </div>
-    </footer>
-
+    
     <script>
         function addToCart(courseSlug) {
             // Add cart functionality here

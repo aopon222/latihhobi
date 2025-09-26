@@ -26,7 +26,7 @@ class EcourseController extends Controller
             ->orderBy('level', 'asc')
             ->get();
         
-        return view('ecourse-robotik', compact('robotikCourses'));
+        return view('ecourse.ecourse-robotik', compact('robotikCourses'));
     }
 
     /**
