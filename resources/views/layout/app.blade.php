@@ -18,7 +18,12 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
+        main { flex: 1 0 auto; }
 
         /* Header Styles */
         .header {
@@ -703,7 +708,7 @@
         }
 
         .footer {
-            background: #2d3748;
+            background: #14293b;
             color: white;
             padding: 2rem 5%;
         }
@@ -722,14 +727,22 @@
         }
 
         .footer-social {
-            color: white;
+            color: #fff;
             text-decoration: none;
-            font-size: 1.2rem;
-            transition: opacity 0.3s ease;
+            font-size: 1rem;
+            width: 36px;
+            height: 36px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
 
         .footer-social:hover {
-            opacity: 0.7;
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-1px);
         }
 
         /* E-Course Page Styles */
@@ -1857,6 +1870,26 @@
     <main>
         @yield('content')
     </main>
+    @if(empty($hideFooter))
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                © 2025 - LatihHobi
+            </div>
+            <div class="footer-right">
+                <a href="https://www.facebook.com/people/Latih-Hobi-Kursus-Ekstrakurikuler/61576377345236/?sk=reels_tab" class="footer-social" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/latihhobi/" class="footer-social" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.youtube.com/@latihhobi" class="footer-social" aria-label="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+    @endif
     
     <script>
         // Simple scroll animation

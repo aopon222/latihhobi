@@ -1,4 +1,4 @@
-@php $hideNavbar = true; @endphp
+@php $hideNavbar = true; $hideFooter = true; @endphp
 @extends('layout.app')
 
 @section('title', $title ?? 'Dashboard Admin - LatihHobi')
