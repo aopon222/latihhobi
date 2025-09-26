@@ -7,7 +7,7 @@
     <section class="lhec-header">
         <div class="lhec-hero-content fade-in">
             <h1>LHEC 2025</h1>
-            <p>LatihHobi Expo dan Competition 2025</p>
+            <p>Latih Hobi Expo dan Competition 2025</p>
             <a href="#lhec-registration" class="btn-start">Daftar Sekarang</a>
         </div>
     </section>
