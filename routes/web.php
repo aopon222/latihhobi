@@ -7,6 +7,7 @@ use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\EcourseController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\EmailTestController;
+use App\Models\Ecourse;
 
 Route::get('/manual-verify', [EmailTestController::class, 'showManualVerify'])->name('manual.verify');
 Route::post('/manual-verify', [EmailTestController::class, 'manualVerify'])->name('manual.verify.submit');
@@ -23,12 +24,12 @@ Route::get('/ecourse', [EcourseController::class, 'index']);
 Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
 // Backward-compatible alias: some links used a dashed path (/ecourse-robotik)
 Route::redirect('/ecourse-robotik', '/ecourse/robotik');
-use App\Models\Ecourse;
 
-Route::get('/ecourse-komik', function () {
+Route::get('/ecourse/komik', function () {
     $komikCourses = Ecourse::where('category', 'Komik')->get();
-    return view('ecourse-komik', compact('komikCourses'));
+    return view('ecourse.ecourse-komik', compact('komikCourses'));
 });
+Route::redirect('/ecourse-komik', '/ecourse/komik');
 
 Route::get('/event', function () {
     return view('event');
@@ -44,7 +45,7 @@ Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])-
 // E-Course: Film & Konten Kreator landing page (dynamic)
 Route::get('/course-film-konten-kreator', function () {
     $filmCourses = Ecourse::where('category', 'Film')->get();
-    return view('course-film-konten-kreator', compact('filmCourses'));
+    return view('ecourse.ecourse-film-konten-kreator', compact('filmCourses'));
 })->name('course.film_konten_kreator');
 // Backward-compatible paths to avoid 404s from older links
 Route::redirect('/ecourse/film', '/course-film-konten-kreator');
@@ -56,7 +57,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
-    
+
     // Password Reset Routes
     Route::get('/password/forgot', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
     Route::post('/password/email', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
@@ -76,15 +77,15 @@ Route::get('/workshop-bootcamp', function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     // Email Testing Routes
     Route::get('/email/status', [EmailTestController::class, 'showEmailStatus'])->name('email.status');
     Route::post('/email/test', [EmailTestController::class, 'testEmail'])->name('email.test');
-    
+
     // Change Password Routes (available to all authenticated users)
     Route::get('/password/change', [PasswordResetController::class, 'showChangePasswordForm'])->name('password.change.form');
     Route::post('/password/change', [PasswordResetController::class, 'changePassword'])->name('password.change');
-    
+
     // Email Verification Routes
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
@@ -93,7 +94,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verification-notification', [AuthController::class, 'resendVerification'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
-    
+
     // Protected routes that require email verification
     Route::middleware('verified')->group(function () {
         // Dashboard Routes
@@ -131,7 +132,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->name('ecourses.toggle-featured');
     Route::post('ecourses/{ecourse}/toggle-active', [App\Http\Controllers\Admin\EcourseController::class, 'toggleActive'])
         ->name('ecourses.toggle-active');
-    
+
     // Alternative delete route if resource route fails
     Route::post('ecourses/{ecourse}/delete', [App\Http\Controllers\Admin\EcourseController::class, 'destroy'])
         ->name('ecourses.delete');

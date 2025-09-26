@@ -31,7 +31,7 @@
                     <p>Kembangkan kreativitas dalam pembuatan film dan konten digital</p>
                     <span class="btn-category">Lihat Kursus</span>
                 </a>
-                <a href="/ecourse-komik" class="ecourse-category" style="text-decoration:none;color:inherit;">
+                <a href="/ecourse/komik" class="ecourse-category" style="text-decoration:none;color:inherit;">
                     <div class="category-icon">
                         <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="category-icon-img">
                     </div>

@@ -9,7 +9,7 @@
         <div class="hero-content fade-in">
             <h1>LATIH HOBI</h1>
             <p>Merupakan platform pengembangan bakat, yang membantu anak, orang tua dan sekolah untuk mengembangkan potensi kemampuan anak di bidangnya masing-masing dengan ekosistem belajar yang lengkap, terukur dan tutor yang kompeten.</p>
-            <a href="/ecourse" class="btn-start">START E-COURSE</a>
+            <a href="{{ route('course.robotik') }}" class="btn-start">START E-COURSE</a>
         </div>
     </section>
 
@@ -97,7 +97,7 @@
                 <a href="/ecourse/robotik" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
                     <div class="ecourse-card-image robotik">ROBOTIK</div>
                 </a>
-                <a href="/ecourse-komik" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
+                <a href="/ecourse/komik" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
                     <div class="ecourse-card-image komik">KOMIK</div>
                 </a>
                 <a href="/course-film-konten-kreator" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">

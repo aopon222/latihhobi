@@ -7,17 +7,17 @@
             <li class="nav-item"><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
             <li class="nav-item"><a href="/ekskul-reguler" class="{{ request()->is('ekskul-reguler') ? 'active' : '' }}">Ekskul Reguler</a></li>
             <li class="nav-item dropdown">
-                <a href="/ecourse">E-course <span class="dropdown-arrow">▼</span></a>
+                <a href="{{ route('course.robotik') }}">E-course <span class="dropdown-arrow">▼</span></a>
                 <div class="dropdown-menu">
-                    <a href="/ecourse/robotik" class="dropdown-item">
+                    <a href="{{ route('course.robotik') }}" class="dropdown-item">
                         <span class="dropdown-icon">🤖</span>
                         Ecourse Robotik
                     </a>
-                    <a href="/course-film-konten-kreator" class="dropdown-item">
+                    <a href="{{ route('course.film_konten_kreator') }}" class="dropdown-item">
                         <span class="dropdown-icon">🎬</span>
                         Ecourse Film & Konten Kreator
                     </a>
-                    <a href="/ecourse-komik" class="dropdown-item">
+                    <a href="/ecourse/komik" class="dropdown-item">
                         <span class="dropdown-icon">📖</span>
                         Ecourse Komik
                     </a>
