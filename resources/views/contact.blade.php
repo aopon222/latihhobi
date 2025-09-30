@@ -61,12 +61,19 @@
         display: block;
         letter-spacing: 1px;
     }
+    .wrapper-wa {
+        width: 100%;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
     .contact-btn {
         background: var(--biru);
         color: var(--putih);
         font-weight: 700;
         border: none;
-        border-radius: 8px;
+        border-radius: 20px;
         padding: 10px 22px;
         font-size: 15px;
         text-decoration: none;
@@ -75,7 +82,9 @@
         margin-top: 8px;
         transition: background .2s, box-shadow .2s;
         box-shadow: 0 2px 8px rgba(4,166,214,.12);
-        border: 2px solid var(--oren);
+        border: 0px;
+        text-align: center;
+        width: 50%;
     }
     .contact-btn:hover {
         background: var(--oren);
@@ -91,24 +100,24 @@
         padding-left: 2px;
     }
     .contact-social-title {
-        font-size: 24px;
+        font-size: 18px;
         font-weight: 900;
         color: var(--hitam);
         text-align: center;
-        margin: 48px 0 18px 0;
+        margin: 10px 0 10px 0;
         letter-spacing: 2px;
         text-shadow: 0 2px 8px rgba(249,165,26,.08);
     }
     .contact-social-row {
         display: flex;
-        gap: 56px;
+        gap: 20px;
         justify-content: center;
         align-items: center;
-        margin-bottom: 32px;
+        margin-bottom: 30px;
     }
     .contact-social-link {
         color: var(--biru);
-        font-size: 56px;
+        font-size: 36px;
         transition: color .2s, transform .2s;
         text-decoration: none;
         background: none;
@@ -116,6 +125,20 @@
         padding: 0;
         box-shadow: none;
         border: none;
+    }
+    .wrapper-maps {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        flex-direction: column;
+    }
+    .googlemaps {
+        display:flex; 
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
     }
     .contact-social-link:hover {
         color: var(--oren);
@@ -140,20 +163,32 @@
             <div class="contact-info-desc">
                 Untuk menyampaikan informasi, pertanyaan dan keluhan dapat melalui beberapa media komunikasi berikut:
             </div>
-            <span class="contact-label"><i class="fa-solid fa-map-location-dot"></i> ALAMAT</span>
-            <a href="https://www.google.com/maps?ll=-6.930189,107.679565&z=13&t=m&hl=en-US&gl=US&mapclient=embed&q=Jl.+Cisaranten+Kulon+No.16+Cisaranten+Kulon+Kec.+Arcamanik+Kota+Bandung,+Jawa+Barat+40293" target="_blank" class="contact-btn">
-                <i class="fa-solid fa-location-dot"></i> Lihat di Google Maps
-            </a>
-            <div class="contact-info-detail">
-                Jl. Cisaranten Kulon No.16, Cisaranten Kulon, Kec. Arcamanik, Kota Bandung, Jawa Barat 40293
-            </div>
-            <span class="contact-label"><i class="fa-brands fa-whatsapp"></i> TELEPHONE</span>
-            <a href="https://api.whatsapp.com/send/?phone=62895401070197&text&type=phone_number&app_absent=0" target="_blank" class="contact-btn">
-                <i class="fa-brands fa-whatsapp"></i> WhatsApp
-            </a>
-            <div class="contact-info-detail">
-                0895-4010-70197
-            </div>
+            <div class="wrapper-maps">
+                <span class="contact-label"><i class="fa-solid fa-map-location-dot"></i> ALAMAT</span>
+                <div class="googlemaps">
+                    <iframe 
+                        src="https://www.google.com/maps?q=-6.9301894,107.6795654&hl=id&z=17&output=embed"
+                        width="450" 
+                        height="250" 
+                        style="border: 1px; border-radius: 5px;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <div class="contact-info-detail" style="text-align: center;">
+                    Jl. Cisaranten Kulon No.16, Cisaranten Kulon, Kec. Arcamanik, Kota Bandung, Jawa Barat 40293
+                </div>
+            </div>   
+            <div class="wrapper-wa">
+                <span class="contact-label"><i class="fa-brands fa-whatsapp"></i> TELEPHONE</span>
+                <a href="https://api.whatsapp.com/send/?phone=62895401070197&text&type=phone_number&app_absent=0" target="_blank" class="contact-btn">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                </a>
+                <div class="contact-info-detail">
+                    0895-4010-70197
+                </div>
+            </div>    
         </div>
     </div>
     <div class="contact-social-title">SOSIAL MEDIA KAMI</div>
