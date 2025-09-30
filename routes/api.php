@@ -64,7 +64,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
-    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
+    // Avatar upload/update API removed - profile photo feature disabled
+    // Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword']);
     Route::get('/profile/enrollments', [ProfileController::class, 'enrollments']);
     Route::get('/profile/communities', [ProfileController::class, 'communities']);

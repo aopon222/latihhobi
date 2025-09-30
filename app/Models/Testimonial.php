@@ -12,7 +12,7 @@ class Testimonial extends Model
         'company',
         'content',
         'rating',
-        'avatar',
+        // 'avatar' removed - profile photo feature disabled
         'is_featured',
         'is_active',
     ];

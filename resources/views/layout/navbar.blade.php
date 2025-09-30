@@ -69,8 +69,9 @@
                     @else
                         <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
                     @endif
-                        <span class="profile-trigger" style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;cursor:pointer;">
-                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
+                        <span class="profile-trigger" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#f3f4f6;color:#111827;font-weight:700;overflow:hidden;text-align:center;cursor:pointer;">
+                            {{-- Avatar feature removed: show user initial instead --}}
+                            {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                         </span>
                         <span class="profile-trigger" style="color:#ffc107;font-weight:600;font-size:1rem;cursor:pointer;">{{ Auth::user()->name ?? 'Profil' }}</span>
                     </a>

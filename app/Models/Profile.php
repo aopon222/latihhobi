@@ -15,7 +15,7 @@ class Profile extends Model
         'postal_code',
         'date_of_birth',
         'gender',
-        'avatar',
+        // 'avatar' removed - profile photo feature disabled
         'bio',
         'occupation',
         'school',

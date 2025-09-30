@@ -26,7 +26,7 @@
         <!-- add small experimental profile trigger for fixed dropdown (local branch) -->
         <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:16px;">
             <span class="admin-profile-trigger" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
-                <img src="{{ asset('images/default-avatar.png') }}" alt="Profile" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#eef2ff;color:#374151;font-weight:700;">{{ strtoupper(substr(Auth::user()->name ?? 'A',0,1)) }}</span>
                 <span style="font-weight:600;color:#374151;">{{ Auth::user()->name ?? 'Admin' }}</span>
             </span>
         </div>

@@ -44,11 +44,9 @@
                 <div class="profile-card">
                     <h2>Informasi Akun</h2>
                     
-                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('profile.update') }}">
                         @csrf
                         @method('PUT')
-
-                        <!-- Fitur upload avatar dihapus sesuai permintaan -->
 
                         <div class="form-group">
                             <label for="name">Nama Lengkap</label>
@@ -88,15 +86,7 @@
 
                         <button type="submit" class="btn-primary">Perbarui Profil</button>
                     </form>
-                    <script>
-                        function previewAvatar(event) {
-                            const reader = new FileReader();
-                            reader.onload = function(){
-                                document.getElementById('avatarPreview').src = reader.result;
-                            };
-                            reader.readAsDataURL(event.target.files[0]);
-                        }
-                    </script>
+                    {{-- Avatar upload/preview removed as per request --}}
                 </div>
 
                 <div class="profile-actions">
