@@ -6,53 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+    protected $table = 'category';
+    protected $primaryKey = 'id_category';
+
     protected $fillable = [
         'name',
-        'slug',
-        'deskripsi',
-        'ikon',
-        'color',
-        'image',
-        'sort_order',
-        'is_featured',
-        'is_active',
+        'icon',
     ];
 
-    protected $casts = [
-        'is_featured' => 'boolean',
-        'is_active' => 'boolean',
-        'sort_order' => 'integer',
-    ];
-
-    /**
-     * Get the programs for the category
-     */
-    public function programs()
+    public function courses()
     {
-        return $this->belongsToMany(Program::class, 'program_categories');
+        return $this->hasMany(CourseCard::class, 'id_category', 'id_category');
     }
 
-    /**
-     * Scope for active categories
-     */
-    public function scopeActive($query)
+    public function courseContents()
     {
-        return $query->where('is_active', true);
+        return $this->hasMany(CourseContent::class, 'id_category', 'id_category');
     }
 
-    /**
-     * Scope for featured categories
-     */
-    public function scopeFeatured($query)
-    {
-        return $query->where('is_featured', true);
-    }
-
-    /**
-     * Scope for ordering
-     */
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('sort_order');
-    }
 }

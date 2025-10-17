@@ -1,60 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Models;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Category;
+use Illuminate\Database\Eloquent\Model;
 
-class CategoryController extends Controller
+class Category extends Model
 {
-    /**
-     * Get all categories
-     */
-    public function index()
-    {
-        try {
-            $categories = Category::active()
-                ->featured()
-                ->ordered()
-                ->get();
-
-            return response()->json([
-                'status' => 'success',
-                'data' => $categories
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to retrieve categories',
-                'errors' => $e->getMessage()
-            ], 500);
-        }
-    }
+    protected $table = 'category'; // nama tabel
+    protected $primaryKey = 'id_category'; // primary key
+    public $timestamps = true; // jika ada created_at & updated_at
+    
+    protected $fillable = [
+        'name',
+        // tambahkan kolom lain sesuai tabel category Anda
+    ];
 
     /**
-     * Get a specific category
+     * Relasi ke tabel course_card
      */
-    public function show($id)
+    public function courses()
     {
-        try {
-            $category = Category::active()->findOrFail($id);
-
-            return response()->json([
-                'status' => 'success',
-                'data' => $category
-            ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Category not found'
-            ], 404);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to retrieve category',
-                'errors' => $e->getMessage()
-            ], 500);
-        }
+        return $this->hasMany(Ecourse::class, 'id_category', 'id_category');
     }
 }

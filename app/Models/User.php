@@ -8,12 +8,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Notifications\VerifyEmail;
-
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
     /**
@@ -33,9 +31,14 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'ttl',
+        'alamat',
+        'kota',
+        'provinsi',
+        'kode_pos',
         'email',
         'password',
-        'login_terakhir',
+        'role',
     ];
 
     /**
@@ -48,6 +51,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+        protected $casts = [
+        'email_verified_at' => 'datetime',
+        'ttl' => 'date',
+    ];
     /**
      * Get the attributes that should be cast.
      *
@@ -121,9 +128,14 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get user's cart items
      */
-    public function cartItems()
+    public function cart()
     {
-        return $this->hasMany(\App\Models\Cart::class);
+        return $this->hasOne(Cart::class, 'id_user');
+    }
+
+    public function order()
+    {
+        return $this->hasMany(Order::class, 'id_user');
     }
 
     /**
@@ -156,29 +168,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isModerator()
     {
         return $this->hasRole('moderator');
-    }
-
-    /**
-     * Check if user is a teacher/instructor
-     */
-    public function isTeacher()
-    {
-        return $this->hasRole('teacher');
-    }
-
-    /**
-     * Check if user is a parent
-     */
-    public function isParent()
-    {
-        return $this->hasRole('parent');
-    }
-
-    /**
-     * Check if user is a student
-     */
-    public function isStudent()
-    {
-        return $this->hasRole('student');
     }
 }

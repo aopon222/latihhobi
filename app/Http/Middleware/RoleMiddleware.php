@@ -31,6 +31,12 @@ class RoleMiddleware
             ], 403);
         }
 
+        if (!$request->user() || $request->user()->role !== $role) {
+            return response()->json([
+                'message' => 'Akses ditolak. Anda tidak memiliki permission.'
+            ], 403);
+        }
+
         return $next($request);
     }
 }

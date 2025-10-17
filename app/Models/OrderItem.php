@@ -9,36 +9,31 @@ class OrderItem extends Model
 {
     use HasFactory;
 
+    protected $table = 'order_items';
+    protected $primaryKey = 'id_order_item';
+    
     protected $fillable = [
-        'order_id',
-        'course_id',
-        'quantity',
+        'id_order',
+        'id_course',
+        'course_name',
         'price',
-        'total'
+        'quantity',
+        'subtotal',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'total' => 'decimal:2'
+        'subtotal' => 'decimal:2',
+        'quantity' => 'integer',
     ];
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'id_order', 'id_order');
     }
 
     public function course()
     {
-        return $this->belongsTo(Course::class);
-    }
-
-    public function getFormattedPriceAttribute()
-    {
-        return 'Rp ' . number_format($this->price, 0, ',', '.');
-    }
-
-    public function getFormattedTotalAttribute()
-    {
-        return 'Rp ' . number_format($this->total, 0, ',', '.');
+        return $this->belongsTo(CourseCard::class, 'id_course', 'id_course');
     }
 }

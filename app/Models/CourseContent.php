@@ -4,17 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ecourse extends Model
+class CourseContent extends Model
 {
-    protected $table = 'course';
-    protected $primaryKey = 'id_course';
-
+    protected $table = 'course_content';
+    protected $primaryKey = 'id_content';
+    
     protected $fillable = [
+        'id_course',
         'id_category',
-        'name',
-        'course_by',
-        'price',
-        'image_url',
         'perakitan',
         'worksheet',
         'ebook',
@@ -26,17 +23,19 @@ class Ecourse extends Model
         'certificate',
     ];
 
-    // Laravel otomatis pakai created_at dan updated_at
-    public $timestamps = true;
+    protected $casts = [
+        'certificate' => 'boolean',
+        'enrolled' => 'integer',
+        'validity' => 'integer',
+    ];
 
-    public function scopeActive($query)
+    public function course()
     {
-        return $query;
+        return $this->belongsTo(CourseCard::class, 'id_course', 'id_course');
     }
 
     public function category()
     {
-        // Pastikan foreign key & local key sesuai struktur tabel kamu
         return $this->belongsTo(Category::class, 'id_category', 'id_category');
     }
 }

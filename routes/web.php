@@ -8,6 +8,7 @@ use App\Http\Controllers\EcourseController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\EmailTestController;
 use App\Models\Ecourse;
+use App\Models\Category;
 
 Route::get('/manual-verify', [EmailTestController::class, 'showManualVerify'])->name('manual.verify');
 Route::post('/manual-verify', [EmailTestController::class, 'manualVerify'])->name('manual.verify.submit');
@@ -20,16 +21,40 @@ Route::get('/ekskul-reguler', function () {
     return view('ekskul-reguler');
 });
 
-Route::get('/ecourse', [EcourseController::class, 'index']);
+// E-Course Routes - Menggunakan Controller (Best Practice)
+Route::get('/ecourse', [EcourseController::class, 'index'])->name('ecourse.index');
 Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
-// Backward-compatible alias: some links used a dashed path (/ecourse-robotik)
 Route::redirect('/ecourse-robotik', '/ecourse/robotik');
 
+// E-Course: Komik - PERBAIKI QUERY
 Route::get('/ecourse/komik', function () {
-    $komikCourses = Ecourse::where('category', 'Komik')->get();
+    $category = Category::where('name', 'Komik')
+        ->orWhere('name', 'LIKE', '%Komik%')
+        ->first();
+    
+    $komikCourses = $category 
+        ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('price', 'asc')->get()
+        : collect();
+    
     return view('ecourse.ecourse-komik', compact('komikCourses'));
-});
+})->name('course.komik');
 Route::redirect('/ecourse-komik', '/ecourse/komik');
+
+// E-Course: Film & Konten Kreator - PERBAIKI QUERY
+Route::get('/course-film-konten-kreator', function () {
+    $category = Category::where('name', 'Film')
+        ->orWhere('name', 'Film & Konten Kreator')
+        ->orWhere('name', 'LIKE', '%Film%')
+        ->first();
+    
+    $filmCourses = $category 
+        ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('price', 'asc')->get()
+        : collect();
+    
+    return view('ecourse.ecourse-film-konten-kreator', compact('filmCourses'));
+})->name('course.film_konten_kreator');
+Route::redirect('/ecourse/film', '/course-film-konten-kreator');
+Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
 
 Route::get('/event', function () {
     return view('event');
@@ -41,15 +66,6 @@ Route::get('/podcasts/{podcast}', [PodcastController::class, 'show'])->name('pod
 
 // Search Route
 Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
-
-// E-Course: Film & Konten Kreator landing page (dynamic)
-Route::get('/course-film-konten-kreator', function () {
-    $filmCourses = Ecourse::where('category', 'Film')->get();
-    return view('ecourse.ecourse-film-konten-kreator', compact('filmCourses'));
-})->name('course.film_konten_kreator');
-// Backward-compatible paths to avoid 404s from older links
-Route::redirect('/ecourse/film', '/course-film-konten-kreator');
-Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {

@@ -7,7 +7,7 @@
             <li class="nav-item"><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
             <li class="nav-item"><a href="/ekskul-reguler" class="{{ request()->is('ekskul-reguler') ? 'active' : '' }}">Ekskul Reguler</a></li>
             <li class="nav-item dropdown">
-                <a href="{{ route('course.robotik') }}">E-course <span class="dropdown-arrow">▼</span></a>
+                <a href="{{ route('ecourse.index') }}">E-course <span class="dropdown-arrow">▼</span></a>
                 <div class="dropdown-menu">
                     <a href="{{ route('course.robotik') }}" class="dropdown-item">
                         <span class="dropdown-icon">🤖</span>

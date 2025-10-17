@@ -3,171 +3,126 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Cart;
-use App\Models\Ecourse;
-use App\Models\Event;
+use App\Models\CartItem;
+use App\Models\CourseCard;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CartController extends ApiBaseController
+class CartController extends Controller
 {
-    /**
-     * Get user's cart
-     */
     public function index(Request $request)
     {
-        try {
-            $user = $request->user();
-            
-            $cartItems = Cart::where('user_id', $user->id)
-                ->with('item')
-                ->get();
-                
-            $total = $cartItems->sum(function ($item) {
-                $price = $item->discount_price ?? $item->price;
-                return $price * $item->quantity;
-            });
+        $cart = Cart::with(['items.course'])->firstOrCreate(
+            ['id_user' => $request->user()->id]
+        );
 
-            return $this->success([
-                'items' => $cartItems,
-                'total' => $total,
-                'count' => $cartItems->count(),
-            ], 'Cart retrieved successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to retrieve cart', $e->getMessage(), 500);
-        }
+        return response()->json([
+            'cart' => $cart,
+            'total' => $cart->total
+        ]);
     }
 
-    /**
-     * Add item to cart
-     */
-    public function store(Request $request)
+    public function addItem(Request $request)
     {
-        try {
-            $user = $request->user();
-            
-            $validator = Validator::make($request->all(), [
-                'item_type' => 'required|string|in:ecourse,event',
-                'item_id' => 'required|integer',
-                'quantity' => 'required|integer|min:1',
-            ]);
+        $validator = Validator::make($request->all(), [
+            'id_course' => 'required|exists:course_card,id_course',
+            'quantity' => 'required|integer|min:1',
+        ]);
 
-            if ($validator->fails()) {
-                return $this->error('Validation failed', $validator->errors(), 422);
-            }
-            
-            // Get the item
-            if ($request->item_type === 'ecourse') {
-                $item = Ecourse::active()->findOrFail($request->item_id);
-            } else if ($request->item_type === 'event') {
-                $item = Event::where('is_active', true)
-                    ->where('status', 'open')
-                    ->findOrFail($request->item_id);
-            } else {
-                return $this->error('Invalid item type');
-            }
-            
-            // Check if item is already in cart
-            $existingItem = Cart::where('user_id', $user->id)
-                ->where('item_type', $request->item_type)
-                ->where('item_id', $request->item_id)
-                ->first();
-                
-            if ($existingItem) {
-                // Update quantity
-                $existingItem->update([
-                    'quantity' => $existingItem->quantity + $request->quantity,
-                ]);
-                
-                $cartItem = $existingItem;
-            } else {
-                // Add new item to cart
-                $cartItem = Cart::create([
-                    'user_id' => $user->id,
-                    'item_type' => $request->item_type,
-                    'item_id' => $request->item_id,
-                    'quantity' => $request->quantity,
-                    'price' => $item->price,
-                    'discount_price' => $item->discount_price,
-                ]);
-            }
-            
-            // Load item relationship
-            $cartItem->load('item');
-
-            return $this->success($cartItem, 'Item added to cart successfully', 201);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return $this->error('Item not found', null, 404);
-        } catch (\Exception $e) {
-            return $this->error('Failed to add item to cart', $e->getMessage(), 500);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
+
+        $course = CourseCard::find($request->id_course);
+        $cart = Cart::firstOrCreate(['id_user' => $request->user()->id]);
+
+        $existingItem = CartItem::where('id_cart', $cart->id_cart)
+            ->where('id_course', $request->id_course)
+            ->first();
+
+        if ($existingItem) {
+            $existingItem->quantity += $request->quantity;
+            $existingItem->sub_total = $existingItem->quantity * $course->price;
+            $existingItem->save();
+
+            return response()->json([
+                'message' => 'Quantity berhasil diupdate',
+                'item' => $existingItem
+            ]);
+        }
+
+        $cartItem = CartItem::create([
+            'id_cart' => $cart->id_cart,
+            'id_course' => $request->id_course,
+            'quantity' => $request->quantity,
+            'price' => $course->price,
+            'sub_total' => $request->quantity * $course->price,
+        ]);
+
+        return response()->json([
+            'message' => 'Item berhasil ditambahkan ke cart',
+            'item' => $cartItem->load('course')
+        ], 201);
     }
 
-    /**
-     * Update cart item quantity
-     */
-    public function update(Request $request, $id)
+    public function updateItem(Request $request, $id)
     {
-        try {
-            $user = $request->user();
-            
-            $validator = Validator::make($request->all(), [
-                'quantity' => 'required|integer|min:1',
-            ]);
+        $validator = Validator::make($request->all(), [
+            'quantity' => 'required|integer|min:1',
+        ]);
 
-            if ($validator->fails()) {
-                return $this->error('Validation failed', $validator->errors(), 422);
-            }
-            
-            $cartItem = Cart::where('user_id', $user->id)
-                ->findOrFail($id);
-                
-            $cartItem->update([
-                'quantity' => $request->quantity,
-            ]);
-
-            return $this->success($cartItem, 'Cart item updated successfully');
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return $this->error('Cart item not found', null, 404);
-        } catch (\Exception $e) {
-            return $this->error('Failed to update cart item', $e->getMessage(), 500);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
+
+        $cartItem = CartItem::find($id);
+
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item tidak ditemukan'], 404);
+        }
+
+        // Verify ownership
+        if ($cartItem->cart->id_user !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $cartItem->quantity = $request->quantity;
+        $cartItem->sub_total = $cartItem->quantity * $cartItem->price;
+        $cartItem->save();
+
+        return response()->json([
+            'message' => 'Item berhasil diupdate',
+            'item' => $cartItem->load('course')
+        ]);
     }
 
-    /**
-     * Remove item from cart
-     */
-    public function destroy(Request $request, $id)
+    public function removeItem(Request $request, $id)
     {
-        try {
-            $user = $request->user();
-            
-            $cartItem = Cart::where('user_id', $user->id)
-                ->findOrFail($id);
-                
-            $cartItem->delete();
+        $cartItem = CartItem::find($id);
 
-            return $this->success(null, 'Item removed from cart successfully');
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return $this->error('Cart item not found', null, 404);
-        } catch (\Exception $e) {
-            return $this->error('Failed to remove item from cart', $e->getMessage(), 500);
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item tidak ditemukan'], 404);
         }
+
+        // Verify ownership
+        if ($cartItem->cart->id_user !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $cartItem->delete();
+
+        return response()->json(['message' => 'Item berhasil dihapus dari cart']);
     }
 
-    /**
-     * Clear cart
-     */
     public function clear(Request $request)
     {
-        try {
-            $user = $request->user();
-            
-            Cart::where('user_id', $user->id)->delete();
+        $cart = Cart::where('id_user', $request->user()->id)->first();
 
-            return $this->success(null, 'Cart cleared successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to clear cart', $e->getMessage(), 500);
+        if ($cart) {
+            $cart->items()->delete();
         }
+
+        return response()->json(['message' => 'Cart berhasil dikosongkan']);
     }
 }

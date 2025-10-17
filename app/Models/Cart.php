@@ -6,43 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
+    protected $table = 'cart';
+    protected $primaryKey = 'id_cart';
+    
     protected $fillable = [
-        'user_id',
-        'item_type',
-        'item_id',
-        'quantity',
-        'price',
-        'discount_price',
+        'id_user',
     ];
 
-    protected $casts = [
-        'price' => 'decimal:2',
-        'discount_price' => 'decimal:2',
-        'quantity' => 'integer',
-    ];
-
-    /**
-     * Get the user that owns the cart item
-     */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_user');
     }
 
-    /**
-     * Get the item associated with the cart item
-     */
-    public function item()
+    public function items()
     {
-        return $this->morphTo();
+        return $this->hasMany(CartItem::class, 'id_cart', 'id_cart');
     }
 
-    /**
-     * Get the total price for this cart item
-     */
-    public function getTotalPriceAttribute()
+    public function getTotalAttribute()
     {
-        $price = $this->discount_price ?? $this->price;
-        return $price * $this->quantity;
+        return $this->items->sum('subtotal');
     }
 }

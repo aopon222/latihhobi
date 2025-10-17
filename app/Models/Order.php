@@ -9,42 +9,38 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $table = 'orders';
+    protected $primaryKey = 'id_order';
+    
     protected $fillable = [
-        'order_number',
-        'user_id',
+        'id_user',
+        'id_coupon',
+        'coupon_code',
+        'discount_amount',
+        'subtotal',
         'total_amount',
-        'status',
-        'payment_method',
-        'payment_reference',
-        'paid_at'
+        'order_date',
     ];
 
     protected $casts = [
+        'discount_amount' => 'decimal:2',
+        'subtotal' => 'decimal:2',
         'total_amount' => 'decimal:2',
-        'paid_at' => 'datetime'
+        'order_date' => 'datetime',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function orderItems()
+    public function coupon()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsTo(Coupon::class, 'id_coupon', 'id_coupon');
     }
 
-    public function getFormattedTotalAttribute()
+    public function items()
     {
-        return 'Rp ' . number_format($this->total_amount, 0, ',', '.');
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function ($order) {
-            $order->order_number = 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
-        });
+        return $this->hasMany(OrderItem::class, 'id_order', 'id_order');
     }
 }

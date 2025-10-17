@@ -3,123 +3,179 @@
 @section('title', 'E-Course - LatihHobi')
 
 @section('content')
-    <!-- Hero Section -->
-    <section class="ecourse-hero">
-        <div class="ecourse-hero-content">
-            <h1>E-COURSE</h1>
-            <p>E-Course LatihHobi adalah program belajar mandiri berbasis digital yang dirancang untuk membantu anak mengembangkan bakatnya kapan saja dan di mana saja.</p>
-        </div>
-    </section>
-
-    <!-- E-Course Categories -->
-    <section class="ecourse-categories">
-        <div class="ecourse-container">
-            <div class="ecourse-grid">
-                <a href="/ecourse/robotik" class="ecourse-category" style="text-decoration:none;color:inherit;">
-                    <div class="category-icon">
-                        <img src="{{ asset('images/ROBONESIA.svg') }}" alt="Robotik" class="category-icon-img">
-                    </div>
-                    <h3>Ecourse Robotik</h3>
-                    <p>Belajar robotik dengan proyek-proyek menarik dan interaktif</p>
-                    <span class="btn-category">Lihat Kursus</span>
-                </a>
-                <a href="/course-film-konten-kreator" class="ecourse-category" style="text-decoration:none;color:inherit;">
-                    <div class="category-icon">
-                        <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="category-icon-img">
-                    </div>
-                    <h3>Ecourse Film & Konten Kreator</h3>
-                    <p>Kembangkan kreativitas dalam pembuatan film dan konten digital</p>
-                    <span class="btn-category">Lihat Kursus</span>
-                </a>
-                <a href="/ecourse/komik" class="ecourse-category" style="text-decoration:none;color:inherit;">
-                    <div class="category-icon">
-                        <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="category-icon-img">
-                    </div>
-                    <h3>Ecourse Komik</h3>
-                    <p>Pelajari seni membuat komik dari dasar hingga mahir</p>
-                    <span class="btn-category">Lihat Kursus</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Products Section -->
-    <section class="products-section">
-        <div class="products-container">
-            <h2>Produk Robotik Terpopuler</h2>
-            <div class="products-grid">
-                @foreach($ecourses->where('category', 'Robotics')->where('is_featured', true)->take(3) as $course)
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="{{ $course->thumbnail ? asset('storage/' . $course->thumbnail) : asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="{{ $course->title }}" class="product-img">
-                        </div>
-                        <div class="product-info">
-                            <h3>{{ $course->title }}</h3>
-                            <p class="product-author">By Latihhobi</p>
-                            <div class="product-price">
-                                @if($course->discount_price && $course->price > $course->discount_price)
-                                    <span class="original-price">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
-                                    <span class="current-price">Rp{{ number_format($course->discount_price, 0, ',', '.') }}</span>
-                                @else
-                                    <span class="current-price">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
-                                @endif
-                            </div>
-                            <button class="btn-add-cart" onclick="addToCart('{{ $course->slug }}')">Tambah ke keranjang</button>
-                        </div>
-                    </div>
-                @endforeach
-                
-                @if($ecourses->where('category', 'Robotics')->where('is_featured', true)->count() < 3)
-                    @for($i = $ecourses->where('category', 'Robotics')->where('is_featured', true)->count(); $i < 3; $i++)
-                        <div class="product-card">
-                            <div class="product-image">
-                                <img src="{{ asset('images/THUMBNAIL E COURSE ROBODUST.svg') }}" alt="Coming Soon" class="product-img">
-                            </div>
-                            <div class="product-info">
-                                <h3>Segera Hadir</h3>
-                                <p class="product-author">By Latihhobi</p>
-                                <div class="product-price">
-                                    <span class="current-price">Coming Soon</span>
-                                </div>
-                                <button class="btn-add-cart" disabled>Coming Soon</button>
-                            </div>
-                        </div>
-                    @endfor
-                @endif
-            </div>
-        </div>
-    </section>
-
-    <!-- Coming Soon Section -->
-    <section class="coming-soon-section">
-        <div class="coming-soon-container">
-            <h2>Kursus Baru Segera Hadir</h2>
-            <div class="coming-soon-grid">
-                <div class="coming-soon-card">
-                    <div class="coming-soon-badge">COMING SOON</div>
-                    <h3>Robot Soccer Bot</h3>
-                    <p>By Latihhobi</p>
-                    <button class="btn-enroll" disabled>Enroll Course</button>
+<section class="ecourse-categories">
+    <div class="ecourse-container">
+        <div class="ecourse-grid">
+            <a href="/ecourse/robotik" class="ecourse-category" style="text-decoration:none;color:inherit;">
+                <div class="category-icon">
+                    <img src="{{ asset('images/ROBONESIA.svg') }}" alt="Robotik" class="category-icon-img">
                 </div>
-                <div class="coming-soon-card">
-                    <div class="coming-soon-badge">COMING SOON</div>
+                <h3>Ecourse Robotik</h3>
+                <p>Belajar robotik dengan proyek-proyek menarik dan interaktif</p>
+                <span class="btn-category">Lihat Kursus</span>
+            </a>
+            <a href="/course-film-konten-kreator" class="ecourse-category" style="text-decoration:none;color:inherit;">
+                <div class="category-icon">
+                    <img src="{{ asset('images/KIDS CC.svg') }}" alt="Film & Konten Kreator" class="category-icon-img">
+                </div>
+                <h3>Ecourse Film & Konten Kreator</h3>
+                <p>Kembangkan kreativitas dalam pembuatan film dan konten digital</p>
+                <span class="btn-category">Lihat Kursus</span>
+            </a>
+            <a href="/ecourse/komik" class="ecourse-category" style="text-decoration:none;color:inherit;">
+                <div class="category-icon">
+                    <img src="{{ asset('images/Asset 1.svg') }}" alt="Komik" class="category-icon-img">
+                </div>
+                <h3>Ecourse Komik</h3>
+                <p>Pelajari seni membuat komik dari dasar hingga mahir</p>
+                <span class="btn-category">Lihat Kursus</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- PRODUK ROBOTIK -->
+<section class="products-section">
+    <div class="products-container">
+        <h2>Produk Course Robotik</h2>
+        <div class="products-scroll">
+            @foreach($ecourses->where('id_category', 1) as $course)
+                <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/THUMBNAIL E COURSE AVOIDER.svg') }}" alt="Robot Hemiptera" class="product-img">
+                        <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}" class="product-img">
                     </div>
-                    <h3>Robot Avoider</h3>
-                    <p>By Latihhobi</p>
-                    <button class="btn-enroll" disabled>Enroll Course</button>
+                    <div class="product-info">
+                        <h3>{{ $course->name }}</h3>
+                        <p class="product-author">By {{ $course->course_by ?? 'Latihhobi' }}</p>
+                        <div class="product-price">
+                            <span class="current-price">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart('{{ $course->id_course }}')">MORE INFO</button>
+                    </div>
                 </div>
-            </div>
+            @endforeach
         </div>
-    </section>
+    </div>
+</section>
 
-    
-    <script>
-        function addToCart(courseSlug) {
-            // Add cart functionality here
-            alert('Menambahkan ke keranjang: ' + courseSlug);
-            // You can implement AJAX call to add to cart
-        }
-    </script>
+<!-- PRODUK FILM & CONTENT CREATOR -->
+<section class="products-section">
+    <div class="products-container">
+        <h2>Produk Course Film & Content Creator</h2>
+        <div class="products-scroll">
+            @foreach($ecourses->where('id_category', 2) as $course)
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}" class="product-img">
+                    </div>
+                    <div class="product-info">
+                        <h3>{{ $course->name }}</h3>
+                        <p class="product-author">By {{ $course->course_by ?? 'Latihhobi' }}</p>
+                        <div class="product-price">
+                            <span class="current-price">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart('{{ $course->id_course }}')">MORE INFO</button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<!-- PRODUK KOMIK -->
+<section class="products-section">
+    <div class="products-container">
+        <h2>Produk Course Komik</h2>
+        <div class="products-scroll">
+            @foreach($ecourses->where('id_category', 3) as $course)
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}" class="product-img">
+                    </div>
+                    <div class="product-info">
+                        <h3>{{ $course->name }}</h3>
+                        <p class="product-author">By {{ $course->course_by ?? 'Latihhobi' }}</p>
+                        <div class="product-price">
+                            <span class="current-price">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart('{{ $course->id_course }}')">MORE INFO</button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<script>
+    function addToCart(courseId) {
+        alert('Menambahkan ke keranjang: ' + courseId);
+    }
+</script>
+
+<style>
+    /* Scrollable Course Cards */
+    .products-scroll {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding-bottom: 10px;
+    }
+
+    .products-scroll::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .products-scroll::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
+    }
+
+    .product-card {
+        min-width: 280px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.2s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .product-info {
+        padding: 15px;
+    }
+
+    .product-author {
+        color: #888;
+        font-size: 0.9rem;
+    }
+
+    .product-price {
+        margin: 10px 0;
+        font-weight: bold;
+    }
+
+    .btn-add-cart {
+        background: #ff6600;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .btn-add-cart:hover {
+        background: #e55a00;
+    }
+</style>
 @endsection

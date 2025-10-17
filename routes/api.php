@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\ProgramController;
 use App\Http\Controllers\Api\ClassController;
 use App\Http\Controllers\Api\EnrollmentController;
@@ -19,11 +21,12 @@ use App\Http\Controllers\Api\EcourseLessonController;
 use App\Http\Controllers\Api\EcourseEnrollmentController;
 use App\Http\Controllers\Api\EcourseProgressController;
 use App\Http\Controllers\Api\EventController;
-use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\AnalyticsController;
 use App\Http\Controllers\Api\FileController;
+use App\Http\Controllers\Api\CouponController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +44,13 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
+// Public - View categories and courses
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{id}', [CategoryController::class, 'show']);
+Route::get('/courses', [CourseController::class, 'index']);
+Route::get('/courses/{id}', [CourseController::class, 'show']);
+Route::get('/courses/category/{categoryId}', [CourseController::class, 'byCategory']);
 
 // Podcast routes (public)
 Route::get('/podcasts', [PodcastController::class, 'index']);
@@ -68,6 +78,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword']);
     Route::get('/profile/enrollments', [ProfileController::class, 'enrollments']);
     Route::get('/profile/communities', [ProfileController::class, 'communities']);
+
+    // Cart
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart/add', [CartController::class, 'addItem']);
+    Route::put('/cart/items/{id}', [CartController::class, 'updateItem']);
+    Route::delete('/cart/items/{id}', [CartController::class, 'removeItem']);
+    Route::delete('/cart/clear', [CartController::class, 'clear']);
+
+    // Orders
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
+
+    // Coupon validation
+    Route::post('/coupons/validate', [CouponController::class, 'validate']);
     
     // Category routes
     Route::get('/categories', [CategoryController::class, 'index']);
@@ -89,13 +114,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/enrollments/{id}', [EnrollmentController::class, 'show']);
     Route::post('/enrollments', [EnrollmentController::class, 'store']);
     Route::put('/enrollments/{id}/cancel', [EnrollmentController::class, 'cancel']);
-    
-    // Payment routes
-    Route::get('/payments', [PaymentController::class, 'index']);
-    Route::get('/payments/{id}', [PaymentController::class, 'show']);
-    Route::post('/payments/ecourse', [PaymentController::class, 'storeForEcourse']);
-    Route::post('/payments/event', [PaymentController::class, 'storeForEvent']);
-    Route::post('/payments/{id}/upload-proof', [PaymentController::class, 'uploadProof']);
     
     // School routes
     Route::get('/schools', [SchoolController::class, 'index']);
@@ -164,13 +182,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/events/search', [EventController::class, 'search']);
     Route::post('/events/{eventId}/register', [EventController::class, 'register']);
     
-    // Cart routes
-    Route::get('/cart', [CartController::class, 'index']);
-    Route::post('/cart', [CartController::class, 'store']);
-    Route::put('/cart/{id}', [CartController::class, 'update']);
-    Route::delete('/cart/{id}', [CartController::class, 'destroy']);
-    Route::delete('/cart', [CartController::class, 'clear']);
-    
     // Notification routes
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
@@ -191,4 +202,26 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/files/download/{id}', [FileController::class, 'download']);
     Route::get('/files/{fileableType}/{fileableId}', [FileController::class, 'forModel']);
     Route::delete('/files/{id}', [FileController::class, 'destroy']);
+
+    // Admin only routes
+    Route::middleware('role:admin')->group(function () {
+        // Categories
+        Route::post('/categories', [CategoryController::class, 'store']);
+        Route::put('/categories/{id}', [CategoryController::class, 'update']);
+        Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
+
+        // Courses
+        Route::post('/courses', [CourseController::class, 'store']);
+        Route::put('/courses/{id}', [CourseController::class, 'update']);
+        Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
+
+        // Coupons
+        Route::get('/coupons', [CouponController::class, 'index']);
+        Route::post('/coupons', [CouponController::class, 'store']);
+        Route::get('/coupons/{id}', [CouponController::class, 'show']);
+        Route::delete('/coupons/{id}', [CouponController::class, 'destroy']);
+
+        // All orders (admin view)
+        Route::get('/admin/orders', [OrderController::class, 'allOrders']);
+    });
 });
