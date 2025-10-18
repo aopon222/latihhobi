@@ -11,7 +11,13 @@ class Cart extends Model
     
     protected $fillable = [
         'id_user',
+        'id_course'
     ];
+
+        public function course()
+    {
+        return $this->belongsTo(Ecourse::class, 'id_course');
+    }
 
     public function user()
     {
