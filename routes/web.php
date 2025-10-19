@@ -193,3 +193,8 @@ Route::get('/ekskul/karate', function () {
 Route::get('/ekskul/tahsin-tahfidz', function () {
     return view('ekskul.tahsin-tahfidz');
 });
+
+
+Route::get('/inforobot', function () {
+    return view('inforobot');
+})->name('inforobot');
