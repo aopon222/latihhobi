@@ -26,35 +26,18 @@ Route::get('/ecourse', [EcourseController::class, 'index'])->name('ecourse.index
 Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
 Route::redirect('/ecourse-robotik', '/ecourse/robotik');
 
-// E-Course: Komik - PERBAIKI QUERY
-Route::get('/ecourse/komik', function () {
-    $category = Category::where('name', 'Komik')
-        ->orWhere('name', 'LIKE', '%Komik%')
-        ->first();
-    
-    $komikCourses = $category 
-        ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('price', 'asc')->get()
-        : collect();
-    
-    return view('ecourse.ecourse-komik', compact('komikCourses'));
-})->name('course.komik');
+// E-Course: Komik
+Route::get('/ecourse/komik', [EcourseController::class, 'komik'])->name('course.komik');
 Route::redirect('/ecourse-komik', '/ecourse/komik');
 
-// E-Course: Film & Konten Kreator - PERBAIKI QUERY
-Route::get('/course-film-konten-kreator', function () {
-    $category = Category::where('name', 'Film')
-        ->orWhere('name', 'Film & Konten Kreator')
-        ->orWhere('name', 'LIKE', '%Film%')
-        ->first();
-    
-    $filmCourses = $category 
-        ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('price', 'asc')->get()
-        : collect();
-    
-    return view('ecourse.ecourse-film-konten-kreator', compact('filmCourses'));
-})->name('course.film_konten_kreator');
-Route::redirect('/ecourse/film', '/course-film-konten-kreator');
-Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
+// E-Course: Film & Konten Kreator
+Route::get('/course-film-konten-kreator', [EcourseController::class, 'film'])->name('course.film_konten_kreator');
+Route::get('/ecourse/film', [EcourseController::class, 'film']);
+Route::get('/ecourse/film-konten-kreator', [EcourseController::class, 'film']);
+
+// E-Course Detail & Cart
+Route::get('/ecourse/{id}', [EcourseController::class, 'show'])->name('ecourse.show');
+Route::post('/ecourse/{id}/add-to-cart', [EcourseController::class, 'addToCart'])->name('ecourse.addToCart')->middleware('auth');
 
 Route::get('/event', function () {
     return view('event');

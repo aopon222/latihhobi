@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_cart')->references('id_cart')->on('cart')->onDelete('cascade');
-            $table->foreign('id_course')->references('id_course')->on('course_card')->onDelete('cascade');
+            $table->foreign('id_course')->references('id_course')->on('course')->onDelete('cascade');
         });
     }
 

@@ -1,25 +1,81 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\Api;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
+use Illuminate\Http\Request;
 
-class Category extends Model
+class CategoryController extends ApiBaseController
 {
-    protected $table = 'category'; // nama tabel
-    protected $primaryKey = 'id_category'; // primary key
-    public $timestamps = true; // jika ada created_at & updated_at
-    
-    protected $fillable = [
-        'name',
-        // tambahkan kolom lain sesuai tabel category Anda
-    ];
+    /**
+     * Display a listing of the categories.
+     */
+    public function index()
+    {
+        $categories = Category::all();
+        return $this->sendResponse($categories, 'Categories retrieved successfully');
+    }
 
     /**
-     * Relasi ke tabel course_card
+     * Store a newly created category in storage.
      */
-    public function courses()
+    public function store(Request $request)
     {
-        return $this->hasMany(Ecourse::class, 'id_category', 'id_category');
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'icon' => 'nullable|string|max:255',
+        ]);
+
+        $category = Category::create($validated);
+        return $this->sendResponse($category, 'Category created successfully', 201);
+    }
+
+    /**
+     * Display the specified category.
+     */
+    public function show($id)
+    {
+        $category = Category::find($id);
+        
+        if (!$category) {
+            return $this->sendError('Category not found', 404);
+        }
+
+        return $this->sendResponse($category, 'Category retrieved successfully');
+    }
+
+    /**
+     * Update the specified category in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $category = Category::find($id);
+        
+        if (!$category) {
+            return $this->sendError('Category not found', 404);
+        }
+
+        $validated = $request->validate([
+            'name' => 'string|max:255',
+            'icon' => 'nullable|string|max:255',
+        ]);
+
+        $category->update($validated);
+        return $this->sendResponse($category, 'Category updated successfully');
+    }
+
+    /**
+     * Remove the specified category from storage.
+     */
+    public function destroy($id)
+    {
+        $category = Category::find($id);
+        
+        if (!$category) {
+            return $this->sendError('Category not found', 404);
+        }
+
+        $category->delete();
+        return $this->sendResponse(null, 'Category deleted successfully');
     }
 }
