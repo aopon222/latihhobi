@@ -92,7 +92,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/{id}', [OrderController::class, 'show']);
 
     // Coupon validation
-    Route::post('/coupons/validate', [CouponController::class, 'validateCoupon']);
+    Route::post('/coupons/validate', [CouponController::class, 'validate']);
     
     // Category routes
     Route::get('/categories', [CategoryController::class, 'index']);

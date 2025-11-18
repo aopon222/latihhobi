@@ -14,6 +14,7 @@ class Ecourse extends Model
         'name',
         'course_by',
         'price',
+        'original_price',
         'image_url',
         'perakitan',
         'worksheet',

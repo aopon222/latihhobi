@@ -3,104 +3,855 @@
 @section('title', 'Ekskul Komik - LatihHobi')
 
 @section('content')
-<style>
-    /* Ekskul Hero V2 - lokal halaman */
-    .ekskul-hero {
-        position: relative;
-        width: 100%;
-        min-height: 70vh;
-        margin-top: 70px; /* offset header fixed dari layout */
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        background: var(--ekskul-bg, linear-gradient(180deg, #e5e7eb 0%, #d1d5db 100%)); /* fallback saat belum ada aset */
-        background-size: cover;
-        background-position: center;
-        overflow: hidden;
-    }
+    <style>
+        /* Hero Section */
+        .komik-hero {
+            position: relative;
+            width: 100%;
+            min-height: 400px;
+            margin-top: 70px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            overflow: hidden;
+        }
 
-    .ekskul-hero::before {
-        content: "";
-        position: absolute;
-        inset: 0 auto 0 0;
-        width: min(700px, 60vw);
-        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.95) 60%, rgba(255,255,255,0) 100%);
-        z-index: 1;
-    }
+        .komik-hero-content {
+            flex: 1;
+            color: white;
+            z-index: 2;
+        }
 
-    .ekskul-hero-content {
-        position: relative;
-        z-index: 2;
-        text-align: left;
-        color: #111827;
-        max-width: 780px;
-        padding: 0 5%;
-    }
+        .komik-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
 
-    .ekskul-hero h1 {
-        font-size: clamp(2rem, 4vw + 0.5rem, 4rem);
-        font-weight: 800;
-        margin-bottom: 1rem;
-        letter-spacing: -0.02em;
-    }
+        .komik-hero-image {
+            flex: 1;
+            max-width: 500px;
+            z-index: 2;
+        }
 
-    .ekskul-hero p {
-        font-size: clamp(1rem, 1.2vw + 0.6rem, 1.25rem);
-        line-height: 1.8;
-        color: #374151;
-        max-width: 60ch;
-        margin: 0;
-    }
+        .komik-hero-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+        }
 
-    .ekskul-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 60px 20px;
-    }
+        /* Info Section */
+        .info-section {
+            background: white;
+            padding: 0;
+            margin-top: 0;
+        }
 
-    .ekskul-intro {
-        text-align: center;
-        margin-bottom: 50px;
-    }
+        .info-table {
+            max-width: 100%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
 
-    .ekskul-intro h2 {
-        font-size: 28px;
-        font-weight: 700;
-        color: #04a6d6;
-        margin-bottom: 20px;
-        letter-spacing: 1px;
-    }
+        .info-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            border-bottom: 1px solid #ddd;
+        }
 
-    .ekskul-intro p {
-        font-size: 16px;
-        color: #1a2330;
-        line-height: 1.7;
-        max-width: 800px;
-        margin: 0 auto;
-    }
+        .info-row:first-child {
+            border-top: 1px solid #ddd;
+        }
 
-    @media (max-width: 768px) {
-        .ekskul-hero { min-height: 60vh; }
-        .ekskul-hero::before { width: 100%; }
-        .ekskul-hero-content { padding: 2rem 1.25rem; }
-    }
-</style>
+        .info-label {
+            background: #e5e5e5;
+            padding: 1.5rem 2rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            border-right: 1px solid #ddd;
+        }
 
-<div class="ekskul-hero">
-    <div class="ekskul-hero-content">
-        <h1>EKSKUL KOMIK</h1>
-        <p>
-            "Ekspresikan kreativitas melalui dunia komik!"
-        </p>
-    </div>
-</div>
+        .info-value {
+            background: white;
+            padding: 1.5rem 2rem;
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
 
-<div class="ekskul-content">
-    <div class="ekskul-intro">
-        <h2>📚 Ekskul Komik</h2>
-        <p>
-            Ekskul Komik mengajarkan siswa cara membuat cerita visual, menggambar karakter, dan merancang komik. Siswa akan belajar teknik ilustrasi dan storytelling.
-        </p>
-    </div>
-</div>
+        .info-value ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-value li {
+            padding: 0.3rem 0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-value li::before {
+            content: "• ";
+            color: #1e3a5f;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            background: #1e3a5f;
+            padding: 60px 5%;
+            text-align: center;
+        }
+
+        .gallery-section h2 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .gallery-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Tujuan Section */
+        .tujuan-section {
+            background: #00a8e6;
+            padding: 60px 5%;
+            text-align: center;
+        }
+
+        .tujuan-section h2 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+
+        .tujuan-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .tujuan-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .tujuan-card h3 {
+            font-size: 1rem;
+            color: #1e3a5f;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        /* Apa Itu Section */
+        .apaitu-section {
+            padding: 60px 5%;
+            background: white;
+        }
+
+        .apaitu-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .apaitu-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .apaitu-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 1.5rem;
+        }
+
+        .apaitu-content p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* Manfaat Section */
+        .manfaat-section {
+            padding: 60px 5%;
+            background: #f5f5f5;
+            text-align: center;
+        }
+
+        .manfaat-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 2rem;
+        }
+
+        .manfaat-list {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .manfaat-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .manfaat-list li {
+            padding: 0.8rem 0;
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .manfaat-list li::before {
+            content: "• ";
+            color: #000000;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Fasilitas Section */
+        .fasilitas-section {
+            background: #1e3a5f;
+            padding: 60px 5%;
+            text-align: center;
+        }
+
+        .fasilitas-section h2 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+
+        .fasilitas-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            justify-items: center;
+        }
+
+        .fasilitas-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .fasilitas-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .fasilitas-icon {
+            width: 70px;
+            height: 70px;
+            background: #1e3a5f;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .fasilitas-card h3 {
+            font-size: 1.1rem;
+            color: #1e3a5f;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        /* Tutor Section */
+        .tutor-section {
+            background: #00a8e6;
+            padding: 60px 5%;
+            text-align: center;
+        }
+
+        .tutor-section h2 {
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .tutor-subtitle {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tutor-grid {
+            max-width: 1000px;
+            margin: 0 auto 2rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .tutor-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tutor-image {
+            width: 100%;
+            height: 250px;
+            background: #5b7ba8;
+            overflow: hidden;
+        }
+
+        .tutor-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tutor-info {
+            padding: 1.5rem 1rem;
+        }
+
+        .tutor-info h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin: 0 0 0.3rem 0;
+        }
+
+        .tutor-info p {
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: #666;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .tutor-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .tutor-pagination .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tutor-pagination .dot.active {
+            background: #ff6b6b;
+            width: 14px;
+            height: 14px;
+        }
+
+        .tutor-pagination .dot:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Siswa Section */
+        .siswa-section {
+            padding: 60px 5%;
+            background: white;
+            text-align: center;
+        }
+
+        .siswa-section h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #00a8e6;
+            margin-bottom: 1rem;
+        }
+
+        /* Testimoni Section */
+        .testimoni-section {
+            background: #1e3a5f;
+            padding: 60px 5%;
+            text-align: center;
+        }
+
+        .testimoni-section h2 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .testimoni-subtitle {
+            color: #fbbf24;
+            font-size: 1rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .testimoni-grid {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .testimoni-card {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .testimoni-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .testimoni-name-blue {
+            font-weight: 700;
+            color: #00a8e6;
+            margin: 0.5rem 0 0.3rem;
+            font-size: 1.1rem;
+        }
+
+        .testimoni-school {
+            color: #fbbf24;
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .testimoni-quote {
+            max-width: 900px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+        }
+
+        .testimoni-quote p:first-child {
+            color: white;
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimoni-author {
+            color: #00a8e6;
+            font-weight: 700;
+            margin: 0.3rem 0;
+            font-size: 1rem;
+        }
+
+        .testimoni-author-school {
+            color: #fbbf24;
+            font-weight: 500;
+            margin: 0.3rem 0;
+            font-size: 0.95rem;
+        }
+
+        .testimoni-footer {
+            color: white;
+            margin-top: 2rem;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 60px 5%;
+            background: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-daftar {
+            background: #00a8e6;
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 168, 230, 0.3);
+        }
+
+        .btn-daftar:hover {
+            background: #0088b8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 168, 230, 0.4);
+        }
+
+        /* Footer Info */
+        .footer-info {
+            background: #1e3a5f;
+            padding: 20px 5%;
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .komik-hero {
+                flex-direction: column;
+                padding: 2rem 5%;
+                text-align: center;
+            }
+
+            .komik-hero h1 {
+                font-size: 2rem;
+            }
+
+            .komik-hero-image {
+                max-width: 100%;
+                margin-top: 2rem;
+            }
+
+            .info-row {
+                grid-template-columns: 1fr;
+            }
+
+            .info-label {
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .info-label,
+            .info-value {
+                padding: 1rem 1.5rem;
+            }
+
+            .tujuan-grid,
+            .fasilitas-grid,
+            .tutor-grid,
+            .testimoni-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .apaitu-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .siswa-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+    <!-- Hero Section -->
+    <section class="komik-hero">
+        <div class="komik-hero-content">
+            <h1>Ekskul Komik</h1>
+        </div>
+        <div class="komik-hero-image">
+            <img src="{{ asset('images/HeroKomik.jpg') }}" alt="Ekskul Komik">
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section">
+        <div class="info-table">
+            <div class="info-row">
+                <div class="info-label">Lembaga</div>
+                <div class="info-value">Latih Hobi</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Program</div>
+                <div class="info-value">Ekstrakurikuler Komik</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Materi</div>
+                <div class="info-value">
+                    <ul>
+                        <li>Level 1 : Buku komik dengan pengerjaan tradisional & flash card</li>
+                        <li>Level 2 : Buku komik dengan pengerjaan tradisional & wallpaper perasaan</li>
+                        <li>Level 3 : Buku komik dengan pengerjaan tradisional & buku karakter</li>
+                        <li>Level 4 : Buku komik dengan pengerjaan tradisional & poster karakter</li>
+                        <li>Level 5 : Buku komik dengan pengerjaan digital & poster digital</li>
+                        <li>Level 6 : Buku komik personal dengan pengerjaan digital</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Biaya</div>
+                <div class="info-value">
+                    <ul>
+                        <li>Rp 150.000 per bulan (Biaya sudah termasuk akses pelatihan,
+                            pembuatan buku komik karya siswa yang hasil bukunya menjadi
+                            hak milik siswa, dan sertifikat project per level)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Jumlah Pertemuan</div>
+                <div class="info-value">60 Menit/Pertemuan</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Durasi</div>
+                <div class="info-value">
+                    <ul>
+                        <li>12 x pertemuan</li>
+                        <li>16 x pertemuan</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+        <h2>Galeri Ekstrakurikuler</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="{{ asset('images/GaleriKomik1.png') }}" alt="Gallery 1">
+            </div>
+            <div class="gallery-item">
+                <img src="{{ asset('images/GaleriKomik2.png') }}" alt="Gallery 2">
+            </div>
+            <div class="gallery-item">
+                <img src="{{ asset('images/GaleriKomik3.png') }}" alt="Gallery 3">
+            </div>
+        </div>
+    </section>
+
+    <!-- Tujuan Section -->
+    <section class="tujuan-section">
+        <h2>Tujuan Pembelajaran</h2>
+        <div class="tujuan-grid">
+            <div class="tujuan-card">
+                <h3>Melatih kesukaan terhadap karya tulis lewat pembuatan dan apresiasi terhadap buku komik karya siswa.
+                </h3>
+            </div>
+            <div class="tujuan-card">
+                <h3>Membangun kepercayaan diri dan keberanian untuk berkarya lewat tulisan dan gambar.</h3>
+            </div>
+            <div class="tujuan-card">
+                <h3>Melatih kreativitas dalam membuat dan menulis cerita.</h3>
+            </div>
+            <div class="tujuan-card">
+                <h3>Melatih visualisasi cerita yang sudah dibuat menjadi sebuah gambar.</h3>
+            </div>
+            <div class="tujuan-card">
+                <h3>Mengenal dunia industri kreatif digital sejak dini sebagai peluang karir masa depan.</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apa Itu Section -->
+    <section class="apaitu-section">
+        <div class="apaitu-container">
+            <div class="apaitu-image">
+                <img src="{{ asset('images/HeroKomik.jpg') }}" alt="Apa Itu Ekskul Komik">
+            </div>
+            <div class="apaitu-content">
+                <h2>Apa itu Ekskul Komik?</h2>
+                <p>Ekskul Komik merupakan tempat siswa untuk mencintai literasi lewat media pembelajaran komik.
+                    Siswa juga akan diarahkan dan dibantu untuk menghasilkan karya buku komiknya sendiri.
+                    Dengan pembelajaran tentang cara menggambar yang baik serta membuat cerita yang terstruktur. </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manfaat Section -->
+    <section class="manfaat-section">
+        <h2>Manfaat Utama Ekskul Komik</h2>
+        <div class="manfaat-list">
+            <ul>
+                <li>Melatih kesukaan terhadap karya tulis lewat pembuatan dan apresiasi terhadap buku komik karya siswa.
+                </li>
+                <li>Membangun kepercayaan diri dan keberanian untuk berkarya lewat tulisan dan gambar.</li>
+                <li>Melatih kreativitas dalam membuat dan menulis cerita.</li>
+                <li>Melatih visualisasi cerita yang sudah dibuat menjadi sebuah gambar.</li>
+                <li>Mengenal dunia industri kreatif digital sejak dini sebagai peluang karir masa depan.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Fasilitas Section -->
+    <section class="fasilitas-section">
+        <h2>Fasilitas apa saja yang didapatkan?</h2>
+        <div class="fasilitas-grid">
+            <div class="fasilitas-card">
+                <div class="fasilitas-icon">📚</div>
+                <h3>Modul Pembelajaran</h3>
+            </div>
+            <div class="fasilitas-card">
+                <div class="fasilitas-icon">💻</div>
+                <h3>Sertifikat</h3>
+            </div>
+            <div class="fasilitas-card">
+                <div class="fasilitas-icon">📖</div>
+                <h3>Rapot</h3>
+            </div>
+            <div class="fasilitas-card">
+                <div class="fasilitas-icon">📖</div>
+                <h3>Fasilitas Karya dan Pameran</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutor Section -->
+    <section class="tutor-section">
+        <h2>Jajaran Tutor Komik Terbaik di Latih Hobi</h2>
+        <p class="tutor-subtitle">Latih Hobi memiliki tutor Komik berpengalaman yang siap memberikan layanan mengajar.</p>
+        <div class="tutor-grid">
+            <div class="tutor-card">
+                <div class="tutor-image">
+                    <img src="{{ asset('images/TutorKomik1.png') }}" alt="Kak Fajar">
+                </div>
+                <div class="tutor-info">
+                    <h3>Kak Fajar</h3>
+                    <p>Tutor Komik</p>
+                </div>
+            </div>
+            <div class="tutor-card">
+                <div class="tutor-image">
+                    <img src="{{ asset('images/TutorKomik2.png') }}" alt="Kak Resta">
+                </div>
+                <div class="tutor-info">
+                    <h3>Kak Resta</h3>
+                    <p>Tutor Komik</p>
+                </div>
+            </div>
+            <div class="tutor-card">
+                <div class="tutor-image">
+                    <img src="{{ asset('images/TutorKomik3.png') }}" alt="Kak Aris">
+                </div>
+                <div class="tutor-info">
+                    <h3>Kak Aris</h3>
+                    <p>Tutor Komik</p>
+                </div>
+            </div>
+        </div>
+        <div class="tutor-pagination">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+        </div>
+    </section>
+
+    <!-- Siswa Section -->
+    <section class="siswa-section">
+        <h2>5000+ Siswa</h2>
+        <p class="testimoni-subtitle">Sudah mengikuti ekstrakulikuler komik. Saatnya kamu untuk bergabung sekarang!</p>
+    </section>
+
+    <!-- Testimoni Section -->
+    <section class="testimoni-section">
+        <h2>Testimoni</h2>
+        <p class="testimoni-subtitle">cerita dan pengalaman pribadi peserta dan wali peserta Latih Hobi selama belajar
+            bersama Tutor</p>
+        <div class="testimoni-grid">
+            <div class="testimoni-card">
+                <img src="{{ asset('images/Testi1.png') }}" alt="Testimoni Bunda Calysta">
+                <p class="testimoni-name-blue">Bunda Calysta</p>
+                <p class="testimoni-school">SD Tridaya</p>
+            </div>
+            <div class="testimoni-card">
+                <img src="{{ asset('images/Testi2.png') }}" alt="Testimoni Mommy Lola">
+                <p class="testimoni-name-blue">Mommy Lola</p>
+                <p class="testimoni-school">SD Islam Al-Azhar 36</p>
+            </div>
+        </div>
+        <div class="testimoni-quote">
+            <p>"Aku senang ikut robotik, soalnya bisa bikin robot jalan sendiri. Seru banget kaya mainan tapi kita yang
+                buat!"</p>
+            <p class="testimoni-author">Reina Hardesty, 11 Tahun</p>
+            <p class="testimoni-author-school">SDP Al-Ghifari</p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Mahir Komik Bersama Latih Hobi!</h2>
+        <p>Asah kreativitasmu lewat goresan tinta dan warna. Bersama Latih Hobi, belajar membuat komik jadi lebih seru dan
+            menyenangkan!</p>
+        <a href="#" class="btn-daftar">Daftar Sekarang</a>
+    </section>
 @endsection

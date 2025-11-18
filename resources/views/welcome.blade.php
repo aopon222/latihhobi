@@ -7,8 +7,10 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content fade-in">
-            <h1>LATIH HOBI</h1>
-            <p>Merupakan platform pengembangan bakat, yang membantu anak, orang tua dan sekolah untuk mengembangkan potensi kemampuan anak di bidangnya masing-masing dengan ekosistem belajar yang lengkap, terukur dan tutor yang kompeten.</p>
+            <h1>Latih Hobi</h1>
+            <p>Merupakan platform pengembangan bakat, yang membantu anak, orang tua dan sekolah untuk mengembangkan potensi
+                kemampuan anak di bidangnya masing-masing dengan ekosistem belajar yang lengkap, terukur dan tutor yang
+                kompeten.</p>
             <a href="{{ route('course.robotik') }}" class="btn-start">START E-COURSE</a>
         </div>
     </section>
@@ -18,37 +20,33 @@
         <div class="services-container">
             <div class="services-grid">
                 <div class="service-card fade-in">
-                    <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
-                    <div class="service-title">Pemrograman</div>
-                    <div class="service-subtitle">Software</div>
+                    <h3>Ekskul Reguler Sekolah</h3>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
-                    <div class="service-title">E-Design</div>
-                    <div class="service-subtitle">Design</div>
+                    <h3>E-Course</h3>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon"><i class="fas fa-users"></i></div>
-                    <div class="service-title">Life-Skill</div>
+                    <h3>Komunitas dan Club</h3>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-                    <div class="service-title">Financial Literate</div>
+                    <h3>Private Class</h3>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon"><i class="fas fa-gamepad"></i></div>
-                    <div class="service-title">E-Sport</div>
+                    <h3>LHEC 2025</h3>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Jadwal Reguler Section -->
+    <!-- Ekskul Reguler Section -->
     <section class="jadwal-section">
         <div class="jadwal-container">
-            <h2>Jadwal Reguler</h2>
-            <p>Dengan jadwal yang sudah disusun secara sistematis, program pelaksanaan pembelajaran dilaksanakan dengan profesional. Selain yang terencana, kami memberikan perangkat kursus online yang dapat diakses 24 jam. Setiap peserta akan memiliki akses materi dengan durasi sesuai rencana standar yang telah ditetapkan oleh peserta yang akan memiliki akun komplementer secara menyeluruh kepada sistem modul terpelajar.</p>
-            <a href="#" class="btn-lihat-jadwal">LIHAT JADWAL</a>
+            <h2>Ekskul Reguler</h2>
+            <p>Ekskul Reguler LatihHobi merupakan kegiatan ekstrakurikuler mingguan berbasis proyek, yang disusun
+                berdasarkan silabus terstruktur dan bertingkat. Program ini ditujukan bagi anak-anak usia sekolah,
+                didampingi oleh tutor berpengalaman, serta melibatkan peran aktif dari orang tua dan pihak sekolah. Kegiatan
+                ini dilaksanakan secara rutin setiap minggu di sekolah mitra LatihHobi.</p>
+            <a href="/ekskul-reguler" class="btn-lihat-jadwal">LIHAT SEMUA</a>
         </div>
     </section>
 
@@ -56,31 +54,35 @@
     <section class="private-class">
         <div class="private-container">
             <h2>PRIVATE CLASS</h2>
-            <p>Private Class Latihhobi adalah layanan pembelajaran privat dan berkelompok. Latihhobi private class memungkinkan pembelajaran menjadi lebih fokus karena participant dapat berkonsultasi lebih dalam dengan mentor yang mengajar dalam sesi pembelajaran private class. Berdasarkan data lapangan, private class adalah metode pembelajaran yang paling diminati yang dapat memiliki keefektifan waktu dan tempat belajar sekaligus dapat beradaptasi terhadap jadwal dan kondisi participant lebih dan tempat belajar sekaligus dapat beradaptasi terhadap jadwal dan kondisi participant yang menjalani kelas individual atau berkelompok level kecil adalah memberikan beberapa kepada peserta kursus yang ditulis.</p>
+            <p>Private Class LatihHobi adalah layanan pembelajaran privat dan berkelompok. LatihHobi private class
+                memungkinkan pembelajaran menjadi lebih fokus karena participant dapat berkonsultasi lebih dalam dengan
+                mentor yang mengajar dalam sesi pembelajaran private class. Berdasarkan data lapangan, private class adalah
+                metode pembelajaran yang paling diminati yang dapat memiliki keefektifan waktu dan tempat belajar sekaligus
+                dapat beradaptasi terhadap jadwal dan kondisi participant.</p>
 
             <div class="private-cards">
                 <div class="private-card fade-in">
                     <div class="private-card-image">
-                        <i class="fas fa-desktop"></i>
+                        <img src="{{ asset('images/Logo Robotik.png') }}" alt="Robotik">
                     </div>
                     <div class="private-card-content">
-                        <h3>Programming</h3>
+                        <h3>Robotik</h3>
                     </div>
                 </div>
                 <div class="private-card fade-in">
                     <div class="private-card-image">
-                        <i class="fas fa-paint-brush"></i>
+                        <img src="{{ asset('images/Logo Komik.png') }}" alt="Komik">
                     </div>
                     <div class="private-card-content">
-                        <h3>Design</h3>
+                        <h3>Komik</h3>
                     </div>
                 </div>
                 <div class="private-card fade-in">
                     <div class="private-card-image">
-                        <i class="fas fa-chart-line"></i>
+                        <img src="{{ asset('images/Logo FKK.png') }}" alt="Film">
                     </div>
                     <div class="private-card-content">
-                        <h3>Business</h3>
+                        <h3>Film & Konten Kreator</h3>
                     </div>
                 </div>
             </div>
@@ -91,26 +93,19 @@
     <section class="ecourse-section">
         <div class="ecourse-container">
             <h2>E-COURSE</h2>
-            <p>E-Course Latihhobi adalah program terstruktur dengan durasi fleksibel sehingga memungkinkan peserta belajar sesuai dengan kebutuhan dan kemampuan masing-masing. Dengan materi yang terstruktur dan lengkap dalam bentuk video, audio, dan teks.</p>
+            <p>E-Course LatihHobi adalah program belajar mandiri berbasis digital yang dirancang untuk membantu anak
+                mengembangkan bakatnya kapan saja dan di mana saja.</p>
 
             <div class="ecourse-cards">
-                <a href="/ecourse/robotik" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
-                    <div class="ecourse-card-image robotik">ROBOTIK</div>
+                <a href="/ecourse/robotik" class="ecourse-card fade-in">
+                    <img src="{{ asset('images/Home Robotik.png') }}" alt="Robotik">
                 </a>
-                <a href="/ecourse/komik" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
-                    <div class="ecourse-card-image komik">KOMIK</div>
+                <a href="/course-film-konten-kreator" class="ecourse-card fade-in">
+                    <img src="{{ asset('images/Home FKK.png') }}" alt="Film & Konten Kreator">
                 </a>
-                <a href="/course-film-konten-kreator" class="ecourse-card fade-in" style="text-decoration:none;color:inherit;">
-                    <div class="ecourse-card-image film">FILM & CONTENT KREATOR</div>
+                <a href="/ecourse/komik" class="ecourse-card fade-in">
+                    <img src="{{ asset('images/Home Komik.png') }}" alt="Komik">
                 </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Private Class Section -->
-    <section class="private-class">
-        <div class="private-class-container">
-            <h2>PRIVATE CLASS</h2>
             </div>
         </div>
     </section>
@@ -118,23 +113,32 @@
     <!-- Komunitas & Club Section -->
     <section class="komunitas-club">
         <div class="komunitas-club-container">
-            <h2>KOMUNITAS & CLUB</h2>
-            <p>"Komunitas & Club LatihHobi adalah ruang lanjutan bagi anak untuk terus mengembangkan minat dan bakatnya setelah mengikuti kelas atau ekskul. Komunitas ini tidak hanya mewadahi siswa peserta ekskul reguler, tetapi juga terbuka untuk anak-anak dari luar sekolah mitra yang ingin bergabung dan belajar bersama. Di dalam komunitas ini, siswa bisa berinteraksi dengan mentor, mengikuti diskusi dan tantangan berkala, mempublikasikan karya, serta berpartisipasi dalam kegiatan showcase atau mini kompetisi. Komunitas ini dibangun sebagai ekosistem belajar yang aktif, suportif, dan mendorong eksplorasi prestasi secara berkelanjutan."</p>
+            <h2>Komunitas & Club</h2>
+            <p>Komunitas & Club LatihHobi adalah wadah lanjutan bagi anak-anak untuk terus mengembangkan minat dan bakat
+                mereka setelah mengikuti kelas atau ekskul. Komunitas ini tidak hanya diperuntukkan bagi siswa ekskul
+                reguler, tetapi juga terbuka bagi anak-anak dari luar sekolah mitra yang ingin bergabung dan belajar
+                bersama. Di komunitas ini, siswa dapat berinteraksi dengan mentor, mengikuti diskusi dan tantangan berkala,
+                mempublikasikan karya, serta berpartisipasi dalam kegiatan showcase atau kompetisi mini. Komunitas ini
+                dirancang sebagai ekosistem belajar yang aktif, suportif, dan mendorong eksplorasi prestasi secara
+                berkelanjutan.</p>
             <div class="komunitas-club-grid">
                 <div class="komunitas-club-item">
-                    <div class="club-badge">COMING SOON</div>
-                    <h3>Robonesia Club Robotik</h3>
-                    <a href="#" class="btn-club" disabled>DAFTAR SEKARANG</a>
+                    <div class="club-image-wrapper">
+                        <img src="{{ asset('images/Club Robotik.png') }}" alt="Robonesia Club Robotik">
+                    </div>
+                    <a href="#" class="btn-club-daftar">Daftar Sekarang</a>
                 </div>
                 <div class="komunitas-club-item">
-                    <div class="club-badge">COMING SOON</div>
-                    <h3>Kids Content Creator</h3>
-                    <a href="#" class="btn-club" disabled>DAFTAR SEKARANG</a>
+                    <div class="club-image-wrapper">
+                        <img src="{{ asset('images/Club FKK.png') }}" alt="Kids Content Creator">
+                    </div>
+                    <a href="#" class="btn-club-daftar">Daftar Sekarang</a>
                 </div>
                 <div class="komunitas-club-item">
-                    <div class="club-badge">COMING SOON</div>
-                    <h3>Latih Hobi Club Archery</h3>
-                    <a href="#" class="btn-club" disabled>DAFTAR SEKARANG</a>
+                    <div class="club-image-wrapper">
+                        <img src="{{ asset('images/Club Panahan.png') }}" alt="Latih Hobi Club Archery">
+                    </div>
+                    <a href="#" class="btn-club-daftar">Daftar Sekarang</a>
                 </div>
             </div>
         </div>
@@ -143,76 +147,101 @@
     <!-- Bootcamp & Workshop Section -->
     <section class="bootcamp-workshop">
         <div class="bootcamp-workshop-container">
-            <h2>BOOTCAMP & WORKSHOP</h2>
-            <p>"Bootcamp & Workshop LatihHobi adalah program kelas intensif berbentuk webinar yang dirancang untuk orang tua, guru, dan anak dalam rangka memahami dan mengembangkan bakat anak secara lebih mendalam. Program ini menghadirkan materi aplikatif, narasumber ahli, sesi interaktif, hingga studi kasus nyata seputar potensi dan minat anak."</p>
-            <div class="workshop-cards">
-                <div class="workshop-card">
-                    <div class="workshop-header">
-                        <h3>Parenting Workshop</h3>
-                        <div class="workshop-badge">REGISTRATION NOW</div>
-                    </div>
-                    <h4>TAKUT SALAH ARAH?</h4>
-                    <p>Begini Cara Dampingi Bakat Anak Sejak Dini</p>
-                    <div class="workshop-details">
-                        <div class="workshop-date">
-                            <span class="date-icon">📅</span>
-                            <span>JUMAT, 15/08/2025</span>
-                        </div>
-                        <div class="workshop-time">
-                            <span class="time-icon">🕐</span>
-                            <span>10.00-11.30 WIB</span>
-                        </div>
-                    </div>
-                    <button class="btn-register">REGISTRATION NOW</button>
-                </div>
-                <div class="workshop-card coming-soon">
-                    <div class="workshop-badge-coming">COMING SOON</div>
-                    <h4>Parenting Anak di Era Digitalisasi</h4>
-                    <p>Kelas Webinar Bersama</p>
-                </div>
-                <div class="workshop-card coming-soon">
-                    <div class="workshop-badge-coming">COMING SOON</div>
-                    <h4>To be A Great Teacher for Kids</h4>
-                    <p>Kelas Bootcamp Online</p>
-                </div>
+            <h2>Bootcamp & Workshop</h2>
+            <p>Bootcamp & Workshop LatihHobi adalah program kelas intensif berbentuk webinar yang dirancang untuk orang tua,
+                guru, dan anak dalam rangka memahami dan mengembangkan bakat anak secara lebih mendalam. Program ini
+                menghadirkan materi aplikatif, narasumber ahli, sesi interaktif, hingga studi kasus nyata seputar potensi
+                minat anak.</p>
+            <div class="bootcamp-grid">
+                <a href="#" class="bootcamp-card">
+                    <img src="{{ asset('images/Bootcamp 1.png') }}" alt="Parenting Workshop - Takut Salah Arah">
+                </a>
+                <a href="#" class="bootcamp-card">
+                    <img src="{{ asset('images/Bootcamp 2.png') }}" alt="Parenting Anak di Era Digitalisasi">
+                </a>
+                <a href="#" class="bootcamp-card">
+                    <img src="{{ asset('images/Bootcamp 3.png') }}" alt="To be A Great Teacher for Kids">
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Podcast Section -->
+    <!-- Tonton Podcast Section -->
     <section class="podcast-section">
         <div class="podcast-container">
-            <h2>TONTON PODCAST LATIHHOBI</h2>
+            <h2>Tonton Podcast LatihHobi</h2>
             <div class="podcast-grid">
                 @php
-                    $featuredPodcasts = \App\Models\Podcast::active()->featured()->ordered()->limit(4)->get();
+                    $featuredPodcasts = \App\Models\Podcast::active()->featured()->ordered()->limit(3)->get();
                 @endphp
-                @foreach($featuredPodcasts as $podcast)
-                <div class="podcast-item" data-youtube-id="{{ $podcast->youtube_id }}">
-                    <div class="podcast-thumbnail">
-                        @if($podcast->embed_url)
-                            <div class="video-embed-wrapper">
-                                <iframe src="{{ $podcast->embed_url }}" frameborder="0" allowfullscreen loading="lazy" title="{{ $podcast->title }}" class="embedded-podcast"></iframe>
-                            </div>
-                        @else
-                            <img src="{{ $podcast->thumbnail_url }}" alt="{{ $podcast->title }}" class="thumbnail-img">
-                            <div class="podcast-overlay">
-                                <h4>{{ Str::limit($podcast->title, 20) }}</h4>
-                                <p>{{ Str::limit($podcast->description, 30) }}</p>
-                                <span>{{ $podcast->duration }}</span>
-                            </div>
-                        @endif
+                @forelse($featuredPodcasts as $podcast)
+                    <div class="podcast-item" data-youtube-id="{{ $podcast->youtube_id }}">
+                        <div class="podcast-thumbnail">
+                            @if ($podcast->embed_url)
+                                <div class="video-embed-wrapper">
+                                    <iframe src="{{ $podcast->embed_url }}" frameborder="0" allowfullscreen loading="lazy"
+                                        title="{{ $podcast->title }}" class="embedded-podcast"></iframe>
+                                </div>
+                            @else
+                                <img src="{{ $podcast->thumbnail_url }}" alt="{{ $podcast->title }}"
+                                    class="thumbnail-img">
+                                <div class="podcast-overlay">
+                                    <h4>{{ Str::limit($podcast->title, 20) }}</h4>
+                                    <p>{{ Str::limit($podcast->description, 30) }}</p>
+                                    <span>{{ $podcast->duration }}</span>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="podcast-info">
+                            <h3>{{ $podcast->title }}</h3>
+                            <p>{{ $podcast->host }}</p>
+                        </div>
                     </div>
-                    <div class="podcast-info">
-                        <h3>{{ $podcast->title }}</h3>
-                        <p>{{ $podcast->host }}</p>
-                        <a href="{{ route('podcasts.show', $podcast) }}" class="btn-subscribe">Tonton Sekarang</a>
+                @empty
+                    <div class="podcast-item">
+                        <div class="podcast-thumbnail">
+                            <img src="{{ asset('images/placeholder-gallery-1.svg') }}" alt="Podcast LatihHobi"
+                                class="thumbnail-img">
+                        </div>
+                        <div class="podcast-info">
+                            <h3>Latih Hobi</h3>
+                            <p>LatihHobi membahas tentang bagaimana cara mengembangkan bakat anak</p>
+                        </div>
                     </div>
-                </div>
-                @endforeach
+                    <div class="podcast-item">
+                        <div class="podcast-thumbnail">
+                            <img src="{{ asset('images/placeholder-gallery-2.svg') }}" alt="Podcast LatihHobi"
+                                class="thumbnail-img">
+                        </div>
+                        <div class="podcast-info">
+                            <h3>Latih Hobi</h3>
+                            <p>LatihHobi membahas tentang bagaimana cara mengembangkan bakat anak</p>
+                        </div>
+                    </div>
+                    <div class="podcast-item">
+                        <div class="podcast-thumbnail">
+                            <img src="{{ asset('images/placeholder-gallery-3.svg') }}" alt="Podcast LatihHobi"
+                                class="thumbnail-img">
+                        </div>
+                        <div class="podcast-info">
+                            <h3>Latih Hobi</h3>
+                            <p>LatihHobi membahas tentang bagaimana cara mengembangkan bakat anak</p>
+                        </div>
+                    </div>
+                @endforelse
             </div>
-            <div class="podcast-actions">
-                <a href="{{ route('podcasts.index') }}" class="btn-view-all">Lihat Semua Podcast</a>
+        </div>
+    </section>
+
+    <!-- Sekolah Section -->
+    <section class="sekolah-section">
+        <div class="sekolah-container">
+            <h2>Sekolah yang sudah bekerjasama</h2>
+            <div class="sekolah-content">
+                <div class="sekolah-image-wrapper">
+                    <img src="{{ asset('images/Kerjasama Dengan Sekolah.png') }}" alt="Sekolah yang sudah bekerjasama"
+                        class="sekolah-cooperation-image">
+                </div>
             </div>
         </div>
     </section>
@@ -228,6 +257,292 @@
     </div>
 
     <style>
+        /* Additional Styles for Updated Design */
+
+        /* Services Section Update */
+        .service-card {
+            background: #00a8e6;
+            color: white;
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+        }
+
+        .service-card h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Private Class Cards Update */
+        .private-card-image {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .private-card-image img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        /* E-Course Cards Update */
+        .ecourse-card {
+            display: block;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .ecourse-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .ecourse-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Komunitas & Club Section Update */
+        .komunitas-club {
+            padding: 80px 5%;
+            background: #ffffff;
+        }
+
+        .komunitas-club-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .komunitas-club h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .komunitas-club p {
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: justify;
+        }
+
+        .komunitas-club-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .komunitas-club-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .komunitas-club-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .club-image-wrapper {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .club-image-wrapper:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            border-color: #ffc107;
+        }
+
+        .club-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .btn-club-daftar {
+            background: #ffc107;
+            color: #2c3e50;
+            padding: 0.8rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+            text-transform: capitalize;
+        }
+
+        .btn-club-daftar:hover {
+            background: #ffb300;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+        }
+
+        /* Bootcamp & Workshop Section */
+        .bootcamp-workshop {
+            padding: 80px 5%;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .bootcamp-workshop-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .bootcamp-workshop h2 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .bootcamp-workshop>.bootcamp-workshop-container>p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            text-align: justify;
+        }
+
+        .bootcamp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .bootcamp-card {
+            display: block;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .bootcamp-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .bootcamp-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Responsive Design for Bootcamp */
+        @media (max-width: 1024px) {
+            .bootcamp-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bootcamp-workshop {
+                padding: 60px 5%;
+            }
+
+            .bootcamp-workshop h2 {
+                font-size: 2rem;
+            }
+
+            .bootcamp-workshop>.bootcamp-workshop-container>p {
+                font-size: 1rem;
+            }
+
+            .bootcamp-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Sekolah Section */
+        .sekolah-section {
+            padding: 80px 5%;
+            background: #f8f9fa;
+        }
+
+        .sekolah-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .sekolah-section h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        .sekolah-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sekolah-image-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .sekolah-image-wrapper:hover {
+            transform: translateY(-5px);
+        }
+
+        .sekolah-cooperation-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
         /* YouTube Modal Styles */
         .youtube-modal {
             display: none;
@@ -237,7 +552,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
+            background-color: rgba(0, 0, 0, 0.9);
         }
 
         .modal-content {
@@ -257,7 +572,7 @@
             font-weight: bold;
             cursor: pointer;
             z-index: 1001;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -268,7 +583,7 @@
         }
 
         .close-modal:hover {
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
         }
 
         .video-container {
@@ -276,7 +591,7 @@
             height: 100%;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .video-container iframe {
@@ -307,18 +622,23 @@
         }
 
         /* Responsive embedded podcast iframe */
-        .video-embed-wrapper{
-            position:relative;
-            width:100%;
-            padding-bottom:56.25%; /* 16:9 */
-            background:#000;
-            border-radius:8px;
-            overflow:hidden;
+        .video-embed-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            /* 16:9 */
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .video-embed-wrapper .embedded-podcast{
-            position:absolute;
-            top:0;left:0;width:100%;height:100%;border:0;
+        .video-embed-wrapper .embedded-podcast {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
 
         .podcast-item .play-button:hover {
@@ -364,6 +684,25 @@
                 border-bottom: 11px solid transparent;
                 margin-left: 4px;
             }
+
+            .sekolah-section h2 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .sekolah-image-wrapper {
+                max-width: 100%;
+                margin: 0 1rem;
+            }
+
+            .komunitas-club h2 {
+                font-size: 2rem;
+            }
+
+            .komunitas-club p {
+                text-align: left;
+                font-size: 0.95rem;
+            }
         }
     </style>
 
@@ -386,7 +725,8 @@
 
                 if (youtubeId) {
                     // Set video source with autoplay
-                    player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+                    player.src =
+                        `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
                     modal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
                 }

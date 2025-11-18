@@ -31,13 +31,9 @@ Route::get('/ecourse/komik', [EcourseController::class, 'komik'])->name('course.
 Route::redirect('/ecourse-komik', '/ecourse/komik');
 
 // E-Course: Film & Konten Kreator
-Route::get('/course-film-konten-kreator', [EcourseController::class, 'film'])->name('course.film_konten_kreator');
-Route::get('/ecourse/film', [EcourseController::class, 'film']);
-Route::get('/ecourse/film-konten-kreator', [EcourseController::class, 'film']);
-
-// E-Course Detail & Cart
-Route::get('/ecourse/{id}', [EcourseController::class, 'show'])->name('ecourse.show');
-Route::post('/ecourse/{id}/add-to-cart', [EcourseController::class, 'addToCart'])->name('ecourse.addToCart')->middleware('auth');
+Route::get('/course-film-konten-kreator', [EcourseController::class, 'filmKontenKreator'])->name('course.film_konten_kreator');
+Route::redirect('/ecourse/film', '/course-film-konten-kreator');
+Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
 
 Route::get('/event', function () {
     return view('event');

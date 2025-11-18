@@ -18,11 +18,13 @@
             <div class="event-grid">
                 <div class="event-category">
                     <div class="event-icon">
-                        <span class="event-emoji">🏆</span>
+                        <img src="{{ asset('images/Event LHEC.png') }}" alt="LHEC 2025"
+                            style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
                     </div>
                     <h3>LHEC IV 2025</h3>
-                    <p>Kompetisi robotik tingkat nasional yang menantang kreativitas dan inovasi anak-anak Indonesia</p>
-                    <a href="/event/lhec-2025" class="btn-event">Lihat Detail</a>
+                    <p>Latih Hobi Expo & Competition 2025. Kompetisi robotik, komik, panahan, foto & video tingkat nasional.
+                        25-27 Desember 2025.</p>
+                    <a href="/lhec2025" class="btn-event">Lihat Detail</a>
                 </div>
                 <div class="event-category">
                     <div class="event-icon">
@@ -30,15 +32,16 @@
                     </div>
                     <h3>WORKSHOP & BOOTCAMP</h3>
                     <p>Program intensif untuk mengembangkan keterampilan dalam berbagai bidang teknologi dan kreativitas</p>
-                    <a href="/event/workshop" class="btn-event">Lihat Detail</a>
+                    <a href="#workshop" class="btn-event">Lihat Detail</a>
                 </div>
                 <div class="event-category">
                     <div class="event-icon">
                         <span class="event-emoji">🎉</span>
                     </div>
                     <h3>HOLIDAY FUN CLASS</h3>
-                    <p>Kelas seru selama liburan sekolah untuk mengisi waktu dengan kegiatan yang bermanfaat dan menyenangkan</p>
-                    <a href="/event/holiday" class="btn-event">Lihat Detail</a>
+                    <p>Kelas seru selama liburan sekolah untuk mengisi waktu dengan kegiatan yang bermanfaat dan
+                        menyenangkan</p>
+                    <a href="#holiday" class="btn-event">Lihat Detail</a>
                 </div>
             </div>
         </div>
@@ -51,34 +54,37 @@
             <div class="events-timeline">
                 <div class="event-item">
                     <div class="event-date">
-                        <span class="month">MAR</span>
-                        <span class="day">15</span>
+                        <span class="month">DES</span>
+                        <span class="day">20</span>
                     </div>
                     <div class="event-details">
-                        <h4>LHEC IV 2025 - Pendaftaran Dibuka</h4>
-                        <p>Pendaftaran kompetisi robotik tingkat nasional sudah dibuka. Segera daftarkan tim Anda!</p>
+                        <h4>LHEC IV 2025 - Batas Akhir Pendaftaran</h4>
+                        <p>Pendaftaran kompetisi robotik, komik, panahan, foto & video tingkat nasional akan segera ditutup.
+                            Jangan sampai terlewat!</p>
                         <span class="event-status">Pendaftaran Dibuka</span>
                     </div>
                 </div>
                 <div class="event-item">
                     <div class="event-date">
-                        <span class="month">APR</span>
-                        <span class="day">20</span>
+                        <span class="month">DES</span>
+                        <span class="day">22</span>
                     </div>
                     <div class="event-details">
-                        <h4>Workshop Robotik untuk Pemula</h4>
-                        <p>Workshop intensif 2 hari untuk mempelajari dasar-dasar robotik dan pemrograman.</p>
+                        <h4>Technical Meeting LHEC IV 2025</h4>
+                        <p>Briefing teknis untuk semua peserta LHEC IV 2025. Wajib dihadiri oleh semua tim yang telah
+                            terdaftar.</p>
                         <span class="event-status">Coming Soon</span>
                     </div>
                 </div>
                 <div class="event-item">
                     <div class="event-date">
-                        <span class="month">JUN</span>
-                        <span class="day">10</span>
+                        <span class="month">DES</span>
+                        <span class="day">25</span>
                     </div>
                     <div class="event-details">
-                        <h4>Holiday Fun Class - Summer Edition</h4>
-                        <p>Berbagai kelas seru selama liburan musim panas dengan tema teknologi dan kreativitas.</p>
+                        <h4>LHEC IV 2025 - Hari Kompetisi</h4>
+                        <p>Kompetisi utama LHEC IV 2025 dimulai! Robotik, komik, panahan, dan foto & video. HTM: 150-250K.
+                        </p>
                         <span class="event-status">Coming Soon</span>
                     </div>
                 </div>
@@ -86,5 +92,4 @@
         </div>
     </section>
 
-    @endsection
-
+@endsection
