@@ -46,6 +46,53 @@
                     <p style="color:#7f1d1d;font-size:24px;font-weight:700;margin:0;">{{ \App\Models\EcourseEnrollment::count() }}</p>
                 </div>
             </div>
+            
+            <!-- Quick Actions -->
+            <div style="margin-top:24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                <a href="{{ route('admin.ecourses.create') }}" style="background:#2563eb;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;">
+                    + Tambah E-course
+                </a>
+                <a href="{{ route('admin.ecourses.index') }}" style="background:#6b7280;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;">
+                    Kelola E-course
+                </a>
+            </div>
+
+            <!-- Recent E-courses (quick manage) -->
+            <div style="margin-top:28px;background:#fff;border-radius:12px;padding:18px;border:1px solid #eef2ff;">
+                <h3 style="margin:0 0 12px 0;font-size:1rem;font-weight:700;color:#111827;">E-course Terbaru</h3>
+                @php $latest = \App\Models\Ecourse::orderBy('created_at','desc')->take(5)->get(); @endphp
+                @if($latest->isEmpty())
+                    <p style="color:#6b7280;margin:0;">Belum ada e-course.</p>
+                @else
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr style="text-align:left;border-bottom:1px solid #eef2ff;">
+                                <th style="padding:10px 8px;font-weight:600;color:#374151;">Judul</th>
+                                <th style="padding:10px 8px;font-weight:600;color:#374151;">Harga</th>
+                                <th style="padding:10px 8px;font-weight:600;color:#374151;">Tanggal</th>
+                                <th style="padding:10px 8px;font-weight:600;color:#374151;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($latest as $ec)
+                                <tr style="border-bottom:1px solid #f8fafc;">
+                                    <td style="padding:10px 8px;">{{ $ec->name }}</td>
+                                    <td style="padding:10px 8px;">Rp {{ number_format($ec->price,0,',','.') }}</td>
+                                    <td style="padding:10px 8px;">{{ $ec->created_at->format('Y-m-d') }}</td>
+                                    <td style="padding:10px 8px;">
+                                        <a href="{{ route('admin.ecourses.edit', $ec) }}" style="background:#f59e0b;color:white;padding:6px 10px;border-radius:6px;text-decoration:none;margin-right:8px;">Edit</a>
+                                        <form method="POST" action="{{ route('admin.ecourses.destroy', $ec) }}" style="display:inline-block;margin:0;" onsubmit="return confirm('Hapus e-course {{ addslashes($ec->name) }}?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" style="background:#ef4444;color:white;padding:6px 10px;border-radius:6px;border:none;cursor:pointer;">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+            </div>
         </div>
     </main>
 </div>
