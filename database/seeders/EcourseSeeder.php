@@ -24,29 +24,19 @@ class EcourseSeeder extends Seeder
         }
 
         $courses = [
-            // Robotik Courses - sesuai gambar dengan asset yang benar
+            // Robotik Courses - urutan Level 1-5 sesuai dengan keterangan di gambar
             [
                 'id_category' => $robotikCategory->id_category,
                 'name' => 'Robot Arthuro',
                 'course_by' => 'Latih Hobi in Robotik',
                 'price' => 280000,
-                'original_price' => 300000,
                 'image_url' => 'THUMBNAIL E COURSE ATHUTO.svg',
-            ],
-            [
-                'id_category' => $robotikCategory->id_category,
-                'name' => 'Robot Hemiptera',
-                'course_by' => 'Latih Hobi in Robotik',
-                'price' => 289000,
-                'original_price' => 300000,
-                'image_url' => 'THUMBNAIL E COURSE HEMIPTERA.svg',
             ],
             [
                 'id_category' => $robotikCategory->id_category,
                 'name' => 'Robot Robofan',
                 'course_by' => 'Latih Hobi in Robotik',
                 'price' => 339000,
-                'original_price' => 350000,
                 'image_url' => 'THUMBNAIL E COURSE ROBOFAN.svg',
             ],
             [
@@ -54,32 +44,28 @@ class EcourseSeeder extends Seeder
                 'name' => 'Robot Robodust',
                 'course_by' => 'Latih Hobi in Robotik',
                 'price' => 480000,
-                'original_price' => 500000,
                 'image_url' => 'THUMBNAIL E COURSE ROBODUST.svg',
+            ],
+            [
+                'id_category' => $robotikCategory->id_category,
+                'name' => 'Robot Hemiptera',
+                'course_by' => 'Latih Hobi in Robotik',
+                'price' => 289000,
+                'image_url' => 'THUMBNAIL E COURSE HEMIPTERA.svg',
             ],
             [
                 'id_category' => $robotikCategory->id_category,
                 'name' => 'Robot Avoider',
                 'course_by' => 'Latih Hobi in Robotik',
                 'price' => 289000,
-                'original_price' => 300000,
                 'image_url' => 'THUMBNAIL E COURSE AVOIDER.svg',
             ],
-            [
-                'id_category' => $robotikCategory->id_category,
-                'name' => 'Robot Soccer Bot',
-                'course_by' => 'Latih Hobi in Robotik',
-                'price' => 580000,
-                'original_price' => 600000,
-                'image_url' => 'THUMBNAIL E COURSE ATHUTO.svg', // Using ATHUTO as placeholder for Soccer Bot
-            ],
-            // Komik Courses - hanya yang memiliki asset gambar
+            // Komik Courses
             [
                 'id_category' => $komikCategory->id_category,
                 'name' => 'Kelas Komik Level 1',
                 'course_by' => 'Latih Hobi in Komik',
                 'price' => 269000,
-                'original_price' => 300000,
                 'image_url' => 'KOMIK 1.svg',
             ],
             [
@@ -87,7 +73,6 @@ class EcourseSeeder extends Seeder
                 'name' => 'Kelas Komik Level 2',
                 'course_by' => 'Latih Hobi in Komik',
                 'price' => 269000,
-                'original_price' => 300000,
                 'image_url' => 'KOMIK 2.svg',
             ],
             [
@@ -95,7 +80,6 @@ class EcourseSeeder extends Seeder
                 'name' => 'Kelas Komik Level 3',
                 'course_by' => 'Latih Hobi in Komik',
                 'price' => 269000,
-                'original_price' => 350000,
                 'image_url' => 'KOMIK 3.svg',
             ],
             [
@@ -103,16 +87,14 @@ class EcourseSeeder extends Seeder
                 'name' => 'Kelas Komik Level 4',
                 'course_by' => 'Latih Hobi in Komik',
                 'price' => 269000,
-                'original_price' => 500000,
                 'image_url' => 'KOMIK 4.svg',
             ],
-            // Film Courses - sesuai dengan gambar dan asset yang tersedia
+            // Film Courses
             [
                 'id_category' => $filmCategory->id_category,
                 'name' => 'Kelas Film dan Konten Kreator Level 1',
                 'course_by' => 'Latih Hobi in FKK',
                 'price' => 269000,
-                'original_price' => 300000,
                 'image_url' => 'FILM 1.svg',
             ],
             [
@@ -120,7 +102,6 @@ class EcourseSeeder extends Seeder
                 'name' => 'Kelas Film dan Konten Kreator Level 2',
                 'course_by' => 'Latih Hobi in FKK',
                 'price' => 269000,
-                'original_price' => 300000,
                 'image_url' => 'FILM 2.svg',
             ],
             [
@@ -128,7 +109,6 @@ class EcourseSeeder extends Seeder
                 'name' => 'Kelas Film dan Konten Kreator Level 3',
                 'course_by' => 'Latih Hobi in FKK',
                 'price' => 269000,
-                'original_price' => 350000,
                 'image_url' => 'FILM 3.svg',
             ],
             [
@@ -136,7 +116,6 @@ class EcourseSeeder extends Seeder
                 'name' => 'Kelas Film dan Konten Kreator Level 4',
                 'course_by' => 'Latih Hobi in FKK',
                 'price' => 269000,
-                'original_price' => 500000,
                 'image_url' => 'FILM 4.svg',
             ],
             [
@@ -144,7 +123,6 @@ class EcourseSeeder extends Seeder
                 'name' => 'Kelas Film dan Konten Kreator Level 5',
                 'course_by' => 'Latih Hobi in FKK',
                 'price' => 269000,
-                'original_price' => 300000,
                 'image_url' => 'FILM 5.svg',
             ],
         ];

@@ -52,7 +52,7 @@ class CouponController extends Controller
         return response()->json(['coupon' => $coupon]);
     }
 
-    public function validate(Request $request)
+    public function validateCoupon(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'code' => 'required|string',

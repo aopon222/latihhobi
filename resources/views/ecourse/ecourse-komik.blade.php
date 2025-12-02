@@ -29,43 +29,49 @@
 
         .courses-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            justify-items: center;
         }
 
         .komik-card {
-            width: 380px;
             background: white;
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
             position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .komik-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
         }
 
         .komik-image {
             width: 100%;
-            height: 280px;
+            height: 260px;
             background: #2c3e50;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .komik-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            background: #2c3e50;
         }
 
         .komik-info {
-            padding: 25px;
-            text-align: left;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .komik-title {

@@ -29,99 +29,79 @@
 
         .courses-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            justify-items: center;
         }
 
         .robot-card {
-            width: 380px;
             background: white;
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
             position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .robot-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
         }
 
-        .robot-image {
+        .robot-image-wrapper {
             width: 100%;
-            height: 280px;
+            height: 260px;
             background: #2c3e50;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
-        .robot-image img {
+        .robot-image-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
         .robot-info {
-            padding: 25px;
-            text-align: left;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .robot-title {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: #2c3e50;
             margin-bottom: 8px;
-            line-height: 1.3;
         }
 
         .robot-instructor {
             color: #7f8c8d;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
         }
 
         .price-section {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            align-items: baseline;
+            gap: 10px;
         }
 
         .current-price {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: #27ae60;
         }
 
         .original-price {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             color: #95a5a6;
             text-decoration: line-through;
-            font-weight: 500;
-        }
-
-        /* Specific robot styling */
-        .robot-card:nth-child(1) .robot-image {
-            border-top: 4px solid #3498db;
-        }
-
-        .robot-card:nth-child(2) .robot-image {
-            border-top: 4px solid #e74c3c;
-        }
-
-        .robot-card:nth-child(3) .robot-image {
-            border-top: 4px solid #f39c12;
-        }
-
-        .robot-card:nth-child(4) .robot-image {
-            border-top: 4px solid #9b59b6;
-        }
-
-        .robot-card:nth-child(5) .robot-image {
-            border-top: 4px solid #1abc9c;
         }
 
         .no-courses {
@@ -144,12 +124,6 @@
             .courses-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
-                padding: 0 10px;
-            }
-
-            .robot-card {
-                width: 100%;
-                max-width: 380px;
             }
         }
     </style>
@@ -160,29 +134,49 @@
         </div>
 
         <div class="courses-container">
+            @if (session('success'))
+                <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('info'))
+                <div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #bee5eb;">
+                    {{ session('info') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #f5c6cb;">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             @if ($robotikCourses->count() > 0)
                 <div class="courses-grid">
-                    @foreach ($robotikCourses as $index => $course)
+                    @foreach ($robotikCourses as $course)
                         <div class="robot-card">
-                            <div class="robot-image">
-                                @if ($course->image_url)
-                                    <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}">
-                                @else
-                                    <img src="{{ asset('images/robotik.svg') }}" alt="{{ $course->name }}">
-                                @endif
+                            <div class="robot-image-wrapper">
+                                <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}">
                             </div>
                             <div class="robot-info">
                                 <h3 class="robot-title">{{ $course->name }}</h3>
                                 @if ($course->course_by)
-                                    <p class="robot-instructor">By {{ $course->course_by }}</p>
+                                    <p class="robot-instructor">{{ $course->course_by }}</p>
                                 @endif
 
                                 <div class="price-section">
                                     <span class="current-price">Rp{{ number_format($course->price, 0, ',', '.') }}</span>
-                                    @if ($course->original_price)
-                                        <span
-                                            class="original-price">Rp{{ number_format($course->original_price, 0, ',', '.') }}</span>
-                                    @endif
+                                </div>
+
+                                <div class="button-group" style="display: flex; gap: 10px; margin-top: auto;">
+                                    <a href="{{ route('ecourse.show', $course->id_course) }}" class="btn-detail" style="flex: 1; background: #007bff; color: white; text-decoration: none; padding: 10px; border-radius: 6px; text-align: center; font-weight: 500; transition: background 0.3s;">
+                                        Lihat Detail
+                                    </a>
+                                    <form action="{{ route('ecourse.addToCart', $course->id_course) }}" method="POST" style="flex: 1;">
+                                        @csrf
+                                        <button type="submit" class="btn-cart" style="width: 100%; background: #28a745; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 500; cursor: pointer; transition: background 0.3s;">
+                                            Tambah ke Keranjang
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -198,3 +192,13 @@
         </div>
     </section>
 @endsection
+
+<style>
+.btn-detail:hover {
+    background: #0056b3 !important;
+}
+
+.btn-cart:hover {
+    background: #218838 !important;
+}
+</style>

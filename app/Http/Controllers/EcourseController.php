@@ -24,9 +24,9 @@ class EcourseController extends Controller
             ->orWhere('name', 'LIKE', '%Robotik%')
             ->first();
 
-        // Ambil courses robotik
+        // Ambil courses robotik - urutkan berdasarkan id_course (sesuai urutan seeding)
         $robotikCourses = $category
-            ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('price', 'asc')->get()
+            ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('id_course', 'asc')->get()
             : collect();
 
         return view('ecourse.ecourse-robotik', compact('robotikCourses'));
@@ -61,5 +61,56 @@ class EcourseController extends Controller
             : collect();
 
         return view('ecourse.ecourse-film-konten-kreator', compact('filmCourses'));
+    }
+
+    public function show($id)
+    {
+        /**
+         * Show detail course
+         */
+        $course = Ecourse::findOrFail($id);
+        return view('ecourse.show', compact('course'));
+    }
+
+    public function addToCart($id)
+    {
+        /**
+         * Add course to cart
+         */
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu');
+        }
+
+        $course = Ecourse::findOrFail($id);
+        $user = auth()->user();
+
+        // Ambil atau buat cart user (gunakan id dari model User)
+        $cart = \App\Models\Cart::firstOrCreate([
+            'id_user' => $user->id,
+        ]);
+
+        // Cek apakah course sudah ada di cart
+        $cartItem = \App\Models\CartItem::where('id_cart', $cart->id_cart)
+            ->where('id_course', $id)
+            ->first();
+
+        if ($cartItem) {
+            return redirect()->back()->with('info', 'Course sudah ada di keranjang');
+        }
+
+        // Tambah ke cart — sertakan harga dan subtotal agar insert tidak gagal (kolom NOT NULL)
+        $quantity = 1;
+        $price = $course->price;
+        $subTotal = $price * $quantity;
+
+        \App\Models\CartItem::create([
+            'id_cart' => $cart->id_cart,
+            'id_course' => $id,
+            'quantity' => $quantity,
+            'price' => $price,
+            'sub_total' => $subTotal,
+        ]);
+
+        return redirect()->back()->with('success', 'Course berhasil ditambahkan ke keranjang');
     }
 }

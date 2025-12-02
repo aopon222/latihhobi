@@ -23,17 +23,23 @@ Route::get('/ekskul-reguler', function () {
 
 // E-Course Routes - Menggunakan Controller (Best Practice)
 Route::get('/ecourse', [EcourseController::class, 'index'])->name('ecourse.index');
-Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
-Route::redirect('/ecourse-robotik', '/ecourse/robotik');
 
-// E-Course: Komik
+// E-Course: Komik (sebelum wildcard agar tidak tertangkap oleh {id})
 Route::get('/ecourse/komik', [EcourseController::class, 'komik'])->name('course.komik');
 Route::redirect('/ecourse-komik', '/ecourse/komik');
 
-// E-Course: Film & Konten Kreator
+// E-Course: Film & Konten Kreator (sebelum wildcard)
 Route::get('/course-film-konten-kreator', [EcourseController::class, 'filmKontenKreator'])->name('course.film_konten_kreator');
 Route::redirect('/ecourse/film', '/course-film-konten-kreator');
 Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
+
+// E-Course: Robotik (sebelum wildcard)
+Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
+Route::redirect('/ecourse-robotik', '/ecourse/robotik');
+
+// E-Course: Detail dan Cart (wildcard terakhir)
+Route::get('/ecourse/{id}', [EcourseController::class, 'show'])->name('ecourse.show');
+Route::post('/ecourse/{id}/add-to-cart', [EcourseController::class, 'addToCart'])->name('ecourse.addToCart')->middleware('auth');
 
 Route::get('/event', function () {
     return view('event');
