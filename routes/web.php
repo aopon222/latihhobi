@@ -41,6 +41,9 @@ Route::redirect('/ecourse-robotik', '/ecourse/robotik');
 Route::get('/ecourse/{id}', [EcourseController::class, 'show'])->name('ecourse.show');
 Route::post('/ecourse/{id}/add-to-cart', [EcourseController::class, 'addToCart'])->name('ecourse.addToCart')->middleware('auth');
 
+// Web cart page (show items)
+Route::get('/cart', [App\Http\Controllers\WebCartController::class, 'index'])->name('cart.index')->middleware('auth');
+
 Route::get('/event', function () {
     return view('event');
 });

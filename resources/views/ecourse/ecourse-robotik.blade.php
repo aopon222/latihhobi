@@ -136,17 +136,17 @@
         <div class="courses-container">
             @if (session('success'))
                 <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
-                    {{ session('success') }}
+                    {!! session('success') !!}
                 </div>
             @endif
             @if (session('info'))
                 <div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #bee5eb;">
-                    {{ session('info') }}
+                    {!! session('info') !!}
                 </div>
             @endif
             @if (session('error'))
                 <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #f5c6cb;">
-                    {{ session('error') }}
+                    {!! session('error') !!}
                 </div>
             @endif
 

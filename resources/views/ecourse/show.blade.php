@@ -106,21 +106,27 @@
 
 <!-- Success/Error Messages -->
 @if(session('success'))
-<script>
-    alert('{{ session("success") }}');
-</script>
+    <div style="position:fixed;top:20px;right:20px;z-index:9999;">
+        <div style="background:#d4edda;color:#155724;padding:12px 18px;border-radius:8px;border:1px solid #c3e6cb;">
+            {!! session('success') !!}
+        </div>
+    </div>
 @endif
 
 @if(session('info'))
-<script>
-    alert('{{ session("info") }}');
-</script>
+    <div style="position:fixed;top:20px;right:20px;z-index:9999;">
+        <div style="background:#d1ecf1;color:#0c5460;padding:12px 18px;border-radius:8px;border:1px solid #bee5eb;">
+            {!! session('info') !!}
+        </div>
+    </div>
 @endif
 
 @if(session('error'))
-<script>
-    alert('{{ session("error") }}');
-</script>
+    <div style="position:fixed;top:20px;right:20px;z-index:9999;">
+        <div style="background:#f8d7da;color:#721c24;padding:12px 18px;border-radius:8px;border:1px solid #f5c6cb;">
+            {!! session('error') !!}
+        </div>
+    </div>
 @endif
 
 @endsection

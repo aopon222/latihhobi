@@ -111,6 +111,7 @@ class EcourseController extends Controller
             'sub_total' => $subTotal,
         ]);
 
-        return redirect()->back()->with('success', 'Course berhasil ditambahkan ke keranjang');
+        $message = 'Course berhasil ditambahkan ke keranjang. <a href="' . route('cart.index') . '">Lihat Keranjang</a>';
+        return redirect()->back()->with('success', $message);
     }
 }

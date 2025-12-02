@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Ecourse;
 
 class CartItem extends Model
 {
@@ -30,6 +31,6 @@ class CartItem extends Model
 
     public function course()
     {
-        return $this->belongsTo(CourseCard::class, 'id_course', 'id_course');
+        return $this->belongsTo(Ecourse::class, 'id_course', 'id_course');
     }
 }
