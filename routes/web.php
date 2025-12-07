@@ -43,6 +43,7 @@ Route::post('/ecourse/{id}/add-to-cart', [EcourseController::class, 'addToCart']
 
 // Web cart page (show items)
 Route::get('/cart', [App\Http\Controllers\WebCartController::class, 'index'])->name('cart.index')->middleware('auth');
+Route::get('/cart-data', [App\Http\Controllers\WebCartController::class, 'getCartData'])->name('cart.data');
 
 Route::get('/event', function () {
     return view('event');

@@ -54,8 +54,8 @@
             <a href="#" class="user-icon"><i class="fas fa-search" style="color:#ffc107;font-size:1.5rem;"></i></a>
             <a href="#" class="user-icon"><i class="fas fa-bell" style="color:#ffc107;font-size:1.5rem;"></i></a>
             <a href="#" class="user-icon" style="position:relative;">
-                <i class="fas fa-shopping-cart" style="color:#ffc107;font-size:1.5rem;"></i>
-                <span style="position:absolute;top:-8px;right:-8px;background:#1e293b;color:#fff;font-size:0.8rem;padding:2px 7px;border-radius:50%;font-weight:700;">1</span>
+                <i class="fas fa-shopping-cart" id="cart-icon" style="color:#ffc107;font-size:1.5rem;cursor:pointer;"></i>
+                <span id="cart-count" style="position:absolute;top:-8px;right:-8px;background:#1e293b;color:#fff;font-size:0.8rem;padding:2px 7px;border-radius:50%;font-weight:700;display:none;">0</span>
             </a>
             @php
                 $hasLoginRoute = \Illuminate\Support\Facades\Route::has('login');
@@ -136,6 +136,88 @@
 
                             triggers.forEach(t => t.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }));
                             document.addEventListener('click', (e) => { if(menuEl && !menuEl.contains(e.target)) menuEl.style.display='none'; });
+                        })();
+
+                        // Cart dropdown functionality
+                        (function(){
+                            const cartIcon = document.getElementById('cart-icon');
+                            const cartCount = document.getElementById('cart-count');
+                            let cartDropdown = null;
+
+                            function createCartDropdown(){
+                                if(cartDropdown) return cartDropdown;
+                                cartDropdown = document.createElement('div');
+                                Object.assign(cartDropdown.style, {
+                                    position: 'fixed',
+                                    right: '16px',
+                                    top: '64px',
+                                    background: '#fff',
+                                    borderRadius: '8px',
+                                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                                    padding: '12px',
+                                    minWidth: '300px',
+                                    maxWidth: '400px',
+                                    maxHeight: '400px',
+                                    overflowY: 'auto',
+                                    zIndex: 2147483646,
+                                    display: 'none'
+                                });
+                                document.body.appendChild(cartDropdown);
+                                return cartDropdown;
+                            }
+
+                            function loadCartData(){
+                                fetch('{{ route('cart.data') }}')
+                                    .then(r => r.json())
+                                    .then(data => {
+                                        const dropdown = createCartDropdown();
+                                        dropdown.innerHTML = '';
+
+                                        if(cartCount) {
+                                            if(data.count > 0) {
+                                                cartCount.textContent = data.count;
+                                                cartCount.style.display = 'block';
+                                            } else {
+                                                cartCount.style.display = 'none';
+                                            }
+                                        }
+
+                                        if(data.items.length === 0){
+                                            dropdown.innerHTML = '<p style="padding:10px;color:#6b7280;">Keranjang kosong</p>';
+                                        } else {
+                                            let html = '<div style="font-weight:700;margin-bottom:8px;">Keranjang ('+data.count+')</div>';
+                                            data.items.forEach(item => {
+                                                html += `<div style="padding:8px;border-bottom:1px solid #f3f4f6;">
+                                                    <div style="font-weight:600;color:#111827;">${item.name}</div>
+                                                    <div style="font-size:0.85rem;color:#6b7280;">Qty: ${item.quantity} × Rp ${Math.round(item.price).toLocaleString('id-ID')}</div>
+                                                    <div style="font-weight:600;color:#2563eb;">Rp ${Math.round(item.subtotal).toLocaleString('id-ID')}</div>
+                                                </div>`;
+                                            });
+                                            html += '<div style="padding:8px;font-weight:700;border-top:2px solid #e5e7eb;">Total: Rp '+Math.round(data.total).toLocaleString('id-ID')+'</div>';
+                                            html += '<div style="padding:8px;text-align:center;"><a href="{{ route('cart.index') }}" style="background:#2563eb;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;display:inline-block;">Lihat Keranjang</a></div>';
+                                            dropdown.innerHTML = html;
+                                        }
+                                    })
+                                    .catch(e => console.error('Error loading cart:', e));
+                            }
+
+                            if(cartIcon){
+                                cartIcon.addEventListener('click', (e) => {
+                                    e.preventDefault();
+                                    const d = createCartDropdown();
+                                    d.style.display = d.style.display === 'block' ? 'none' : 'block';
+                                    if(d.style.display === 'block') loadCartData();
+                                });
+                            }
+
+                            document.addEventListener('click', (e) => {
+                                if(cartDropdown && !cartDropdown.contains(e.target) && e.target !== cartIcon) {
+                                    cartDropdown.style.display = 'none';
+                                }
+                            });
+
+                            // Load cart count on page load
+                            loadCartData();
                         })();
                     </script>
             @else

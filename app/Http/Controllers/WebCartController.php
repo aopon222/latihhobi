@@ -28,4 +28,36 @@ class WebCartController extends Controller
 
         return view('cart.index', compact('cartItems', 'total'));
     }
+
+    public function getCartData()
+    {
+        if (!Auth::check()) {
+            return response()->json(['items' => [], 'total' => 0, 'count' => 0]);
+        }
+
+        $cart = Cart::with(['items.course'])->where('id_user', Auth::id())->first();
+        $items = $cart ? $cart->items : collect();
+
+        $total = $items->sum(function ($it) {
+            return $it->quantity * $it->price;
+        });
+
+        $count = $items->sum('quantity');
+
+        $formattedItems = $items->map(function ($item) {
+            return [
+                'id' => $item->id_cart_items,
+                'name' => $item->course ? $item->course->name : 'Product',
+                'quantity' => $item->quantity,
+                'price' => (float)$item->price,
+                'subtotal' => $item->quantity * $item->price,
+            ];
+        });
+
+        return response()->json([
+            'items' => $formattedItems,
+            'total' => (float)$total,
+            'count' => $count,
+        ]);
+    }
 }
