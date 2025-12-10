@@ -113,16 +113,7 @@ class EcourseController extends Controller
     {
         $validated = $request->validated();
 
-        // Generate slug
-        $validated['slug'] = Str::slug($validated['title']);
-        
-        // Pastikan slug unique
-        $originalSlug = $validated['slug'];
-        $counter = 1;
-        while (Ecourse::where('slug', $validated['slug'])->exists()) {
-            $validated['slug'] = $originalSlug . '-' . $counter;
-            $counter++;
-        }
+        // Note: slug column doesn't exist in course table, removing slug logic
 
         // Handle file uploads
         if ($request->hasFile('image')) {
@@ -197,18 +188,7 @@ class EcourseController extends Controller
     {
         $validated = $request->validated();
 
-        // Update slug jika title berubah
-        if ($validated['title'] !== $ecourse->title) {
-            $baseSlug = Str::slug($validated['title']);
-            $validated['slug'] = $baseSlug;
-            
-            // Pastikan slug unique (kecuali untuk ecourse yang sedang diedit)
-            $counter = 1;
-            while (Ecourse::where('slug', $validated['slug'])->where('id', '!=', $ecourse->id)->exists()) {
-                $validated['slug'] = $baseSlug . '-' . $counter;
-                $counter++;
-            }
-        }
+        // Note: slug column doesn't exist in course table, removing slug logic
 
         // Handle file uploads
         if ($request->hasFile('image')) {
