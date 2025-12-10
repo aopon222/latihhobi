@@ -102,142 +102,185 @@
 
 @push('scripts')
 <script>
-$(document).ready(function() {
+// Vanilla JS cart functionality (no jQuery dependency)
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     // Quantity change handlers
-    $('.quantity-btn').on('click', function() {
-        const action = $(this).data('action');
-        const cartId = $(this).data('cart-id');
-        const input = $(`.quantity-input[data-cart-id="${cartId}"]`);
-        let quantity = parseInt(input.val());
-        
-        if (action === 'increase') {
-            quantity = Math.min(quantity + 1, 10);
-        } else {
-            quantity = Math.max(quantity - 1, 1);
-        }
-        
-        input.val(quantity);
-        updateCartItem(cartId, quantity);
+    document.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const action = this.dataset.action;
+            const cartId = this.dataset.cartId;
+            const input = document.querySelector(`.quantity-input[data-cart-id="${cartId}"]`);
+            let quantity = parseInt(input.value);
+            
+            if (action === 'increase') {
+                quantity = Math.min(quantity + 1, 10);
+            } else {
+                quantity = Math.max(quantity - 1, 1);
+            }
+            
+            input.value = quantity;
+            updateCartItem(cartId, quantity, csrfToken);
+        });
     });
 
-    $('.quantity-input').on('change', function() {
-        const cartId = $(this).data('cart-id');
-        let quantity = parseInt($(this).val());
-        quantity = Math.max(1, Math.min(quantity, 10));
-        $(this).val(quantity);
-        updateCartItem(cartId, quantity);
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', function() {
+            const cartId = this.dataset.cartId;
+            let quantity = parseInt(this.value);
+            quantity = Math.max(1, Math.min(quantity, 10));
+            this.value = quantity;
+            updateCartItem(cartId, quantity, csrfToken);
+        });
     });
 
-    // Remove item
-    $('.remove-item-btn').on('click', function() {
-        const cartId = $(this).data('cart-id');
-        removeCartItem(cartId);
+    // Remove item buttons
+    document.querySelectorAll('.remove-item-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const cartId = this.dataset.cartId;
+            removeCartItem(cartId, csrfToken);
+        });
     });
 
-    // Clear cart
-    $('#clear-cart-btn').on('click', function() {
-        if (confirm('Are you sure you want to clear your cart?')) {
-            clearCart();
-        }
-    });
+    // Clear cart button
+    const clearBtn = document.getElementById('clear-cart-btn');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to clear your cart?')) {
+                clearCart(csrfToken);
+            }
+        });
+    }
 });
 
-function updateCartItem(cartId, quantity) {
-    $.ajax({
-        url: `/cart/update/${cartId}`,
+function updateCartItem(cartId, quantity, csrfToken) {
+    const formData = new FormData();
+    formData.append('quantity', quantity);
+    formData.append('_token', csrfToken);
+
+    fetch(`/cart/update/${cartId}`, {
         method: 'PATCH',
-        data: {
-            quantity: quantity,
-            _token: '{{ csrf_token() }}'
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
         },
-        success: function(response) {
-            if (response.success) {
-                updateCartSummary(response);
-                showAlert('success', 'Cart updated successfully');
-            } else {
-                showAlert('danger', response.message);
-            }
-        },
-        error: function() {
-            showAlert('danger', 'Failed to update cart');
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            updateCartSummary(data);
+            showAlert('success', 'Cart updated successfully');
+        } else {
+            showAlert('danger', data.message || 'Failed to update cart');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showAlert('danger', 'Failed to update cart');
     });
 }
 
-function removeCartItem(cartId) {
-    $.ajax({
-        url: `/cart/remove/${cartId}`,
+function removeCartItem(cartId, csrfToken) {
+    const formData = new FormData();
+    formData.append('_token', csrfToken);
+
+    fetch(`/cart/remove/${cartId}`, {
         method: 'DELETE',
-        data: {
-            _token: '{{ csrf_token() }}'
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
         },
-        success: function(response) {
-            if (response.success) {
-                $(`[data-cart-id="${cartId}"]`).fadeOut(300, function() {
-                    $(this).remove();
-                    if ($('.card-body .row').length === 0) {
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            const itemRow = document.querySelector(`[data-cart-id="${cartId}"]`);
+            if (itemRow) {
+                itemRow.style.opacity = '0';
+                itemRow.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => {
+                    itemRow.remove();
+                    const cardBody = document.querySelector('.card-body');
+                    if (cardBody && cardBody.querySelectorAll('.row').length === 0) {
                         location.reload();
                     }
-                });
-                updateCartSummary(response);
-                $('#cart-count').text(response.cart_count);
-                showAlert('success', 'Item removed from cart');
-            } else {
-                showAlert('danger', response.message);
+                }, 300);
             }
-        },
-        error: function() {
-            showAlert('danger', 'Failed to remove item');
+            updateCartSummary(data);
+            showAlert('success', 'Item removed from cart');
+        } else {
+            showAlert('danger', data.message || 'Failed to remove item');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showAlert('danger', 'Failed to remove item');
     });
 }
 
-function clearCart() {
-    $.ajax({
-        url: '{{ route("cart.clear") }}',
+function clearCart(csrfToken) {
+    const formData = new FormData();
+    formData.append('_token', csrfToken);
+
+    fetch('/cart/clear', {
         method: 'DELETE',
-        data: {
-            _token: '{{ csrf_token() }}'
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
         },
-        success: function(response) {
-            if (response.success) {
-                location.reload();
-            } else {
-                showAlert('danger', response.message);
-            }
-        },
-        error: function() {
-            showAlert('danger', 'Failed to clear cart');
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            showAlert('danger', data.message || 'Failed to clear cart');
         }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        showAlert('danger', 'Failed to clear cart');
     });
 }
 
-function updateCartSummary(response) {
-    $('#total-items').text(response.total_items);
-    // format numbers as Indonesian Rupiah
-    try {
-        const sub = Number(response.subtotal) || 0;
-        const total = Number(response.total) || 0;
-        $('#subtotal').text('Rp ' + Math.round(sub).toLocaleString('id-ID'));
-        $('#total-amount').text('Rp ' + Math.round(total).toLocaleString('id-ID'));
-    } catch (e) {
-        $('#subtotal').text(response.subtotal);
-        $('#total-amount').text(response.total);
+function updateCartSummary(data) {
+    const totalItemsEl = document.getElementById('total-items');
+    const subtotalEl = document.getElementById('subtotal');
+    const totalEl = document.getElementById('total-amount');
+
+    if (totalItemsEl) totalItemsEl.textContent = data.total_items || 0;
+    
+    if (subtotalEl) {
+        const sub = Number(data.subtotal) || 0;
+        subtotalEl.textContent = 'Rp ' + Math.round(sub).toLocaleString('id-ID');
+    }
+    
+    if (totalEl) {
+        const total = Number(data.total) || 0;
+        totalEl.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
     }
 }
 
 function showAlert(type, message) {
-    const alertHtml = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+    const container = document.querySelector('.container');
+    if (!container) return;
+
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.setAttribute('role', 'alert');
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
     
-    $('.container').first().prepend(alertHtml);
+    container.insertBefore(alertDiv, container.firstChild);
     
-    setTimeout(function() {
-        $('.alert').alert('close');
+    setTimeout(() => {
+        alertDiv.remove();
     }, 5000);
 }
 </script>
