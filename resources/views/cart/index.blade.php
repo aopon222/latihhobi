@@ -163,42 +163,42 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateCartItem(cartId, quantity, csrfToken) {
-    const formData = new FormData();
-    formData.append('quantity', quantity);
-    formData.append('_token', csrfToken);
-
     fetch(`/cart/update/${cartId}`, {
         method: 'PATCH',
         headers: {
+            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
         },
-        body: formData
+        body: JSON.stringify({
+            quantity: quantity,
+            _token: csrfToken
+        })
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
             updateCartSummary(data);
-            showAlert('success', 'Cart updated successfully');
+            showAlert('success', 'Keranjang berhasil diperbarui');
         } else {
-            showAlert('danger', data.message || 'Failed to update cart');
+            showAlert('danger', data.message || 'Gagal memperbarui keranjang');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showAlert('danger', 'Failed to update cart');
+        showAlert('danger', 'Gagal memperbarui keranjang');
     });
 }
 
 function removeCartItem(cartId, csrfToken) {
-    const formData = new FormData();
-    formData.append('_token', csrfToken);
-
     fetch(`/cart/remove/${cartId}`, {
         method: 'DELETE',
         headers: {
+            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
         },
-        body: formData
+        body: JSON.stringify({
+            _token: csrfToken
+        })
     })
     .then(res => res.json())
     .then(data => {
@@ -216,39 +216,39 @@ function removeCartItem(cartId, csrfToken) {
                 }, 300);
             }
             updateCartSummary(data);
-            showAlert('success', 'Item removed from cart');
+            showAlert('success', 'Item berhasil dihapus dari keranjang');
         } else {
-            showAlert('danger', data.message || 'Failed to remove item');
+            showAlert('danger', data.message || 'Gagal menghapus item');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showAlert('danger', 'Failed to remove item');
+        showAlert('danger', 'Gagal menghapus item');
     });
 }
 
 function clearCart(csrfToken) {
-    const formData = new FormData();
-    formData.append('_token', csrfToken);
-
     fetch('/cart/clear', {
         method: 'DELETE',
         headers: {
+            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
         },
-        body: formData
+        body: JSON.stringify({
+            _token: csrfToken
+        })
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
             location.reload();
         } else {
-            showAlert('danger', data.message || 'Failed to clear cart');
+            showAlert('danger', data.message || 'Gagal mengosongkan keranjang');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showAlert('danger', 'Failed to clear cart');
+        showAlert('danger', 'Gagal mengosongkan keranjang');
     });
 }
 
