@@ -30,20 +30,20 @@ class EcourseController extends Controller
     {
         $query = Ecourse::query();
 
-        // Filter berdasarkan kategori
-        if ($request->filled('category')) {
-            // Support combined 'Film & Konten Kreator' filter (maps to two DB categories)
-            if ($request->category === 'film_and_konten') {
-                $query->whereIn('category', ['Film', 'Content Creation']);
-            } else {
-                $query->where('category', $request->category);
-            }
-        }
+        // Filter berdasarkan kategori - TODO: Fix - category is not a direct column, need id_category
+        // if ($request->filled('category')) {
+        //     // Support combined 'Film & Konten Kreator' filter (maps to two DB categories)
+        //     if ($request->category === 'film_and_konten') {
+        //         $query->whereIn('category', ['Film', 'Content Creation']);
+        //     } else {
+        //         $query->where('category', $request->category);
+        //     }
+        // }
 
-        // Filter berdasarkan level
-        if ($request->filled('level')) {
-            $query->where('level', $request->level);
-        }
+        // Filter berdasarkan level - TODO: Fix - level is not in course table
+        // if ($request->filled('level')) {
+        //     $query->where('level', $request->level);
+        // }
 
         // Filter berdasarkan status
         if ($request->filled('status')) {
