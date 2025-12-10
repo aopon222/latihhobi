@@ -65,10 +65,12 @@
             @auth
                 <div class="user-dropdown" style="display:flex;align-items:center;gap:12px;">
                     @if(auth()->user()->email === 'multimedia.latihhobi@gmail.com')
-                        <a href="{{ route('admin.dashboard') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
-                    @else
-                        <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+                        <a href="{{ route('admin.dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#0ea5e9;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.9rem;" title="Admin Dashboard">
+                            <i class="fas fa-tachometer-alt" style="font-size:1rem;"></i>
+                            <span>Dashboard</span>
+                        </a>
                     @endif
+                    <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
                         <span class="profile-trigger" style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;cursor:pointer;">
                             <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
                         </span>
