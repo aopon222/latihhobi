@@ -47,7 +47,8 @@ class EcourseController extends Controller
 
         // Filter berdasarkan status
         if ($request->filled('status')) {
-            $query->where('is_active', $request->status === 'active');
+            // Note: is_active column tidak ada di tabel course, skip filter ini untuk sekarang
+            // $query->where('is_active', $request->status === 'active');
         }
 
         // Search berdasarkan title

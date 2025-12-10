@@ -32,13 +32,13 @@
                 </div>
                 
                 <div style="background:#dcfce7;padding:20px;border-radius:12px;">
-                    <h3 style="color:#166534;font-size:14px;font-weight:600;margin:0 0 8px 0;">E-COURSE AKTIF</h3>
-                    <p style="color:#14532d;font-size:24px;font-weight:700;margin:0;">{{ \App\Models\Ecourse::where('is_active', true)->count() }}</p>
+                    <h3 style="color:#166534;font-size:14px;font-weight:600;margin:0 0 8px 0;">ROBOTIK COURSE</h3>
+                    <p style="color:#14532d;font-size:24px;font-weight:700;margin:0;">{{ \App\Models\Ecourse::where('category', 'Robotics')->count() }}</p>
                 </div>
                 
                 <div style="background:#fef3c7;padding:20px;border-radius:12px;">
-                    <h3 style="color:#92400e;font-size:14px;font-weight:600;margin:0 0 8px 0;">FEATURED COURSE</h3>
-                    <p style="color:#78350f;font-size:24px;font-weight:700;margin:0;">{{ \App\Models\Ecourse::where('is_featured', true)->count() }}</p>
+                    <h3 style="color:#92400e;font-size:14px;font-weight:600;margin:0 0 8px 0;">FILM & KONTEN</h3>
+                    <p style="color:#78350f;font-size:24px;font-weight:700;margin:0;">{{ \App\Models\Ecourse::whereIn('category', ['Film', 'Content Creation'])->count() }}</p>
                 </div>
                 
                 <div style="background:#fee2e2;padding:20px;border-radius:12px;">
