@@ -1943,6 +1943,20 @@
             });
         }
     </script>
+    <!-- Include jQuery for legacy scripts that rely on $ (used by cart page) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJ+Y3o2Xb2a6JbQ6YkGkK3QzK3Q5o5bY5jv4g=" crossorigin="anonymous"></script>
+    <script>
+        // Configure jQuery to send CSRF token in header for AJAX requests
+        try {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        } catch (e) {
+            console.warn('jQuery not available for ajaxSetup');
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>

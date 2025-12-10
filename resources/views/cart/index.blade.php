@@ -16,34 +16,28 @@
                 <div class="card">
                     <div class="card-body">
                         @foreach($cartItems as $item)
-                            <div class="row align-items-center border-bottom py-3" data-cart-id="{{ $item->id }}">
+                            <div class="row align-items-center border-bottom py-3" data-cart-id="{{ $item->id_cart_items }}">
                                 <div class="col-md-2">
-                                    <img src="{{ $item->course->image ?: '/placeholder.svg?height=100&width=150' }}" 
-                                         class="img-fluid rounded" alt="{{ $item->course->title }}">
+                                    <img src="{{ optional($item->course)->image_url ?: '/placeholder.svg' }}" 
+                                         class="img-fluid rounded" alt="{{ optional($item->course)->name }}">
                                 </div>
                                 <div class="col-md-5">
-                                    <h5 class="mb-1">{{ $item->course->title }}</h5>
-                                    <p class="text-muted mb-1">{{ $item->course->category }}</p>
-                                    <div class="rating">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <i class="fas fa-star {{ $i <= $item->course->rating ? 'text-warning' : 'text-muted' }}"></i>
-                                        @endfor
-                                        <small class="text-muted ms-1">({{ $item->course->total_reviews }})</small>
-                                    </div>
+                                    <h5 class="mb-1">{{ optional($item->course)->name ?? 'Product' }}</h5>
+                                    <p class="text-muted mb-1">{{ optional(optional($item->course)->category)->name ?? '' }}</p>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="input-group">
-                                        <button class="btn btn-outline-secondary btn-sm quantity-btn" data-action="decrease" data-cart-id="{{ $item->id }}">-</button>
+                                        <button class="btn btn-outline-secondary btn-sm quantity-btn" data-action="decrease" data-cart-id="{{ $item->id_cart_items }}">-</button>
                                         <input type="number" class="form-control form-control-sm text-center quantity-input" 
-                                               value="{{ $item->quantity }}" min="1" max="10" data-cart-id="{{ $item->id }}">
-                                        <button class="btn btn-outline-secondary btn-sm quantity-btn" data-action="increase" data-cart-id="{{ $item->id }}">+</button>
+                                               value="{{ $item->quantity }}" min="1" max="10" data-cart-id="{{ $item->id_cart_items }}">
+                                        <button class="btn btn-outline-secondary btn-sm quantity-btn" data-action="increase" data-cart-id="{{ $item->id_cart_items }}">+</button>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <span class="fw-bold text-primary item-price">{{ $item->course->formatted_price }}</span>
+                                    <span class="fw-bold text-primary item-price">{{ 'Rp ' . number_format($item->price, 0, ',', '.') }}</span>
                                 </div>
                                 <div class="col-md-1">
-                                    <button class="btn btn-outline-danger btn-sm remove-item-btn" data-cart-id="{{ $item->id }}">
+                                    <button class="btn btn-outline-danger btn-sm remove-item-btn" data-cart-id="{{ $item->id_cart_items }}">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -56,7 +50,7 @@
                     <button class="btn btn-outline-danger" id="clear-cart-btn">
                         <i class="fas fa-trash me-2"></i>Clear Cart
                     </button>
-                    <a href="{{ route('courses.index') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('ecourse.index') }}" class="btn btn-outline-primary">
                         <i class="fas fa-arrow-left me-2"></i>Continue Shopping
                     </a>
                 </div>
@@ -70,7 +64,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Subtotal (<span id="total-items">{{ $cartItems->sum('quantity') }}</span> items):</span>
-                            <span id="subtotal">{{ $total }}</span>
+                            <span id="subtotal">{{ 'Rp ' . number_format($total, 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span>Tax:</span>
@@ -83,10 +77,10 @@
                         <hr>
                         <div class="d-flex justify-content-between mb-3">
                             <strong>Total:</strong>
-                            <strong id="total-amount" class="text-primary">{{ $total }}</strong>
+                            <strong id="total-amount" class="text-primary">{{ 'Rp ' . number_format($total, 0, ',', '.') }}</strong>
                         </div>
                         
-                        <a href="{{ route('checkout.index') }}" class="btn btn-primary btn-lg w-100">
+                        <a href="{{ url('/checkout') }}" class="btn btn-primary btn-lg w-100">
                             <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
                         </a>
                     </div>
@@ -98,7 +92,7 @@
             <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
             <h3>Your cart is empty</h3>
             <p class="text-muted mb-4">Looks like you haven't added any courses to your cart yet.</p>
-            <a href="{{ route('courses.index') }}" class="btn btn-primary btn-lg">
+            <a href="{{ route('ecourse.index') }}" class="btn btn-primary btn-lg">
                 <i class="fas fa-search me-2"></i>Browse Courses
             </a>
         </div>
@@ -220,8 +214,16 @@ function clearCart() {
 
 function updateCartSummary(response) {
     $('#total-items').text(response.total_items);
-    $('#subtotal').text(response.subtotal);
-    $('#total-amount').text(response.total);
+    // format numbers as Indonesian Rupiah
+    try {
+        const sub = Number(response.subtotal) || 0;
+        const total = Number(response.total) || 0;
+        $('#subtotal').text('Rp ' + Math.round(sub).toLocaleString('id-ID'));
+        $('#total-amount').text('Rp ' + Math.round(total).toLocaleString('id-ID'));
+    } catch (e) {
+        $('#subtotal').text(response.subtotal);
+        $('#total-amount').text(response.total);
+    }
 }
 
 function showAlert(type, message) {

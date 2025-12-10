@@ -44,6 +44,10 @@ Route::post('/ecourse/{id}/add-to-cart', [EcourseController::class, 'addToCart']
 // Web cart page (show items)
 Route::get('/cart', [App\Http\Controllers\WebCartController::class, 'index'])->name('cart.index')->middleware('auth');
 Route::get('/cart-data', [App\Http\Controllers\WebCartController::class, 'getCartData'])->name('cart.data');
+// Cart modification endpoints used by AJAX in the cart page
+Route::patch('/cart/update/{id}', [App\Http\Controllers\WebCartController::class, 'update'])->name('cart.update')->middleware('auth');
+Route::delete('/cart/remove/{id}', [App\Http\Controllers\WebCartController::class, 'remove'])->name('cart.remove')->middleware('auth');
+Route::delete('/cart/clear', [App\Http\Controllers\WebCartController::class, 'clear'])->name('cart.clear')->middleware('auth');
 
 Route::get('/event', function () {
     return view('event');
