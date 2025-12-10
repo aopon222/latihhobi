@@ -63,161 +63,155 @@
                 $hasLogoutRoute = \Illuminate\Support\Facades\Route::has('logout');
             @endphp
             @auth
-                <div class="user-dropdown" style="display:flex;align-items:center;gap:12px;">
-                    <div style="display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none;">
+                <div class="user-dropdown" style="position:relative;display:flex;align-items:center;gap:12px;">
+                    <div class="profile-trigger-box" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
                         <span class="profile-trigger" style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;cursor:pointer;">
                             <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
                         </span>
-                        <span class="profile-trigger" style="color:#ffc107;font-weight:600;font-size:1rem;cursor:pointer;">{{ Auth::user()->name ?? 'Profil' }}</span>
+                        <span class="profile-trigger" style="color:#ffc107;font-weight:600;font-size:1rem;cursor:pointer;user-select:none;">{{ Auth::user()->name ?? 'Profil' }}</span>
                     </div>
-                    {{-- Logout moved into profile dropdown (kept in experimental fixed menu) --}}
+
+                    {{-- Dropdown Menu --}}
+                    <div id="profile-dropdown-menu" class="profile-dropdown-menu" style="position:absolute;top:100%;right:0;background:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:8px 0;min-width:200px;z-index:999999;visibility:hidden;opacity:0;margin-top:8px;">
+                        @if(auth()->user()->email === 'multimedia.latihhobi@gmail.com')
+                            <a href="{{ route('admin.dashboard') }}" class="profile-menu-item" style="display:block;padding:10px 14px;color:#111827;text-decoration:none;font-size:15px;transition:background 0.2s;">Dashboard</a>
+                        @endif
+                        <a href="{{ route('profile') }}" class="profile-menu-item" style="display:block;padding:10px 14px;color:#111827;text-decoration:none;font-size:15px;transition:background 0.2s;">Profil</a>
+                        <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+                            @csrf
+                            <button type="submit" class="profile-menu-item-btn" style="width:100%;text-align:left;padding:10px 14px;background:transparent;border:0;color:#ef4444;cursor:pointer;font-size:15px;transition:background 0.2s;">Keluar</button>
+                        </form>
+                    </div>
                 </div>
                 
-                    <script>
-                        // Profile dropdown menu with Dashboard access for admin
-                        (function(){
-                            const triggers = document.querySelectorAll('.profile-trigger');
-                            if(!triggers.length) return;
-                            let menuEl = null;
-                            let isMenuOpen = false;
+                <script>
+                    (function(){
+                        const triggerBox = document.querySelector('.profile-trigger-box');
+                        const menu = document.getElementById('profile-dropdown-menu');
+                        let isOpen = false;
 
-                            function createMenu(){
-                                if(menuEl && document.body.contains(menuEl)) return menuEl;
-                                menuEl = document.createElement('div');
-                                menuEl.className = 'profile-fixed-menu';
-                                menuEl.style.visibility = 'hidden';
-                                menuEl.style.opacity = '0';
-                                
-                                // Build inner content (Dashboard if admin, Profile, Logout form)
-                                const isAdmin = {{ auth()->user() && auth()->user()->email === 'multimedia.latihhobi@gmail.com' ? 'true' : 'false' }};
-                                
-                                let html = '';
-                                if(isAdmin){
-                                    html += '<a href="{{ route('admin.dashboard') }}">Dashboard Admin</a>';
-                                }
-                                html += '<a href="{{ route('profile') }}">Profil</a>';
-                                html += '<form method="POST" action="{{ route('logout') }}" style="margin:0;"><input type="hidden" name="_token" value="{{ csrf_token() }}"><button type="submit">Keluar</button></form>';
-                                
-                                menuEl.innerHTML = html;
-                                document.body.appendChild(menuEl);
-                                return menuEl;
+                        if(!triggerBox || !menu) return;
+
+                        // Toggle menu on trigger click
+                        triggerBox.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            isOpen = !isOpen;
+                            if(isOpen){
+                                menu.style.visibility = 'visible';
+                                menu.style.opacity = '1';
+                            } else {
+                                menu.style.visibility = 'hidden';
+                                menu.style.opacity = '0';
                             }
+                        });
 
-                            function openMenu(){
-                                const m = createMenu();
-                                isMenuOpen = true;
-                                m.style.visibility = 'visible';
-                                m.style.opacity = '1';
+                        // Close menu when clicking outside
+                        document.addEventListener('click', (e) => {
+                            if(!triggerBox.contains(e.target) && !menu.contains(e.target)){
+                                isOpen = false;
+                                menu.style.visibility = 'hidden';
+                                menu.style.opacity = '0';
                             }
+                        });
 
-                            function closeMenu(){
-                                if(menuEl && document.body.contains(menuEl)){
-                                    isMenuOpen = false;
-                                    menuEl.style.visibility = 'hidden';
-                                    menuEl.style.opacity = '0';
-                                }
-                            }
-
-                            triggers.forEach(t => {
-                                t.addEventListener('click', (e) => { 
-                                    e.preventDefault(); 
-                                    e.stopPropagation();
-                                    if(isMenuOpen) closeMenu();
-                                    else openMenu();
-                                });
+                        // Close menu when menu item is clicked (but allow links to work)
+                        const menuItems = menu.querySelectorAll('.profile-menu-item, .profile-menu-item-btn');
+                        menuItems.forEach(item => {
+                            item.addEventListener('click', () => {
+                                // Links will navigate naturally, form will submit naturally
+                                setTimeout(() => {
+                                    isOpen = false;
+                                    menu.style.visibility = 'hidden';
+                                    menu.style.opacity = '0';
+                                }, 100);
                             });
-                            
-                            document.addEventListener('click', (e) => { 
-                                if(isMenuOpen && menuEl && document.body.contains(menuEl)) {
-                                    if(!menuEl.contains(e.target) && !Array.from(triggers).some(t => t.contains(e.target))) {
-                                        closeMenu();
-                                    }
-                                }
+                        });
+                    })();
+                </script>
+
+                <script>
+                    // Cart dropdown functionality
+                    (function(){
+                        const cartIcon = document.getElementById('cart-icon');
+                        const cartCount = document.getElementById('cart-count');
+                        let cartDropdown = null;
+
+                        function createCartDropdown(){
+                            if(cartDropdown && document.body.contains(cartDropdown)) return cartDropdown;
+                            cartDropdown = document.createElement('div');
+                            Object.assign(cartDropdown.style, {
+                                position: 'fixed',
+                                right: '16px',
+                                top: '64px',
+                                background: '#fff',
+                                borderRadius: '8px',
+                                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                                padding: '12px',
+                                minWidth: '300px',
+                                maxWidth: '400px',
+                                maxHeight: '400px',
+                                overflowY: 'auto',
+                                zIndex: '999998',
+                                display: 'none'
                             });
-                        })();
+                            document.body.appendChild(cartDropdown);
+                            return cartDropdown;
+                        }
 
-                        // Cart dropdown functionality
-                        (function(){
-                            const cartIcon = document.getElementById('cart-icon');
-                            const cartCount = document.getElementById('cart-count');
-                            let cartDropdown = null;
+                        function loadCartData(){
+                            fetch('{{ route('cart.data') }}')
+                                .then(r => r.json())
+                                .then(data => {
+                                    const dropdown = createCartDropdown();
+                                    dropdown.innerHTML = '';
 
-                            function createCartDropdown(){
-                                if(cartDropdown && document.body.contains(cartDropdown)) return cartDropdown;
-                                cartDropdown = document.createElement('div');
-                                Object.assign(cartDropdown.style, {
-                                    position: 'fixed',
-                                    right: '16px',
-                                    top: '64px',
-                                    background: '#fff',
-                                    borderRadius: '8px',
-                                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                                    padding: '12px',
-                                    minWidth: '300px',
-                                    maxWidth: '400px',
-                                    maxHeight: '400px',
-                                    overflowY: 'auto',
-                                    zIndex: '999998',
-                                    display: 'none'
-                                });
-                                document.body.appendChild(cartDropdown);
-                                return cartDropdown;
-                            }
-
-                            function loadCartData(){
-                                fetch('{{ route('cart.data') }}')
-                                    .then(r => r.json())
-                                    .then(data => {
-                                        const dropdown = createCartDropdown();
-                                        dropdown.innerHTML = '';
-
-                                        if(cartCount) {
-                                            if(data.count > 0) {
-                                                cartCount.textContent = data.count;
-                                                cartCount.style.display = 'block';
-                                            } else {
-                                                cartCount.style.display = 'none';
-                                            }
-                                        }
-
-                                        if(data.items.length === 0){
-                                            dropdown.innerHTML = '<p style="padding:10px;color:#6b7280;">Keranjang kosong</p>';
+                                    if(cartCount) {
+                                        if(data.count > 0) {
+                                            cartCount.textContent = data.count;
+                                            cartCount.style.display = 'block';
                                         } else {
-                                            let html = '<div style="font-weight:700;margin-bottom:8px;">Keranjang ('+data.count+')</div>';
-                                            data.items.forEach(item => {
-                                                html += `<div style="padding:8px;border-bottom:1px solid #f3f4f6;">
-                                                    <div style="font-weight:600;color:#111827;">${item.name}</div>
-                                                    <div style="font-size:0.85rem;color:#6b7280;">Qty: ${item.quantity} × Rp ${Math.round(item.price).toLocaleString('id-ID')}</div>
-                                                    <div style="font-weight:600;color:#2563eb;">Rp ${Math.round(item.subtotal).toLocaleString('id-ID')}</div>
-                                                </div>`;
-                                            });
-                                            html += '<div style="padding:8px;font-weight:700;border-top:2px solid #e5e7eb;">Total: Rp '+Math.round(data.total).toLocaleString('id-ID')+'</div>';
-                                            html += '<div style="padding:8px;text-align:center;"><a href="{{ route('cart.index') }}" style="background:#2563eb;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;display:inline-block;">Lihat Keranjang</a></div>';
-                                            dropdown.innerHTML = html;
+                                            cartCount.style.display = 'none';
                                         }
-                                    })
-                                    .catch(e => console.error('Error loading cart:', e));
-                            }
+                                    }
 
-                            if(cartIcon){
-                                cartIcon.addEventListener('click', (e) => {
-                                    e.preventDefault();
-                                    const d = createCartDropdown();
-                                    d.style.display = d.style.display === 'block' ? 'none' : 'block';
-                                    if(d.style.display === 'block') loadCartData();
-                                });
-                            }
+                                    if(data.items.length === 0){
+                                        dropdown.innerHTML = '<p style="padding:10px;color:#6b7280;">Keranjang kosong</p>';
+                                    } else {
+                                        let html = '<div style="font-weight:700;margin-bottom:8px;">Keranjang ('+data.count+')</div>';
+                                        data.items.forEach(item => {
+                                            html += `<div style="padding:8px;border-bottom:1px solid #f3f4f6;">
+                                                <div style="font-weight:600;color:#111827;">${item.name}</div>
+                                                <div style="font-size:0.85rem;color:#6b7280;">Qty: ${item.quantity} × Rp ${Math.round(item.price).toLocaleString('id-ID')}</div>
+                                                <div style="font-weight:600;color:#2563eb;">Rp ${Math.round(item.subtotal).toLocaleString('id-ID')}</div>
+                                            </div>`;
+                                        });
+                                        html += '<div style="padding:8px;font-weight:700;border-top:2px solid #e5e7eb;">Total: Rp '+Math.round(data.total).toLocaleString('id-ID')+'</div>';
+                                        html += '<div style="padding:8px;text-align:center;"><a href="{{ route('cart.index') }}" style="background:#2563eb;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;display:inline-block;">Lihat Keranjang</a></div>';
+                                        dropdown.innerHTML = html;
+                                    }
+                                })
+                                .catch(e => console.error('Error loading cart:', e));
+                        }
 
-                            document.addEventListener('click', (e) => {
-                                if(cartDropdown && document.body.contains(cartDropdown) && !cartDropdown.contains(e.target) && e.target !== cartIcon) {
-                                    cartDropdown.style.display = 'none';
-                                }
+                        if(cartIcon){
+                            cartIcon.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                const d = createCartDropdown();
+                                d.style.display = d.style.display === 'block' ? 'none' : 'block';
+                                if(d.style.display === 'block') loadCartData();
                             });
+                        }
 
-                            // Load cart count on page load
-                            loadCartData();
-                        })();
-                    </script>
+                        document.addEventListener('click', (e) => {
+                            if(cartDropdown && document.body.contains(cartDropdown) && !cartDropdown.contains(e.target) && e.target !== cartIcon) {
+                                cartDropdown.style.display = 'none';
+                            }
+                        });
+
+                        // Load cart count on page load
+                        loadCartData();
+                    })();
+                </script>
             @else
                 @if($hasLoginRoute)
                 <a href="{{ route('login') }}" class="btn-signin">Sign in</a>
