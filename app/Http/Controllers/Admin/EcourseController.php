@@ -113,32 +113,6 @@ class EcourseController extends Controller
     {
         $validated = $request->validated();
 
-        // Note: slug column doesn't exist in course table, removing slug logic
-
-        // Handle file uploads
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('ecourses/images', 'public');
-        }
-
-        if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('ecourses/thumbnails', 'public');
-        }
-
-        // Convert string inputs to arrays
-        if (!empty($validated['prerequisites'])) {
-            $validated['prerequisites'] = array_map('trim', explode("\n", $validated['prerequisites']));
-        }
-
-        if (!empty($validated['learning_outcomes'])) {
-            $validated['learning_outcomes'] = array_map('trim', explode("\n", $validated['learning_outcomes']));
-        }
-
-        if (!empty($validated['tools_needed'])) {
-            $validated['tools_needed'] = array_map('trim', explode("\n", $validated['tools_needed']));
-        }
-
-        // Note: is_featured and is_active columns don't exist in course table
-
         Ecourse::create($validated);
 
         return redirect()->route('admin.ecourses.index')
@@ -188,44 +162,6 @@ class EcourseController extends Controller
     {
         $validated = $request->validated();
 
-        // Note: slug column doesn't exist in course table, removing slug logic
-
-        // Handle file uploads
-        if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($ecourse->image) {
-                Storage::disk('public')->delete($ecourse->image);
-            }
-            $validated['image'] = $request->file('image')->store('ecourses/images', 'public');
-        }
-
-        if ($request->hasFile('thumbnail')) {
-            // Hapus thumbnail lama jika ada
-            if ($ecourse->thumbnail) {
-                Storage::disk('public')->delete($ecourse->thumbnail);
-            }
-            $validated['thumbnail'] = $request->file('thumbnail')->store('ecourses/thumbnails', 'public');
-        }
-
-        // Convert string inputs to arrays
-        if (!empty($validated['prerequisites'])) {
-            $validated['prerequisites'] = array_map('trim', explode("\n", $validated['prerequisites']));
-        } else {
-            $validated['prerequisites'] = null;
-        }
-
-        if (!empty($validated['learning_outcomes'])) {
-            $validated['learning_outcomes'] = array_map('trim', explode("\n", $validated['learning_outcomes']));
-        } else {
-            $validated['learning_outcomes'] = null;
-        }
-
-        if (!empty($validated['tools_needed'])) {
-            $validated['tools_needed'] = array_map('trim', explode("\n", $validated['tools_needed']));
-        } else {
-            $validated['tools_needed'] = null;
-        }
-
         $ecourse->update($validated);
 
         return redirect()->route('admin.ecourses.index')
@@ -237,15 +173,6 @@ class EcourseController extends Controller
      */
     public function destroy(Ecourse $ecourse)
     {
-        // Hapus file gambar jika ada
-        if ($ecourse->image) {
-            Storage::disk('public')->delete($ecourse->image);
-        }
-
-        if ($ecourse->thumbnail) {
-            Storage::disk('public')->delete($ecourse->thumbnail);
-        }
-
         $ecourse->delete();
 
         return redirect()->route('admin.ecourses.index')

@@ -22,23 +22,12 @@ class UpdateEcourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'short_description' => 'required|string|max:500',
-            'category' => 'required|string|max:100',
+            'name' => 'required|string|max:255',
+            'id_category' => 'required|integer|exists:category,id_category',
+            'course_by' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
-            'discount_price' => 'nullable|numeric|min:0|lt:price',
-            'duration' => 'required|string|max:50',
-            'total_lessons' => 'required|integer|min:1',
-            'level' => 'required|in:Beginner,Intermediate,Advanced',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-            'demo_video' => 'nullable|url',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
-            'prerequisites' => 'nullable|string',
-            'learning_outcomes' => 'nullable|string',
-            'tools_needed' => 'nullable|string',
+            'original_price' => 'nullable|numeric|min:0',
+            'image_url' => 'nullable|string|max:255',
         ];
     }
 
