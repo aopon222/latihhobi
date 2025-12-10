@@ -89,3 +89,50 @@
 .user-dropdown-item[style*="color:#e74c3c"] {
     color: #e74c3c !important;
 }
+
+/* Profile Fixed Menu (Admin Dashboard Menu) */
+.profile-fixed-menu {
+    position: fixed !important;
+    right: 16px !important;
+    top: 64px !important;
+    background: #fff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+    padding: 8px 0 !important;
+    min-width: 200px !important;
+    z-index: 999999 !important;
+    display: none !important;
+}
+
+.profile-fixed-menu a {
+    display: block !important;
+    padding: 10px 14px !important;
+    color: #111827 !important;
+    text-decoration: none !important;
+    font-size: 15px !important;
+    transition: background 0.2s !important;
+}
+
+.profile-fixed-menu a:hover {
+    background: #f3f4f6 !important;
+}
+
+.profile-fixed-menu form {
+    margin: 0 !important;
+}
+
+.profile-fixed-menu button {
+    width: 100% !important;
+    text-align: left !important;
+    padding: 10px 14px !important;
+    background: transparent !important;
+    border: 0 !important;
+    color: #ef4444 !important;
+    cursor: pointer !important;
+    font-size: 15px !important;
+    transition: background 0.2s !important;
+}
+
+.profile-fixed-menu button:hover {
+    background: #f3f4f6 !important;
+}

@@ -64,12 +64,6 @@
             @endphp
             @auth
                 <div class="user-dropdown" style="display:flex;align-items:center;gap:12px;">
-                    @if(auth()->user()->email === 'multimedia.latihhobi@gmail.com')
-                        <a href="{{ route('admin.dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#0ea5e9;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.9rem;" title="Admin Dashboard">
-                            <i class="fas fa-tachometer-alt" style="font-size:1rem;"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    @endif
                     <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
                         <span class="profile-trigger" style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;cursor:pointer;">
                             <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
@@ -80,64 +74,56 @@
                 </div>
                 
                     <script>
-                        // Experimental: append a fixed dropdown to body when profile-trigger is clicked (local branch)
+                        // Profile dropdown menu with Dashboard access for admin
                         (function(){
                             const triggers = document.querySelectorAll('.profile-trigger');
                             if(!triggers.length) return;
                             let menuEl = null;
 
                             function createMenu(){
-                                if(menuEl) return menuEl;
+                                if(menuEl && document.body.contains(menuEl)) return menuEl;
                                 menuEl = document.createElement('div');
                                 menuEl.className = 'profile-fixed-menu';
-                                Object.assign(menuEl.style, {
-                                    position: 'fixed',
-                                    right: '16px',
-                                    top: '64px',
-                                    background: '#fff',
-                                    borderRadius: '8px',
-                                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                                    padding: '8px 0',
-                                    minWidth: '200px',
-                                    zIndex: 2147483647,
-                                    display: 'none'
-                                });
-
+                                
                                 // Build inner content (Dashboard if admin, Profile, Logout form)
                                 const isAdmin = {{ auth()->user() && auth()->user()->email === 'multimedia.latihhobi@gmail.com' ? 'true' : 'false' }};
+                                
+                                let html = '';
                                 if(isAdmin){
-                                    const a = document.createElement('a');
-                                    a.href = '{{ route('admin.dashboard') }}';
-                                    a.textContent = 'Dashboard';
-                                    a.style.display = 'block'; a.style.padding = '10px 14px'; a.style.color = '#111827'; a.style.textDecoration='none';
-                                    menuEl.appendChild(a);
+                                    html += '<a href="{{ route('admin.dashboard') }}">Dashboard Admin</a>';
                                 }
-                                const p = document.createElement('a');
-                                p.href = '{{ route('profile') }}'; p.textContent = 'Profil';
-                                p.style.display = 'block'; p.style.padding = '10px 14px'; p.style.color = '#111827'; p.style.textDecoration='none';
-                                menuEl.appendChild(p);
-
-                                @if($hasLogoutRoute ?? true)
-                                const form = document.createElement('form'); form.method='POST'; form.action='{{ route('logout') }}'; form.style.margin='0';
-                                const csrf = document.createElement('input'); csrf.type='hidden'; csrf.name='_token'; csrf.value='{{ csrf_token() }}'; form.appendChild(csrf);
-                                const btn = document.createElement('button'); btn.type='submit'; btn.textContent='Keluar';
-                                Object.assign(btn.style, {width:'100%',textAlign:'left',padding:'10px 14px',background:'transparent',border:'0',color:'#ef4444',cursor:'pointer'});
-                                form.appendChild(btn);
-                                menuEl.appendChild(form);
-                                @endif
-
+                                html += '<a href="{{ route('profile') }}">Profil</a>';
+                                html += '<form method="POST" action="{{ route('logout') }}" style="margin:0;"><input type="hidden" name="_token" value="{{ csrf_token() }}"><button type="submit">Keluar</button></form>';
+                                
+                                menuEl.innerHTML = html;
                                 document.body.appendChild(menuEl);
                                 return menuEl;
                             }
 
                             function toggleMenu(){
                                 const m = createMenu();
-                                if(m.style.display === 'block') { m.style.display='none'; }
-                                else { m.style.display='block'; }
+                                if(m.style.display === 'block') { 
+                                    m.style.display='none'; 
+                                } else { 
+                                    m.style.display='block';
+                                }
                             }
 
-                            triggers.forEach(t => t.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }));
-                            document.addEventListener('click', (e) => { if(menuEl && !menuEl.contains(e.target)) menuEl.style.display='none'; });
+                            triggers.forEach(t => {
+                                t.addEventListener('click', (e) => { 
+                                    e.preventDefault(); 
+                                    e.stopPropagation(); 
+                                    toggleMenu(); 
+                                });
+                            });
+                            
+                            document.addEventListener('click', (e) => { 
+                                if(menuEl && document.body.contains(menuEl)) {
+                                    if(!menuEl.contains(e.target) && !Array.from(triggers).some(t => t.contains(e.target))) {
+                                        menuEl.style.display='none'; 
+                                    }
+                                }
+                            });
                         })();
 
                         // Cart dropdown functionality
@@ -147,7 +133,7 @@
                             let cartDropdown = null;
 
                             function createCartDropdown(){
-                                if(cartDropdown) return cartDropdown;
+                                if(cartDropdown && document.body.contains(cartDropdown)) return cartDropdown;
                                 cartDropdown = document.createElement('div');
                                 Object.assign(cartDropdown.style, {
                                     position: 'fixed',
@@ -161,7 +147,7 @@
                                     maxWidth: '400px',
                                     maxHeight: '400px',
                                     overflowY: 'auto',
-                                    zIndex: 2147483646,
+                                    zIndex: '999998',
                                     display: 'none'
                                 });
                                 document.body.appendChild(cartDropdown);
@@ -213,7 +199,7 @@
                             }
 
                             document.addEventListener('click', (e) => {
-                                if(cartDropdown && !cartDropdown.contains(e.target) && e.target !== cartIcon) {
+                                if(cartDropdown && document.body.contains(cartDropdown) && !cartDropdown.contains(e.target) && e.target !== cartIcon) {
                                     cartDropdown.style.display = 'none';
                                 }
                             });
