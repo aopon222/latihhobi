@@ -146,9 +146,7 @@ class EcourseController extends Controller
             $validated['tools_needed'] = array_map('trim', explode("\n", $validated['tools_needed']));
         }
 
-        // Set default values
-        $validated['is_featured'] = $request->has('is_featured');
-        $validated['is_active'] = $request->has('is_active');
+        // Note: is_featured and is_active columns don't exist in course table
 
         Ecourse::create($validated);
 
@@ -248,10 +246,6 @@ class EcourseController extends Controller
             $validated['tools_needed'] = null;
         }
 
-        // Set boolean values
-        $validated['is_featured'] = $request->has('is_featured');
-        $validated['is_active'] = $request->has('is_active');
-
         $ecourse->update($validated);
 
         return redirect()->route('admin.ecourses.index')
@@ -276,33 +270,5 @@ class EcourseController extends Controller
 
         return redirect()->route('admin.ecourses.index')
             ->with('success', 'E-course berhasil dihapus!');
-    }
-
-    /**
-     * Toggle featured status
-     */
-    public function toggleFeatured(Ecourse $ecourse)
-    {
-        $ecourse->update(['is_featured' => !$ecourse->is_featured]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Status featured berhasil diubah!',
-            'is_featured' => $ecourse->is_featured
-        ]);
-    }
-
-    /**
-     * Toggle active status
-     */
-    public function toggleActive(Ecourse $ecourse)
-    {
-        $ecourse->update(['is_active' => !$ecourse->is_active]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Status aktif berhasil diubah!',
-            'is_active' => $ecourse->is_active
-        ]);
     }
 }
