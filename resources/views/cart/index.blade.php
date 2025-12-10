@@ -2,6 +2,10 @@
 
 @section('title', 'Keranjang Saya - LatihHobi')
 
+@section('head')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -101,6 +105,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
 // Vanilla JS cart functionality (no jQuery dependency)
 document.addEventListener('DOMContentLoaded', function() {
