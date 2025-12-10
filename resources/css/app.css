@@ -101,7 +101,9 @@
     padding: 8px 0 !important;
     min-width: 200px !important;
     z-index: 999999 !important;
-    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s, visibility 0.2s !important;
 }
 
 .profile-fixed-menu a {

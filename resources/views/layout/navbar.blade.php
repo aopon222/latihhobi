@@ -64,12 +64,12 @@
             @endphp
             @auth
                 <div class="user-dropdown" style="display:flex;align-items:center;gap:12px;">
-                    <a href="{{ route('profile') }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+                    <div style="display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none;">
                         <span class="profile-trigger" style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#f3f4f6;overflow:hidden;text-align:center;cursor:pointer;">
                             <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;">
                         </span>
                         <span class="profile-trigger" style="color:#ffc107;font-weight:600;font-size:1rem;cursor:pointer;">{{ Auth::user()->name ?? 'Profil' }}</span>
-                    </a>
+                    </div>
                     {{-- Logout moved into profile dropdown (kept in experimental fixed menu) --}}
                 </div>
                 
@@ -79,11 +79,14 @@
                             const triggers = document.querySelectorAll('.profile-trigger');
                             if(!triggers.length) return;
                             let menuEl = null;
+                            let isMenuOpen = false;
 
                             function createMenu(){
                                 if(menuEl && document.body.contains(menuEl)) return menuEl;
                                 menuEl = document.createElement('div');
                                 menuEl.className = 'profile-fixed-menu';
+                                menuEl.style.visibility = 'hidden';
+                                menuEl.style.opacity = '0';
                                 
                                 // Build inner content (Dashboard if admin, Profile, Logout form)
                                 const isAdmin = {{ auth()->user() && auth()->user()->email === 'multimedia.latihhobi@gmail.com' ? 'true' : 'false' }};
@@ -100,27 +103,34 @@
                                 return menuEl;
                             }
 
-                            function toggleMenu(){
+                            function openMenu(){
                                 const m = createMenu();
-                                if(m.style.display === 'block') { 
-                                    m.style.display='none'; 
-                                } else { 
-                                    m.style.display='block';
+                                isMenuOpen = true;
+                                m.style.visibility = 'visible';
+                                m.style.opacity = '1';
+                            }
+
+                            function closeMenu(){
+                                if(menuEl && document.body.contains(menuEl)){
+                                    isMenuOpen = false;
+                                    menuEl.style.visibility = 'hidden';
+                                    menuEl.style.opacity = '0';
                                 }
                             }
 
                             triggers.forEach(t => {
                                 t.addEventListener('click', (e) => { 
                                     e.preventDefault(); 
-                                    e.stopPropagation(); 
-                                    toggleMenu(); 
+                                    e.stopPropagation();
+                                    if(isMenuOpen) closeMenu();
+                                    else openMenu();
                                 });
                             });
                             
                             document.addEventListener('click', (e) => { 
-                                if(menuEl && document.body.contains(menuEl)) {
+                                if(isMenuOpen && menuEl && document.body.contains(menuEl)) {
                                     if(!menuEl.contains(e.target) && !Array.from(triggers).some(t => t.contains(e.target))) {
-                                        menuEl.style.display='none'; 
+                                        closeMenu();
                                     }
                                 }
                             });
