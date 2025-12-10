@@ -51,9 +51,9 @@ class EcourseController extends Controller
             // $query->where('is_active', $request->status === 'active');
         }
 
-        // Search berdasarkan title
+        // Search berdasarkan name (table `course` uses `name`)
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%' . $request->search . '%');
         }
 
         $ecourses = $query->orderBy('created_at', 'desc')->paginate(10);
@@ -73,8 +73,12 @@ class EcourseController extends Controller
             'Music' => 'Music',
         ];
 
-        // Levels from DB (existing values)
-        $levels = Ecourse::distinct()->pluck('level')->filter();
+        // Levels: use static list (table does not have `level` column)
+        $levels = [
+            'Beginner' => 'Beginner',
+            'Intermediate' => 'Intermediate',
+            'Advanced' => 'Advanced',
+        ];
 
         return view('admin.ecourses.index', compact('ecourses', 'categories', 'levels'));
     }
