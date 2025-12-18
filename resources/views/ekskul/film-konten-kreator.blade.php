@@ -655,19 +655,6 @@
                 <div class="info-value">Ekstrakurikuler Film dan Konten Kreator</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Materi</div>
-                <div class="info-value">
-                    <ul>
-                        <li>Level 1 Dasar Fotografi (Toys Photography & Product Photo)</li>
-                        <li>Level 2 Fotografi & Cerita (Photo Story & Dokumentasi Acara)</li>
-                        <li>Level 3 Dasar Videografi (Smartphone Videography & Cinematic Footage)</li>
-                        <li>Level 4 Produksi Film Dasar (Short Movie: Mini Production)</li>
-                        <li>Level 5 Konten Publik (Video Vlog, Tutorial, & Video Essay)</li>
-                        <li>Level 6 Proyek Final (Film Pendek & Pameran Karya)</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="info-row">
                 <div class="info-label">Biaya</div>
                 <div class="info-value">Rp 150.000 per bulan (Biaya sudah termasuk akses pelatihan, peminjaman kamera
                     digital, dan sertifikat project per level)</div>

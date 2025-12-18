@@ -646,19 +646,6 @@
                 <div class="info-value">Ekstrakurikuler Komik</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Materi</div>
-                <div class="info-value">
-                    <ul>
-                        <li>Level 1 : Buku komik dengan pengerjaan tradisional & flash card</li>
-                        <li>Level 2 : Buku komik dengan pengerjaan tradisional & wallpaper perasaan</li>
-                        <li>Level 3 : Buku komik dengan pengerjaan tradisional & buku karakter</li>
-                        <li>Level 4 : Buku komik dengan pengerjaan tradisional & poster karakter</li>
-                        <li>Level 5 : Buku komik dengan pengerjaan digital & poster digital</li>
-                        <li>Level 6 : Buku komik personal dengan pengerjaan digital</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="info-row">
                 <div class="info-label">Biaya</div>
                 <div class="info-value">
                     <ul>

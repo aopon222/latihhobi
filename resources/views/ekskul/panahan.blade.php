@@ -646,18 +646,6 @@
                 <div class="info-value">Ekstrakurikuler Panahan (Archery)</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Materi</div>
-                <div class="info-value">
-                    <ul>
-                        <li>Level 1 : (Basic Archery 1, Archery Science 1, Ability Planner 1)</li>
-                        <li>Level 2 : (Basic Archery 2, Archery Science 2, Ability Planner 2)</li>
-                        <li>Level 3 : (Basic Archery 3, Archery Science 3, Ability Planner 3)</li>
-                        <li>Level 4 : (Barebow 1, Archery Science 4, Ability Planner 4)</li>
-                        <li>Level 5 : (Barebow 2, Archery Science 5, Ability Planner 5)</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="info-row">
                 <div class="info-label">Biaya</div>
                 <div class="info-value">
                     <ul>
