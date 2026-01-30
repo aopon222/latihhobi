@@ -239,7 +239,7 @@
                         <td style="padding:16px;">
                             <div>
                                 <h3 style="font-weight:600;color:#111827;margin-bottom:4px;">{{ $ecourse->name }}</h3>
-                                <p style="color:#6b7280;font-size:14px;">{{ Str::limit($ecourse->short_description, 50) }}</p>
+                                <p style="color:#6b7280;font-size:14px;">{{ $ecourse->course_by ?? '-' }}</p>
                             </div>
                         </td>
                         <td style="padding:16px;">
@@ -270,18 +270,24 @@
                             </span>
                         </td>
                         <td style="padding:16px;">
-                            <span style="background:#{{ $ecourse->level == 'Beginner' ? 'dcfce7' : ($ecourse->level == 'Intermediate' ? 'fef3c7' : 'fee2e2') }};color:#{{ $ecourse->level == 'Beginner' ? '166534' : ($ecourse->level == 'Intermediate' ? '92400e' : '991b1b') }};padding:4px 8px;border-radius:4px;font-size:12px;font-weight:500;">
-                                {{ $ecourse->level }}
+                            @php
+                                $bgColor = 'e5e7eb';
+                                $textColor = '6b7280';
+                                if ($ecourse->level) {
+                                    $bgColor = ($ecourse->level == 'Beginner' ? 'dcfce7' : ($ecourse->level == 'Intermediate' ? 'fef3c7' : 'fee2e2'));
+                                    $textColor = ($ecourse->level == 'Beginner' ? '166534' : ($ecourse->level == 'Intermediate' ? '92400e' : '991b1b'));
+                                }
+                            @endphp
+                            <span style="background:#{{ $bgColor }};color:#{{ $textColor }};padding:4px 8px;border-radius:4px;font-size:12px;font-weight:500;">
+                                {{ $ecourse->level ?? 'N/A' }}
                             </span>
                         </td>
                         <td style="padding:16px;">
                             <div>
-                                @if($ecourse->discount_price)
-                                    <span style="color:#dc2626;font-weight:600;">Rp {{ number_format($ecourse->discount_price, 0, ',', '.') }}</span>
+                                <span style="color:#111827;font-weight:600;">Rp {{ number_format($ecourse->price, 0, ',', '.') }}</span>
+                                @if($ecourse->original_price && $ecourse->original_price > $ecourse->price)
                                     <br>
-                                    <span style="color:#9ca3af;text-decoration:line-through;font-size:14px;">Rp {{ number_format($ecourse->price, 0, ',', '.') }}</span>
-                                @else
-                                    <span style="color:#111827;font-weight:600;">Rp {{ number_format($ecourse->price, 0, ',', '.') }}</span>
+                                    <span style="color:#9ca3af;text-decoration:line-through;font-size:14px;">Rp {{ number_format($ecourse->original_price, 0, ',', '.') }}</span>
                                 @endif
                             </div>
                         </td>
