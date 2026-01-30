@@ -140,9 +140,10 @@ class EcourseController extends Controller
 
         // Handle uploaded image file if present and set image_url
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $path = $request->file('image')->store('public/course_images');
-            $rel = str_replace('public/', '', $path);
-            $data['image_url'] = $rel;
+            // Upload to public disk (storage/app/public/course_images)
+            $path = $request->file('image')->store('course_images', 'public');
+            // Storage::url() will return /storage/course_images/...
+            $data['image_url'] = $path;
         }
 
         $ecourse = Ecourse::create($data);
@@ -243,9 +244,10 @@ class EcourseController extends Controller
 
         // Handle uploaded image if provided
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $path = $request->file('image')->store('public/course_images');
-            $rel = str_replace('public/', '', $path);
-            $data['image_url'] = $rel;
+            // Upload to public disk (storage/app/public/course_images)
+            $path = $request->file('image')->store('course_images', 'public');
+            // Storage::url() will return /storage/course_images/...
+            $data['image_url'] = $path;
         }
 
         // Merge validated additional fields that may exist

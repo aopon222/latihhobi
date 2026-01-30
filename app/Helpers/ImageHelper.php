@@ -20,9 +20,9 @@ class ImageHelper
             return asset('images/' . $fallback);
         }
 
-        // If the image is stored in course_images (uploaded via admin), use Storage
+        // If the image is stored in course_images (uploaded via admin to public disk), use Storage with public disk
         if (strpos($imagePath, 'course_images') !== false) {
-            return Storage::url($imagePath);
+            return Storage::disk('public')->url($imagePath);
         }
 
         // Otherwise, try to get from public/images folder first, then fallback to storage
@@ -31,8 +31,8 @@ class ImageHelper
         }
 
         // Try storage as last resort
-        if (Storage::exists($imagePath)) {
-            return Storage::url($imagePath);
+        if (Storage::disk('public')->exists($imagePath)) {
+            return Storage::disk('public')->url($imagePath);
         }
 
         // Return fallback
