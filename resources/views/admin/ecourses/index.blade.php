@@ -227,10 +227,10 @@
                             @if($adminThumb)
                                 <img src="{{ getEcourseImageUrl($adminThumb) }}" 
                                      alt="{{ $ecourse->name }}"
-                                     style="width:60px;height:40px;object-fit:cover;border-radius:6px;">
+                                     style="width:120px;height:80px;object-fit:cover;border-radius:6px;">
                             @else
-                                <div style="width:60px;height:40px;background:#e5e7eb;border-radius:6px;display:flex;align-items:center;justify-content:center;">
-                                    <svg style="width:20px;height:20px;color:#9ca3af;" fill="currentColor" viewBox="0 0 20 20">
+                                <div style="width:120px;height:80px;background:#e5e7eb;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+                                    <svg style="width:40px;height:40px;color:#9ca3af;" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
