@@ -16,15 +16,7 @@ class Ecourse extends Model
         'price',
         'original_price',
         'image_url',
-        'perakitan',
-        'worksheet',
-        'ebook',
-        'live_session',
-        'mini_competition',
         'level',
-        'enrolled',
-        'validity',
-        'certificate',
     ];
 
     // Laravel otomatis pakai created_at dan updated_at
@@ -39,5 +31,24 @@ class Ecourse extends Model
     {
         // Pastikan foreign key & local key sesuai struktur tabel kamu
         return $this->belongsTo(Category::class, 'id_category', 'id_category');
+    }
+
+    /**
+     * Lessons relation - no table currently in use
+     * Returns empty collection if called
+     */
+    public function lessons()
+    {
+        // Placeholder for future implementation
+        // Currently no lessons table exists in the database
+        return $this->hasMany(\App\Models\EcourseLesson::class, 'ecourse_id', 'id_course');
+    }
+
+    /**
+     * Enrollments relation
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(\App\Models\EcourseEnrollment::class, 'ecourse_id', 'id_course');
     }
 }

@@ -5,16 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Ecourse;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class EcourseController extends Controller
 {
     public function index()
     {
-        // Ambil semua data course
-        $ecourses = Ecourse::with('category')->get();
+        $dbError = false;
+        try {
+            $ecourses = Ecourse::with('category')->get();
+        } catch (\Throwable $e) {
+            $ecourses = collect();
+            $dbError = true;
+        }
 
-        // Kirim ke view
-        return view('ecourse', compact('ecourses'));
+        // Kirim ke view (jika error, view akan menampilkan pesan)
+        return view('ecourse', compact('ecourses', 'dbError'));
     }
 
     public function robotik()
@@ -24,12 +30,38 @@ class EcourseController extends Controller
             ->orWhere('name', 'LIKE', '%Robotik%')
             ->first();
 
-        // Ambil courses robotik - urutkan berdasarkan id_course (sesuai urutan seeding)
-        $robotikCourses = $category
-            ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('id_course', 'asc')->get()
-            : collect();
+        // Ambil courses robotik - urutkan menurut level yang tertera pada thumbnail.
+        // Karena file thumbnail mengikuti pola nama tertentu, kita map thumbnail -> level.
+        // Jika mapping tidak cocok, kursus akan berada di urutan akhir.
+        $robotikCourses = collect();
+        $courses = collect();
+        if ($category) {
+            $mapping = [
+                'THUMBNAIL E COURSE ATHUTO.svg' => 1, // Robot Arthuro (Level 1)
+                'THUMBNAIL E COURSE ROBOFAN.svg' => 2, // Robot Robofan (Level 2)
+                'THUMBNAIL E COURSE ROBODUST.svg' => 3, // Robot Robodust (Level 3)
+                'THUMBNAIL E COURSE HEMIPTERA.svg' => 4, // Robot Hemiptera (Level 4)
+                'THUMBNAIL E COURSE AVOIDER.svg' => 5, // Robot Avoider (Level 5)
+            ];
 
-        return view('ecourse.ecourse-robotik', compact('robotikCourses'));
+            // Build a CASE expression to order by mapping
+            $caseSql = "CASE ";
+            foreach ($mapping as $file => $pos) {
+                // escape single quotes
+                $fileEsc = str_replace("'", "\\'", $file);
+                $caseSql .= "WHEN image_url = '" . $fileEsc . "' THEN " . intval($pos) . " ";
+            }
+            $caseSql .= "ELSE 999 END";
+
+            $robotikCourses = Ecourse::active()
+                ->where('id_category', $category->id_category)
+                ->orderByRaw($caseSql)
+                ->orderBy('id_course', 'asc')
+                ->get();
+            $courses = $robotikCourses; // Also provide as 'courses' for generic views
+        }
+
+        return view('ecourse.ecourse-robotik', compact('robotikCourses', 'courses'));
     }
 
     public function komik()
@@ -44,7 +76,9 @@ class EcourseController extends Controller
             ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('price', 'asc')->get()
             : collect();
 
-        return view('ecourse.ecourse-komik', compact('komikCourses'));
+        $courses = $komikCourses; // Also provide as 'courses' for generic views
+
+        return view('ecourse.ecourse-komik', compact('komikCourses', 'courses'));
     }
 
     public function filmKontenKreator()
@@ -60,7 +94,54 @@ class EcourseController extends Controller
             ? Ecourse::active()->where('id_category', $category->id_category)->orderBy('price', 'asc')->get()
             : collect();
 
-        return view('ecourse.ecourse-film-konten-kreator', compact('filmCourses'));
+        $courses = $filmCourses; // Also provide as 'courses' for generic views
+
+        return view('ecourse.ecourse-film-konten-kreator', compact('filmCourses', 'courses'));
+    }
+
+    /**
+     * Handle dynamic category views (auto-generated)
+     */
+    public function category($slug)
+    {
+        // Try to find category - start from slug variations
+        $category = null;
+        
+        // Get all categories and find best match
+        $allCategories = Category::all();
+        
+        foreach ($allCategories as $cat) {
+            $catSlug = Str::slug($cat->name); // Slugify the actual category name
+            if ($catSlug === $slug) {
+                $category = $cat;
+                break;
+            }
+        }
+
+        if (!$category) {
+            abort(404, 'Kategori tidak ditemukan: ' . $slug);
+        }
+
+        // Get courses for this category
+        $courses = Ecourse::active()
+            ->where('id_category', $category->id_category)
+            ->orderBy('price', 'asc')
+            ->get();
+
+        // Try to load the auto-generated view
+        $viewPath = 'ecourse.ecourse-' . $slug;
+        if (view()->exists($viewPath)) {
+            return view($viewPath, compact('courses'));
+        }
+
+        // If view doesn't exist, generate it
+        \App\Services\EcourseCategoryViewService::generateCategoryView(
+            $category->name,
+            $category->id_category
+        );
+
+        // Return the generated view
+        return view($viewPath, compact('courses'));
     }
 
     public function show($id)
@@ -69,6 +150,21 @@ class EcourseController extends Controller
          * Show detail course
          */
         $course = Ecourse::findOrFail($id);
+
+        // Check if user has access (unlocked enrollment)
+        if (auth()->check()) {
+            $enrollment = EcourseEnrollment::where('user_id', auth()->id())
+                ->where('id_course', $id)
+                ->where('is_locked', false)
+                ->first();
+
+            if (!$enrollment) {
+                return redirect()->back()->with('error', 'Anda tidak memiliki akses ke e-course ini. Silakan hubungi admin untuk mengaktifkan akses.');
+            }
+        } else {
+            return redirect()->route('login')->with('error', 'Silakan login untuk mengakses e-course.');
+        }
+
         return view('ecourse.show', compact('course'));
     }
 

@@ -1,17 +1,17 @@
 @extends('layout.app')
 
-@section('title', '{{ $course->name }} - LatihHobi')
+@section('title', $course->name . ' - LatihHobi')
 
 @section('content')
-<div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
-        <!-- Course Image -->
-        <div>
-            <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+<div style="max-width: 1200px; margin: 0 auto; padding: 100px 20px 40px;">
+    <div style="display: grid; grid-template-columns: 1fr 420px; gap: 40px; margin-bottom: 40px; align-items: start;">
+        <!-- Course Image (left, flexible) -->
+        <div style="background:transparent;padding:0;border-radius:12px;overflow:hidden;max-width:100%;">
+            <img src="{{ getEcourseImageUrl($course->image_url) }}" alt="{{ $course->name }}" style="width:100%;height:260px;max-height:260px;object-fit:cover;aspect-ratio:16/9;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);display:block;">
         </div>
 
-        <!-- Course Info -->
-        <div>
+        <!-- Course Info (right sidebar, fixed width) -->
+        <aside>
             <div style="margin-bottom: 20px;">
                 <h1 style="font-size: 2rem; margin: 0 0 10px 0; color: #333;">{{ $course->name }}</h1>
                 <p style="color: #666; font-size: 1.1rem; margin: 0;">By {{ $course->course_by ?? 'Latihhobi' }}</p>
@@ -63,7 +63,7 @@
                     <p style="margin: 0; font-size: 1.5rem; font-weight: bold; color: #f5a623;">★★★★★</p>
                 </div>
             </div>
-        </div>
+        </aside>
     </div>
 
     <!-- Course Description -->

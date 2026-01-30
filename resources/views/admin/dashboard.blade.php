@@ -11,8 +11,9 @@
         <nav style="width:100%;">
             <a href="{{ route('admin.dashboard') }}" style="display:block;padding:12px 32px;color:#2563eb;font-weight:600;text-decoration:none;border-radius:8px;margin-bottom:8px;background:#e0e7ff;">Dashboard</a>
             <a href="{{ route('admin.ecourses.index') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">E-course</a>
+            <a href="{{ route('admin.enrollments.index') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">📚 Enrollments</a>
             <a href="{{ route('admin.podcasts.index') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">Podcast</a>
-            <a href="#" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">Event</a>
+            <a href="{{ route('admin.events.index') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">Event</a>
             <a href="{{ route('password.change.form') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">🔐 Ganti Password</a>
             <a href="{{ route('home') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">Kembali ke Website</a>
         </nav>
@@ -45,6 +46,11 @@
                     <h3 style="color:#991b1b;font-size:14px;font-weight:600;margin:0 0 8px 0;">TOTAL PENDAFTARAN</h3>
                     <p style="color:#7f1d1d;font-size:24px;font-weight:700;margin:0;">{{ \App\Models\EcourseEnrollment::count() }}</p>
                 </div>
+                
+                <div style="background:#f3e8ff;padding:20px;border-radius:12px;">
+                    <h3 style="color:#6b21a8;font-size:14px;font-weight:600;margin:0 0 8px 0;">TOTAL EVENT</h3>
+                    <p style="color:#581c87;font-size:24px;font-weight:700;margin:0;">{{ \App\Models\Event::count() }}</p>
+                </div>
             </div>
             
             <!-- Quick Actions -->
@@ -54,6 +60,12 @@
                 </a>
                 <a href="{{ route('admin.ecourses.index') }}" style="background:#6b7280;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;">
                     Kelola E-course
+                </a>
+                <a href="{{ route('admin.events.create') }}" style="background:#059669;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;">
+                    + Tambah Event
+                </a>
+                <a href="{{ route('admin.events.index') }}" style="background:#7c3aed;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;">
+                    Kelola Event
                 </a>
             </div>
 
@@ -82,6 +94,43 @@
                                     <td style="padding:10px 8px;">
                                         <a href="{{ route('admin.ecourses.edit', $ec) }}" style="background:#f59e0b;color:white;padding:6px 10px;border-radius:6px;text-decoration:none;margin-right:8px;">Edit</a>
                                         <form method="POST" action="{{ route('admin.ecourses.destroy', $ec) }}" style="display:inline-block;margin:0;" onsubmit="return confirm('Hapus e-course {{ addslashes($ec->name) }}?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" style="background:#ef4444;color:white;padding:6px 10px;border-radius:6px;border:none;cursor:pointer;">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+            </div>
+            
+            <!-- Recent Events (quick manage) -->
+            <div style="margin-top:28px;background:#fff;border-radius:12px;padding:18px;border:1px solid #eef2ff;">
+                <h3 style="margin:0 0 12px 0;font-size:1rem;font-weight:700;color:#111827;">Event Terbaru</h3>
+                @php $latestEvents = \App\Models\Event::orderBy('created_at','desc')->take(5)->get(); @endphp
+                @if($latestEvents->isEmpty())
+                    <p style="color:#6b7280;margin:0;">Belum ada event.</p>
+                @else
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr style="text-align:left;border-bottom:1px solid #eef2ff;">
+                                <th style="padding:10px 8px;font-weight:600;color:#374151;">Judul</th>
+                                <th style="padding:10px 8px;font-weight:600;color:#374151;">Tanggal Mulai</th>
+                                <th style="padding:10px 8px;font-weight:600;color:#374151;">Lokasi</th>
+                                <th style="padding:10px 8px;font-weight:600;color:#374151;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($latestEvents as $event)
+                                <tr style="border-bottom:1px solid #f8fafc;">
+                                    <td style="padding:10px 8px;">{{ $event->title }}</td>
+                                    <td style="padding:10px 8px;">{{ $event->start_date ? $event->start_date->format('Y-m-d') : '-' }}</td>
+                                    <td style="padding:10px 8px;">{{ $event->location ?: '-' }}</td>
+                                    <td style="padding:10px 8px;">
+                                        <a href="{{ route('admin.events.edit', $event) }}" style="background:#f59e0b;color:white;padding:6px 10px;border-radius:6px;text-decoration:none;margin-right:8px;">Edit</a>
+                                        <form method="POST" action="{{ route('admin.events.destroy', $event) }}" style="display:inline-block;margin:0;" onsubmit="return confirm('Hapus event {{ addslashes($event->title) }}?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" style="background:#ef4444;color:white;padding:6px 10px;border-radius:6px;border:none;cursor:pointer;">Hapus</button>

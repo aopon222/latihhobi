@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Schema;
 
 class EcourseController extends Controller
 {
@@ -28,22 +29,24 @@ class EcourseController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ecourse::query();
+        $dbError = false;
+        $query = null;
 
-        // Filter berdasarkan kategori - TODO: Fix - category is not a direct column, need id_category
-        // if ($request->filled('category')) {
-        //     // Support combined 'Film & Konten Kreator' filter (maps to two DB categories)
-        //     if ($request->category === 'film_and_konten') {
-        //         $query->whereIn('category', ['Film', 'Content Creation']);
-        //     } else {
-        //         $query->where('category', $request->category);
-        //     }
-        // }
+        try {
+            $query = Ecourse::query();
+        } catch (\Throwable $e) {
+            $dbError = true;
+        }
 
-        // Filter berdasarkan level - TODO: Fix - level is not in course table
-        // if ($request->filled('level')) {
-        //     $query->where('level', $request->level);
-        // }
+        // Filter berdasarkan kategori
+        if ($request->filled('category')) {
+            $query->where('id_category', $request->category);
+        }
+
+        // Filter berdasarkan level
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
 
         // Filter berdasarkan status
         if ($request->filled('status')) {
@@ -56,22 +59,23 @@ class EcourseController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $ecourses = $query->orderBy('created_at', 'desc')->paginate(10);
+        if (! $dbError) {
+            try {
+                $ecourses = $query->orderBy('created_at', 'desc')->paginate(10);
+            } catch (\Throwable $e) {
+                $ecourses = collect();
+                $dbError = true;
+            }
+        } else {
+            $ecourses = collect();
+        }
 
         // Define canonical categories mapping (stored DB value => display label)
-        $categories = [
-            // combined option (non-destructive filtering)
-            'film_and_konten' => 'Film & Konten Kreator',
-            'Robotics' => 'Robotik',
-            'Film' => 'Film',
-            'Content Creation' => 'Konten Kreator',
-            'Programming' => 'Programming',
-            'Design' => 'Design',
-            'Marketing' => 'Marketing',
-            'Business' => 'Business',
-            'Photography' => 'Photography',
-            'Music' => 'Music',
-        ];
+        // Load categories from DB (id => name)
+        $categories = \Illuminate\Support\Facades\DB::table('category')
+            ->orderBy('name')
+            ->pluck('name', 'id_category')
+            ->toArray();
 
         // Levels: use static list (table does not have `level` column)
         $levels = [
@@ -80,7 +84,7 @@ class EcourseController extends Controller
             'Advanced' => 'Advanced',
         ];
 
-        return view('admin.ecourses.index', compact('ecourses', 'categories', 'levels'));
+        return view('admin.ecourses.index', compact('ecourses', 'categories', 'levels', 'dbError'));
     }
 
     /**
@@ -88,18 +92,11 @@ class EcourseController extends Controller
      */
     public function create()
     {
-        $categories = [
-            'Programming' => 'Programming',
-            'Design' => 'Design', 
-            'Marketing' => 'Marketing',
-            'Business' => 'Business',
-            'Photography' => 'Photography',
-            'Music' => 'Music',
-            // Stored DB value => Display label (Indonesian)
-            'Robotics' => 'Robotik',
-            'Film' => 'Film',
-            'Content Creation' => 'Konten Kreator'
-        ];
+        // Load categories from DB (id => name)
+        $categories = \Illuminate\Support\Facades\DB::table('category')
+            ->orderBy('name')
+            ->pluck('name', 'id_category')
+            ->toArray();
 
         $levels = [
             'Beginner' => 'Beginner',
@@ -117,7 +114,38 @@ class EcourseController extends Controller
     {
         $validated = $request->validated();
 
-        Ecourse::create($validated);
+        // Handle new category creation
+        $categoryId = $validated['id_category'] ?? $request->input('id_category');
+        if ($request->filled('new_category_name')) {
+            $categoryName = $request->input('new_category_name');
+            // Create new category
+            $category = \App\Models\Category::create([
+                'name' => $categoryName,
+            ]);
+            $categoryId = $category->id_category;
+            
+            // Auto-generate view file for the new category
+            \App\Services\EcourseCategoryViewService::generateCategoryView($categoryName, $categoryId);
+        }
+
+        // Map form fields to DB columns
+        $data = [
+            'id_category' => $categoryId,
+            'name' => $validated['name'] ?? $request->input('name'),
+            'course_by' => $validated['course_by'] ?? $request->input('course_by'),
+            'price' => $validated['price'] ?? $request->input('price'),
+            'original_price' => $validated['original_price'] ?? $request->input('original_price'),
+            'level' => $validated['level'] ?? $request->input('level'),
+        ];
+
+        // Handle uploaded image file if present and set image_url
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $path = $request->file('image')->store('public/course_images');
+            $rel = str_replace('public/', '', $path);
+            $data['image_url'] = $rel;
+        }
+
+        $ecourse = Ecourse::create($data);
 
         return redirect()->route('admin.ecourses.index')
             ->with('success', 'E-course berhasil dibuat!');
@@ -128,8 +156,36 @@ class EcourseController extends Controller
      */
     public function show(Ecourse $ecourse)
     {
-        $ecourse->load(['lessons', 'enrollments']);
-        return view('admin.ecourses.show', compact('ecourse'));
+        // Only eager-load relations that have corresponding tables to avoid QueryException
+        $relations = ['enrollments'];
+        try {
+            if (Schema::hasTable('course_content') || Schema::hasTable('ecourse_lessons')) {
+                $relations[] = 'lessons';
+            }
+        } catch (\Throwable $e) {
+            // If checking schema fails, skip eager-loading lessons
+        }
+
+        try {
+            $ecourse->load($relations);
+        } catch (\Throwable $e) {
+            // swallow exceptions to keep admin page working; view has further fallbacks
+        }
+
+        // Flags to indicate whether underlying tables exist (used by view to show helpful notices)
+        try {
+            $lessonsTableExists = Schema::hasTable('course_content') || Schema::hasTable('ecourse_lessons');
+        } catch (\Throwable $e) {
+            $lessonsTableExists = false;
+        }
+
+        try {
+            $enrollmentsTableExists = Schema::hasTable('ecourse_enrollments');
+        } catch (\Throwable $e) {
+            $enrollmentsTableExists = false;
+        }
+
+        return view('admin.ecourses.show', compact('ecourse', 'lessonsTableExists', 'enrollmentsTableExists'));
     }
 
     /**
@@ -137,18 +193,11 @@ class EcourseController extends Controller
      */
     public function edit(Ecourse $ecourse)
     {
-        $categories = [
-            'Programming' => 'Programming',
-            'Design' => 'Design', 
-            'Marketing' => 'Marketing',
-            'Business' => 'Business',
-            'Photography' => 'Photography',
-            'Music' => 'Music',
-            // Stored DB value => Display label (Indonesian)
-            'Robotics' => 'Robotik',
-            'Film' => 'Film',
-            'Content Creation' => 'Konten Kreator'
-        ];
+        // Load categories from DB (id => name)
+        $categories = \Illuminate\Support\Facades\DB::table('category')
+            ->orderBy('name')
+            ->pluck('name', 'id_category')
+            ->toArray();
 
         $levels = [
             'Beginner' => 'Beginner',
@@ -166,7 +215,54 @@ class EcourseController extends Controller
     {
         $validated = $request->validated();
 
-        $ecourse->update($validated);
+        // Handle new category creation
+        $categoryId = $validated['id_category'] ?? $request->input('id_category');
+        if ($request->filled('new_category_name')) {
+            $categoryName = $request->input('new_category_name');
+            // Create new category
+            $category = \App\Models\Category::create([
+                'name' => $categoryName,
+            ]);
+            $categoryId = $category->id_category;
+            
+            // Auto-generate view file for the new category
+            \App\Services\EcourseCategoryViewService::generateCategoryView($categoryName, $categoryId);
+        }
+
+        $data = [
+            'id_category' => $categoryId,
+            'name' => $validated['name'] ?? $request->input('name'),
+            'course_by' => $validated['course_by'] ?? $request->input('course_by'),
+            'price' => $validated['price'] ?? $request->input('price'),
+            'original_price' => $validated['original_price'] ?? $request->input('original_price'),
+            'level' => $validated['level'] ?? $request->input('level'),
+        ];
+
+        // Capture attributes before update for diff display
+        $before = $ecourse->getAttributes();
+
+        // Handle uploaded image if provided
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $path = $request->file('image')->store('public/course_images');
+            $rel = str_replace('public/', '', $path);
+            $data['image_url'] = $rel;
+        }
+
+        // Merge validated additional fields that may exist
+        $updatePayload = array_merge($validated, $data);
+
+        $ecourse->update($updatePayload);
+
+        // Refresh and capture after state
+        $ecourse->refresh();
+        $after = $ecourse->getAttributes();
+
+        // Store diff in session flash so view can present before/after
+        session()->flash('ecourse_update_diff', [
+            'before' => $before,
+            'after' => $after,
+            'id' => $ecourse->id
+        ]);
 
         return redirect()->route('admin.ecourses.index')
             ->with('success', 'E-course berhasil diperbarui!');
@@ -177,7 +273,18 @@ class EcourseController extends Controller
      */
     public function destroy(Ecourse $ecourse)
     {
+        $deletedName = $ecourse->name;
         $ecourse->delete();
+
+        // Jika yang dihapus adalah Robotik Level 1, jalankan seeder untuk menambahkannya kembali
+        try {
+            if (stripos($deletedName, 'robotik level 1') !== false) {
+                // Run seeder to re-create Robotik Level 1 if missing
+                (new \Database\Seeders\RobotikCourseSeeder())->run();
+            }
+        } catch (\Throwable $e) {
+            // swallow errors but log if possible
+        }
 
         return redirect()->route('admin.ecourses.index')
             ->with('success', 'E-course berhasil dihapus!');

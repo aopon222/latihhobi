@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Event Header -->
-    <section class="event-hero">
+    <section class="event-hero" @if($event->image) style="background-image: url('{{ asset('images/' . $event->image) }}'); background-size: cover; background-position: center; background-attachment: fixed;" @endif>
         <div class="event-hero-content">
             <h1>{{ $event->title }}</h1>
             <p>{{ $event->short_description ?? $event->description }}</p>
@@ -41,7 +41,7 @@
                             <div class="info-item">
                                 <strong>Harga:</strong>
                                 <span>
-                                    @if($event->is_free)
+                                    @if($event->price == 0 || $event->price == null)
                                         GRATIS
                                     @else
                                         Rp{{ number_format($event->price, 0, ',', '.') }}
@@ -102,6 +102,48 @@
     @endif
 
     <style>
+        .event-hero {
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .event-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        
+        .event-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        
+        .event-hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .event-hero-content p {
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
         .event-details-section {
             padding: 4rem 5%;
             background: #f8f9fa;

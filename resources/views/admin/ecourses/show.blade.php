@@ -3,6 +3,31 @@
 @section('title', 'Detail E-course - Admin LatihHobi')
 
 @section('admin-content')
+@php
+    // Safe counts for relations - use controller-provided flags to avoid querying missing tables
+    $lessonsCount = 0;
+    $enrollmentsCount = 0;
+
+    try {
+        if (isset($lessonsTableExists) && $lessonsTableExists) {
+            if (is_callable([$ecourse, 'lessons'])) {
+                $lessonsCount = $ecourse->relationLoaded('lessons') ? $ecourse->lessons->count() : $ecourse->lessons()->count();
+            }
+        }
+    } catch (\Throwable $e) {
+        $lessonsCount = 0;
+    }
+
+    try {
+        if (isset($enrollmentsTableExists) && $enrollmentsTableExists) {
+            if (is_callable([$ecourse, 'enrollments'])) {
+                $enrollmentsCount = $ecourse->relationLoaded('enrollments') ? $ecourse->enrollments->count() : $ecourse->enrollments()->count();
+            }
+        }
+    } catch (\Throwable $e) {
+        $enrollmentsCount = 0;
+    }
+@endphp
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
     <h1 style="font-size:2rem;font-weight:700;color:#2563eb;">Detail E-course</h1>
     <div style="display:flex;gap:12px;">
@@ -23,14 +48,26 @@
     </div>
 </div>
 
+@if(isset($lessonsTableExists) && !$lessonsTableExists)
+    <div style="background:#fff4f4;border-left:4px solid #f87171;padding:12px;border-radius:8px;margin-bottom:12px;color:#7f1d1d;">
+        <strong>Perhatian:</strong> Data pelajaran tidak tersedia. Tabel `course_content` atau `ecourse_lessons` belum dibuat di database.
+    </div>
+@endif
+
+@if(isset($enrollmentsTableExists) && !$enrollmentsTableExists)
+    <div style="background:#fff7ed;border-left:4px solid #f59e0b;padding:12px;border-radius:8px;margin-bottom:12px;color:#92400e;">
+        <strong>Perhatian:</strong> Data pendaftar tidak tersedia. Tabel `ecourse_enrollments` belum dibuat di database.
+    </div>
+@endif
+
 <!-- Course Header -->
 <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04);padding:32px;margin-bottom:24px;">
     <div style="display:grid;grid-template-columns:300px 1fr;gap:32px;">
         <!-- Course Image -->
         <div>
-            @if($ecourse->image)
-                <img src="{{ Storage::url($ecourse->image) }}" 
-                     alt="{{ $ecourse->title }}"
+            @if($ecourse->image_url)
+                <img src="{{ getEcourseImageUrl($ecourse->image_url) }}" 
+                     alt="{{ $ecourse->name }}"
                      style="width:100%;height:200px;object-fit:cover;border-radius:12px;border:1px solid #e5e7eb;">
             @else
                 <div style="width:100%;height:200px;background:#f3f4f6;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid #e5e7eb;">
@@ -44,7 +81,7 @@
         <!-- Course Info -->
         <div>
             <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;">
-                <h1 style="font-size:2rem;font-weight:700;color:#111827;margin:0;">{{ $ecourse->title }}</h1>
+                <h1 style="font-size:2rem;font-weight:700;color:#111827;margin:0;">{{ $ecourse->name }}</h1>
                 <div style="display:flex;gap:8px;">
                     @if($ecourse->is_featured)
                         <span style="background:#f59e0b;color:white;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;">
@@ -62,12 +99,20 @@
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:16px;">
                 <div style="background:#f8fafc;padding:16px;border-radius:8px;">
                     <h3 style="font-size:14px;font-weight:600;color:#6b7280;margin:0 0 4px 0;">KATEGORI</h3>
-                    <p style="font-size:16px;font-weight:600;color:#111827;margin:0;">{{ $ecourse->category }}</p>
+                    <p style="font-size:16px;font-weight:600;color:#111827;margin:0;">
+                        @php
+                            if (is_object($ecourse->category)) {
+                                echo $ecourse->category->name ?? ($ecourse->category->id ?? '-');
+                            } else {
+                                echo $ecourse->category ?? '-';
+                            }
+                        @endphp
+                    </p>
                 </div>
                 
                 <div style="background:#f8fafc;padding:16px;border-radius:8px;">
                     <h3 style="font-size:14px;font-weight:600;color:#6b7280;margin:0 0 4px 0;">LEVEL</h3>
-                    <p style="font-size:16px;font-weight:600;color:#111827;margin:0;">{{ $ecourse->level }}</p>
+                    <p style="font-size:16px;font-weight:600;color:#111827;margin:0;">{{ $ecourse->level ?? '-' }}</p>
                 </div>
                 
                 <div style="background:#f8fafc;padding:16px;border-radius:8px;">
@@ -94,7 +139,7 @@
                 
                 <div style="background:#f8fafc;padding:16px;border-radius:8px;">
                     <h3 style="font-size:14px;font-weight:600;color:#6b7280;margin:0 0 4px 0;">PENDAFTARAN</h3>
-                    <p style="font-size:16px;font-weight:600;color:#111827;margin:0;">{{ $ecourse->enrollments->count() }} Siswa</p>
+                    <p style="font-size:16px;font-weight:600;color:#111827;margin:0;">{{ $enrollmentsCount }} Siswa</p>
                 </div>
             </div>
         </div>
@@ -163,10 +208,11 @@
         <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04);padding:24px;margin-bottom:24px;">
             <h3 style="font-size:1.25rem;font-weight:700;color:#111827;margin-bottom:16px;">Media</h3>
             
-            @if($ecourse->thumbnail)
+            @php $adminThumb = $ecourse->image_url ?? null; @endphp
+            @if($adminThumb)
             <div style="margin-bottom:16px;">
                 <h4 style="font-size:14px;font-weight:600;color:#6b7280;margin-bottom:8px;">THUMBNAIL</h4>
-                <img src="{{ Storage::url($ecourse->thumbnail) }}" 
+                <img src="{{ getEcourseImageUrl($adminThumb) }}" 
                      alt="Thumbnail"
                      style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;">
             </div>
@@ -194,22 +240,22 @@
             <div style="space-y:12px;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
                     <span style="color:#6b7280;">Total Pelajaran:</span>
-                    <span style="font-weight:600;color:#111827;">{{ $ecourse->lessons->count() }}/{{ $ecourse->total_lessons }}</span>
+                    <span style="font-weight:600;color:#111827;">{{ $lessonsCount }}/{{ $ecourse->total_lessons }}</span>
                 </div>
                 
                 <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
                     <span style="color:#6b7280;">Total Siswa:</span>
-                    <span style="font-weight:600;color:#111827;">{{ $ecourse->enrollments->count() }}</span>
+                    <span style="font-weight:600;color:#111827;">{{ $enrollmentsCount }}</span>
                 </div>
                 
                 <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
                     <span style="color:#6b7280;">Dibuat:</span>
-                    <span style="font-weight:600;color:#111827;">{{ $ecourse->created_at->format('d M Y') }}</span>
+                    <span style="font-weight:600;color:#111827;">{{ $ecourse->created_at ? $ecourse->created_at->format('d M Y') : '-' }}</span>
                 </div>
                 
                 <div style="display:flex;justify-content:space-between;">
                     <span style="color:#6b7280;">Diperbarui:</span>
-                    <span style="font-weight:600;color:#111827;">{{ $ecourse->updated_at->format('d M Y') }}</span>
+                    <span style="font-weight:600;color:#111827;">{{ $ecourse->updated_at ? $ecourse->updated_at->format('d M Y') : '-' }}</span>
                 </div>
             </div>
         </div>
@@ -219,12 +265,12 @@
             <h3 style="font-size:1.25rem;font-weight:700;color:#111827;margin-bottom:16px;">Aksi Cepat</h3>
             
             <div style="space-y:8px;">
-                <button onclick="toggleActive({{ $ecourse->id }})" 
+                <button onclick="toggleActive({{ $ecourse->id_course }})" 
                         style="width:100%;background:{{ $ecourse->is_active ? '#ef4444' : '#10b981' }};color:white;padding:10px;border:none;border-radius:6px;font-weight:600;cursor:pointer;margin-bottom:8px;">
                     {{ $ecourse->is_active ? 'Nonaktifkan Course' : 'Aktifkan Course' }}
                 </button>
                 
-                <button onclick="toggleFeatured({{ $ecourse->id }})" 
+                <button onclick="toggleFeatured({{ $ecourse->id_course }})" 
                         style="width:100%;background:{{ $ecourse->is_featured ? '#6b7280' : '#f59e0b' }};color:white;padding:10px;border:none;border-radius:6px;font-weight:600;cursor:pointer;margin-bottom:8px;">
                     {{ $ecourse->is_featured ? 'Hapus dari Featured' : 'Jadikan Featured' }}
                 </button>

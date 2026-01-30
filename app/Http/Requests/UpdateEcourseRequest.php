@@ -23,11 +23,13 @@ class UpdateEcourseRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'id_category' => 'required|integer|exists:category,id_category',
+            'id_category' => $this->request->get('new_category_name') ? 'nullable' : 'required|integer|exists:category,id_category',
+            'new_category_name' => 'nullable|string|max:100',
             'course_by' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'original_price' => 'nullable|numeric|min:0',
-            'image_url' => 'nullable|string|max:255',
+            'level' => 'nullable|string|in:Beginner,Intermediate,Advanced',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 

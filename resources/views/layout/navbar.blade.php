@@ -8,36 +8,46 @@
             <li class="nav-item"><a href="/ekskul-reguler" class="{{ request()->is('ekskul-reguler') ? 'active' : '' }}">Ekskul Reguler</a></li>
             <li class="nav-item dropdown">
                 <a href="{{ route('ecourse.index') }}">E-course <span class="dropdown-arrow">▼</span></a>
-                <div class="dropdown-menu">
-                    <a href="{{ route('course.robotik') }}" class="dropdown-item">
-                        <span class="dropdown-icon">🤖</span>
-                        Ecourse Robotik
-                    </a>
-                    <a href="{{ route('course.film_konten_kreator') }}" class="dropdown-item">
-                        <span class="dropdown-icon">🎬</span>
-                        Ecourse Film & Konten Kreator
-                    </a>
-                    <a href="/ecourse/komik" class="dropdown-item">
-                        <span class="dropdown-icon">📖</span>
-                        Ecourse Komik
-                    </a>
+                <div class="dropdown-menu" style="min-width:220px;border-radius:8px;padding:8px;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.12);">
+                    <style>
+                        .nav-ecourse-category{display:block;padding:10px 14px;border-radius:8px;color:#3b82f6;font-weight:700;text-decoration:none;transition:background .12s ease,color .12s ease}
+                        .nav-ecourse-category:hover{background:#dbeafe;color:#3b82f6}
+                        .nav-ecourse-empty{padding:10px 12px;color:#6b7280}
+                    </style>
+
+                    @php
+                        $navEcourseCategories = \App\Models\Category::orderBy('name', 'asc')->get();
+                    @endphp
+
+                    @if($navEcourseCategories->isEmpty())
+                        <div class="nav-ecourse-empty">Belum ada kategori kursus</div>
+                    @else
+                        @foreach($navEcourseCategories as $category)
+                            <a href="{{ route('ecourse.category', Str::slug($category->name)) }}" class="nav-ecourse-category">{{ Str::limit($category->name, 48) }}</a>
+                        @endforeach
+                    @endif
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a href="#">Event <span class="dropdown-arrow">▼</span></a>
-                <div class="dropdown-menu">
-                    <a href="{{ route('lhec2025') }}" class="dropdown-item">
-                        <span class="dropdown-icon">🏆</span>
-                        LHEC 2025
-                    </a>
-                    <a href="{{ route('workshop-bootcamp') }}" class="dropdown-item">
-                        <span class="dropdown-icon">💼</span>
-                        WORKSHOP & BOOTCAMP
-                    </a>
-                    <a href="{{ route('holiday-fun-class') }}" class="dropdown-item">
-                        <span class="dropdown-icon">🎉</span>
-                        HOLIDAY FUN CLASS
-                    </a>
+                <a href="{{ route('events.index') }}">Event <span class="dropdown-arrow">▼</span></a>
+                <div class="dropdown-menu" style="min-width:220px;border-radius:8px;padding:8px;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.12);">
+                    <style>
+                        .nav-event-item{display:block;padding:10px 14px;border-radius:8px;color:#f59e0b;font-weight:700;text-decoration:none;transition:background .12s ease,color .12s ease}
+                        .nav-event-item:hover{background:#fff7ed;color:#f59e0b}
+                        .nav-event-empty{padding:10px 12px;color:#6b7280}
+                    </style>
+
+                    @php
+                        $navEvents = \App\Models\Event::published()->orderBy('start_date', 'asc')->take(6)->get();
+                    @endphp
+
+                    @if($navEvents->isEmpty())
+                        <div class="nav-event-empty">Tidak ada event saat ini</div>
+                    @else
+                        @foreach($navEvents as $ev)
+                            <a href="{{ route('events.show', $ev) }}" class="nav-event-item">{{ Str::limit($ev->title, 48) }}</a>
+                        @endforeach
+                    @endif
                 </div>
             </li>
             <li class="nav-item dropdown">

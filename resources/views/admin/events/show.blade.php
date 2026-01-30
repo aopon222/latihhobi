@@ -8,6 +8,11 @@
     <p style="color:#6b7280;margin-bottom:16px;">{{ $event->short_description }}</p>
 
     <div style="background:#fff;padding:20px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.04);">
+        @if($event->image)
+            <div style="margin-bottom:12px;">
+                <img src="{{ asset('images/' . $event->image) }}" alt="{{ $event->title }}" style="max-width:100%;height:auto;border-radius:8px;border:1px solid #e5e7eb;" />
+            </div>
+        @endif
         <p><strong>Mulai:</strong> {{ $event->start_date ? $event->start_date->format('d M Y H:i') : '-' }}</p>
         <p><strong>Selesai:</strong> {{ $event->end_date ? $event->end_date->format('d M Y H:i') : '-' }}</p>
         <p><strong>Lokasi:</strong> {{ $event->location ?: '-' }}</p>

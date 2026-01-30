@@ -1,0 +1,2 @@
+App\Models\Ecourse::count()
+exit

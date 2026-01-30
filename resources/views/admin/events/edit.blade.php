@@ -3,10 +3,21 @@
 @section('title', 'Edit Event - Admin LatihHobi')
 
 @section('admin-content')
+<style>
+    /* Hide number input spinners */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <div style="max-width:900px;margin:0 auto;">
     <h1 style="font-size:1.75rem;font-weight:700;color:#111827;margin-bottom:16px;">Edit Event</h1>
 
-    <form method="POST" action="{{ route('admin.events.update', $event) }}">
+    <form method="POST" action="{{ route('admin.events.update', $event) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
@@ -57,6 +68,20 @@
             <div style="grid-column:1 / -1;display:flex;gap:12px;align-items:center;margin-top:8px;">
                 <label style="display:flex;gap:8px;align-items:center;"><input type="checkbox" name="is_active" {{ old('is_active', $event->is_active) ? 'checked' : '' }}> Aktif</label>
                 <label style="display:flex;gap:8px;align-items:center;"><input type="checkbox" name="is_featured" {{ old('is_featured', $event->is_featured) ? 'checked' : '' }}> Featured</label>
+            </div>
+            <div style="grid-column:1 / -1;display:flex;gap:12px;align-items:center;">
+                <div style="flex:1;">
+                    <label class="block font-semibold">Gambar Event (jpg, png, webp)</label>
+                    <input type="file" name="image" accept="image/*" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;" />
+                </div>
+                <div style="width:160px;">
+                    <label class="block font-semibold">Preview saat ini</label>
+                    @if($event->image)
+                        <img src="{{ asset('images/' . $event->image) }}" alt="Gambar event" style="width:160px;height:90px;object-fit:cover;border-radius:6px;border:1px solid #e5e7eb;" />
+                    @else
+                        <div style="width:160px;height:90px;display:flex;align-items:center;justify-content:center;background:#f3f4f6;border-radius:6px;border:1px solid #e5e7eb;color:#6b7280;">Tidak ada gambar</div>
+                    @endif
+                </div>
             </div>
         </div>
 

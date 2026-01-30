@@ -37,6 +37,9 @@ Route::redirect('/ecourse/film-konten-kreator', '/course-film-konten-kreator');
 Route::get('/ecourse/robotik', [EcourseController::class, 'robotik'])->name('course.robotik');
 Route::redirect('/ecourse-robotik', '/ecourse/robotik');
 
+// E-Course: Dynamic category routes (auto-generated views) - HARUS SEBELUM /{id}
+Route::get('/ecourse/category/{slug}', [EcourseController::class, 'category'])->name('ecourse.category');
+
 // E-Course: Detail dan Cart (wildcard terakhir)
 Route::get('/ecourse/{id}', [EcourseController::class, 'show'])->name('ecourse.show');
 Route::post('/ecourse/{id}/add-to-cart', [EcourseController::class, 'addToCart'])->name('ecourse.addToCart')->middleware('auth');
@@ -52,6 +55,10 @@ Route::delete('/cart/clear', [App\Http\Controllers\WebCartController::class, 'cl
 Route::get('/event', function () {
     return view('event');
 });
+
+// Event Routes (Frontend)
+Route::get('/events', [App\Http\Controllers\EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event}', [App\Http\Controllers\EventController::class, 'show'])->name('events.show');
 
 // Podcast Routes
 Route::get('/podcasts', [PodcastController::class, 'index'])->name('podcasts.index');
@@ -89,6 +96,7 @@ Route::middleware('auth')->group(function () {
 
     // Email Testing Routes
     Route::get('/email/status', [EmailTestController::class, 'showEmailStatus'])->name('email.status');
+    Route::get('/email/config-check', [EmailTestController::class, 'showEmailStatus'])->name('email.config.check');
     Route::post('/email/test', [EmailTestController::class, 'testEmail'])->name('email.test');
 
     // Change Password Routes (available to all authenticated users)
@@ -146,6 +154,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('ecourses/{ecourse}/delete', [App\Http\Controllers\Admin\EcourseController::class, 'destroy'])
         ->name('ecourses.delete');
 
+    // Enrollment management routes
+    Route::resource('enrollments', App\Http\Controllers\Admin\EcourseEnrollmentController::class)->only(['index', 'show']);
+    Route::post('enrollments/{enrollment}/toggle-lock', [App\Http\Controllers\Admin\EcourseEnrollmentController::class, 'toggleLock'])
+        ->name('enrollments.toggle-lock');
+
     // Podcast management routes
     Route::resource('podcasts', App\Http\Controllers\Admin\PodcastController::class);
     Route::post('podcasts/{podcast}/toggle-featured', [App\Http\Controllers\Admin\PodcastController::class, 'toggleFeatured'])
@@ -159,6 +172,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->name('events.toggle-featured');
     Route::post('events/{event}/toggle-active', [App\Http\Controllers\Admin\EventController::class, 'toggleActive'])
         ->name('events.toggle-active');
+    
+    // Category management (delete only if unused)
+    Route::delete('categories/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])
+        ->name('categories.destroy');
 });
 
 // Ekskul Routes

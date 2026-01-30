@@ -3,6 +3,11 @@
 @section('title', 'E-Course - LatihHobi')
 
 @section('content')
+@if(isset($dbError) && $dbError)
+    <div style="background:#fff4f4;border-left:4px solid #f87171;padding:12px;border-radius:8px;margin-bottom:12px;color:#7f1d1d;">
+        <strong>Perhatian:</strong> Gagal memuat daftar e-course (database bermasalah atau tabel tidak ditemukan).
+    </div>
+@endif
 <section class="ecourse-categories">
     <div class="ecourse-container">
         <div class="ecourse-grid">
@@ -42,7 +47,7 @@
             @foreach($ecourses->where('id_category', 1) as $course)
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}" class="product-img">
+                        <img src="{{ getEcourseImageUrl($course->image_url) }}" alt="{{ $course->name }}" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>{{ $course->name }}</h3>
@@ -66,7 +71,7 @@
             @foreach($ecourses->where('id_category', 2) as $course)
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}" class="product-img">
+                        <img src="{{ getEcourseImageUrl($course->image_url) }}" alt="{{ $course->name }}" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>{{ $course->name }}</h3>
@@ -90,7 +95,7 @@
             @foreach($ecourses->where('id_category', 3) as $course)
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}" class="product-img">
+                        <img src="{{ getEcourseImageUrl($course->image_url) }}" alt="{{ $course->name }}" class="product-img">
                     </div>
                     <div class="product-info">
                         <h3>{{ $course->name }}</h3>

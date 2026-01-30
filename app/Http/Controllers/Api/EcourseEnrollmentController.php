@@ -27,6 +27,7 @@ class EcourseEnrollmentController extends ApiBaseController
             $user = $request->user();
             
             $enrollments = EcourseEnrollment::where('user_id', $user->id)
+                ->where('is_locked', false) // Only show unlocked enrollments
                 ->with('ecourse')
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);

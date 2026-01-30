@@ -53,17 +53,22 @@
 
         .robot-image-wrapper {
             width: 100%;
-            height: 260px;
+            height: 260px !important;
+            max-height: 260px !important;
             background: #2c3e50;
             position: relative;
             overflow: hidden;
             flex-shrink: 0;
+            display: block;
         }
 
         .robot-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 260px !important;
+            object-fit: cover !important;
+            aspect-ratio: 16 / 9 !important;
+            display: block !important;
         }
 
         .robot-info {
@@ -150,12 +155,17 @@
                 </div>
             @endif
 
-            @if ($robotikCourses->count() > 0)
+            @php
+                // Support both old and new variable names
+                $coursesToShow = $robotikCourses ?? $courses ?? collect();
+            @endphp
+
+            @if ($coursesToShow->count() > 0)
                 <div class="courses-grid">
-                    @foreach ($robotikCourses as $course)
+                    @foreach ($coursesToShow as $course)
                         <div class="robot-card">
                             <div class="robot-image-wrapper">
-                                <img src="{{ asset('images/' . $course->image_url) }}" alt="{{ $course->name }}">
+                                <img src="{{ getEcourseImageUrl($course->image_url) }}" alt="{{ $course->name }}" style="width:100%;height:260px;max-height:260px;object-fit:cover;aspect-ratio:16/9;display:block;">
                             </div>
                             <div class="robot-info">
                                 <h3 class="robot-title">{{ $course->name }}</h3>

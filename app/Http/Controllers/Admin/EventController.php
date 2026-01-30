@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class EventController extends Controller
 {
@@ -56,28 +57,52 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
+        // Manual validation
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:500',
             'link' => 'nullable|url',
             'description' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'registration_start' => 'nullable|date',
-            'registration_end' => 'nullable|date|after_or_equal:registration_start',
+            'start_date' => 'required|date_format:Y-m-d\TH:i',
+            'end_date' => 'nullable|date_format:Y-m-d\TH:i|after_or_equal:start_date',
+            'registration_start' => 'nullable|date_format:Y-m-d\TH:i',
+            'registration_end' => 'nullable|date_format:Y-m-d\TH:i|after_or_equal:registration_start',
             'location' => 'nullable|string|max:255',
             'max_participants' => 'nullable|integer|min:1',
             'price' => 'nullable|numeric|min:0',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
 
+        // Generate slug from title
+        $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
+
+        // Ensure unique slug
+        $originalSlug = $validated['slug'];
+        $count = 1;
+        while (Event::where('slug', $validated['slug'])->exists()) {
+            $validated['slug'] = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Ensure folder exists
+            $uploadDir = public_path('images/events');
+            if (!File::exists($uploadDir)) {
+                File::makeDirectory($uploadDir, 0755, true);
+            }
+            
+            $imageName = time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move($uploadDir, $imageName);
+            $validated['image'] = 'events/' . $imageName;
+        }
+
         Event::create($validated);
 
-        return redirect()->route('admin.events.index')->with('success', 'Event berhasil dibuat!');
+        return redirect()->route('admin.events.index')->with('success', 'Event "' . $validated['title'] . '" berhasil dibuat dan siap digunakan!');
     }
 
     public function show(Event $event)
@@ -92,34 +117,66 @@ class EventController extends Controller
 
     public function update(Request $request, Event $event)
     {
+        // Manual validation
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:500',
             'link' => 'nullable|url',
             'description' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'registration_start' => 'nullable|date',
-            'registration_end' => 'nullable|date|after_or_equal:registration_start',
+            'start_date' => 'required|date_format:Y-m-d\TH:i',
+            'end_date' => 'nullable|date_format:Y-m-d\TH:i|after_or_equal:start_date',
+            'registration_start' => 'nullable|date_format:Y-m-d\TH:i',
+            'registration_end' => 'nullable|date_format:Y-m-d\TH:i|after_or_equal:registration_start',
             'location' => 'nullable|string|max:255',
             'max_participants' => 'nullable|integer|min:1',
             'price' => 'nullable|numeric|min:0',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
 
+        // Generate slug if title changed
+        if ($event->title !== $validated['title']) {
+            $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
+
+            // Ensure unique slug
+            $originalSlug = $validated['slug'];
+            $count = 1;
+            while (Event::where('slug', $validated['slug'])->where('id', '!=', $event->id)->exists()) {
+                $validated['slug'] = $originalSlug . '-' . $count;
+                $count++;
+            }
+        }
+
+        // Handle image replacement
+        if ($request->hasFile('image')) {
+            // Ensure folder exists
+            $uploadDir = public_path('images/events');
+            if (!File::exists($uploadDir)) {
+                File::makeDirectory($uploadDir, 0755, true);
+            }
+            
+            // remove old image if present
+            if ($event->image && file_exists(public_path('images/' . $event->image))) {
+                unlink(public_path('images/' . $event->image));
+            }
+            
+            $imageName = time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move($uploadDir, $imageName);
+            $validated['image'] = 'events/' . $imageName;
+        }
+
         $event->update($validated);
 
-        return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui!');
+        return redirect()->route('admin.events.index')->with('success', 'Event "' . $event->title . '" berhasil diperbarui!');
     }
 
     public function destroy(Event $event)
     {
+        $eventTitle = $event->title;
         $event->delete();
-        return redirect()->route('admin.events.index')->with('success', 'Event berhasil dihapus!');
+        return redirect()->route('admin.events.index')->with('success', 'Event "' . $eventTitle . '" berhasil dihapus!');
     }
 
     public function toggleFeatured(Event $event)

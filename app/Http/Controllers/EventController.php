@@ -13,8 +13,7 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::published()
-            ->upcoming()
-            ->orderBy('start_date')
+            ->orderBy('start_date', 'desc')
             ->paginate(12);
 
         return view('events.index', compact('events'));

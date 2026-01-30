@@ -11,7 +11,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register files binding for event caching compatibility
+        $this->app->bind('files', function ($app) {
+            return new \Illuminate\Filesystem\Filesystem();
+        });
     }
 
     /**

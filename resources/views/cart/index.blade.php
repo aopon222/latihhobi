@@ -22,7 +22,7 @@
                         @foreach($cartItems as $item)
                             <div class="row align-items-center border-bottom py-3" data-cart-id="{{ $item->id_cart_items }}">
                                 <div class="col-md-2">
-                                    <img src="{{ optional($item->course)->image_url ?: '/placeholder.svg' }}" 
+                                    <img src="{{ getEcourseImageUrl(optional($item->course)->image_url) }}" 
                                          class="img-fluid rounded" alt="{{ optional($item->course)->name }}">
                                 </div>
                                 <div class="col-md-5">
@@ -32,8 +32,8 @@
                                 <div class="col-md-2">
                                     <div class="input-group">
                                         <button class="btn btn-outline-secondary btn-sm quantity-btn" data-action="decrease" data-cart-id="{{ $item->id_cart_items }}">-</button>
-                                        <input type="number" class="form-control form-control-sm text-center quantity-input" 
-                                               value="{{ $item->quantity }}" min="1" max="10" data-cart-id="{{ $item->id_cart_items }}">
+                                        <span class="form-control form-control-sm text-center quantity-display" 
+                                              data-cart-id="{{ $item->id_cart_items }}">{{ $item->quantity }}</span>
                                         <button class="btn btn-outline-secondary btn-sm quantity-btn" data-action="increase" data-cart-id="{{ $item->id_cart_items }}">+</button>
                                     </div>
                                 </div>
@@ -117,8 +117,8 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const action = this.dataset.action;
             const cartId = this.dataset.cartId;
-            const input = document.querySelector(`.quantity-input[data-cart-id="${cartId}"]`);
-            let quantity = parseInt(input.value);
+            const display = document.querySelector(`.quantity-display[data-cart-id="${cartId}"]`);
+            let quantity = parseInt(display.textContent);
             
             if (action === 'increase') {
                 quantity = Math.min(quantity + 1, 10);
@@ -126,17 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 quantity = Math.max(quantity - 1, 1);
             }
             
-            input.value = quantity;
-            updateCartItem(cartId, quantity, csrfToken);
-        });
-    });
-
-    document.querySelectorAll('.quantity-input').forEach(input => {
-        input.addEventListener('change', function() {
-            const cartId = this.dataset.cartId;
-            let quantity = parseInt(this.value);
-            quantity = Math.max(1, Math.min(quantity, 10));
-            this.value = quantity;
+            display.textContent = quantity;
             updateCartItem(cartId, quantity, csrfToken);
         });
     });

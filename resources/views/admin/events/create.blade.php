@@ -3,10 +3,32 @@
 @section('title', 'Tambah Event - Admin LatihHobi')
 
 @section('admin-content')
+<style>
+    /* Hide number input spinners */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <div style="max-width:900px;margin:0 auto;">
     <h1 style="font-size:1.75rem;font-weight:700;color:#111827;margin-bottom:16px;">Tambah Event</h1>
 
-    <form method="POST" action="{{ route('admin.events.store') }}">
+    @if($errors->any())
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;margin-bottom:24px;">
+            <h3 style="color:#dc2626;font-weight:600;margin-bottom:8px;">Terjadi Kesalahan:</h3>
+            <ul style="color:#dc2626;margin:0;padding-left:20px;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('admin.events.store') }}" enctype="multipart/form-data">
         @csrf
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <div>
@@ -56,6 +78,10 @@
             <div style="grid-column:1 / -1;display:flex;gap:12px;align-items:center;margin-top:8px;">
                 <label style="display:flex;gap:8px;align-items:center;"><input type="checkbox" name="is_active" {{ old('is_active') ? 'checked' : '' }}> Aktif</label>
                 <label style="display:flex;gap:8px;align-items:center;"><input type="checkbox" name="is_featured" {{ old('is_featured') ? 'checked' : '' }}> Featured</label>
+            </div>
+            <div style="grid-column:1 / -1;">
+                <label class="block font-semibold">Gambar Event (jpg, png, webp)</label>
+                <input type="file" name="image" accept="image/*" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;" />
             </div>
         </div>
 

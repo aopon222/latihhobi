@@ -3,6 +3,17 @@
 @section('title', 'Tambah E-course - Admin LatihHobi')
 
 @section('admin-content')
+<style>
+    /* Hide number input spinners */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
     <h1 style="font-size:2rem;font-weight:700;color:#2563eb;">Tambah E-course</h1>
     <a href="{{ route('admin.ecourses.index') }}" 
@@ -25,29 +36,113 @@
             <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:24px;">
                 <div>
                     <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Judul E-course *</label>
-                    <input type="text" name="title" value="{{ old('title') }}" required
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('title') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
+                    <input type="text" name="name" value="{{ old('name') }}" required
+                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('name') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
                            placeholder="Masukkan judul e-course">
-                    @error('title')
+                    @error('name')
                         <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
                     @enderror
                 </div>
                 
                 <div>
                     <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Kategori *</label>
-                    <select name="category" required
-                            style="width:100%;padding:12px;border:1px solid {{ $errors->has('category') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
-                        <option value="">Pilih Kategori</option>
-                        @foreach($categories as $value => $label)
-                            <option value="{{ $value }}" {{ old('category') == $value ? 'selected' : '' }}>
-                                {{ $label }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('category')
-                        <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                    @enderror
+                    <div style="display:flex;gap:8px;align-items:flex-start;">
+                        <div style="flex:1;">
+                            <select name="id_category" id="category-select"
+                                    style="width:100%;padding:12px;border:1px solid {{ $errors->has('id_category') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
+                                <option value="">Pilih Kategori atau Buat Baru</option>
+                                @foreach($categories as $value => $label)
+                                    <option value="{{ $value }}" {{ old('id_category') == $value ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                                <option value="__new__" style="color:#2563eb;font-weight:600;">+ Buat Kategori Baru</option>
+                            </select>
+                            @error('id_category')
+                                <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden input for new category name -->
+                    <input type="hidden" name="new_category_name" id="new-category-name" value="">
+                    
+                    <!-- Modal for creating new category -->
+                    <div id="category-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+                        <div style="background:white;border-radius:12px;padding:32px;max-width:400px;width:90%;">
+                            <h3 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;">Buat Kategori Baru</h3>
+                            <div style="margin-bottom:24px;">
+                                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Nama Kategori *</label>
+                                <input type="text" id="new-category-input" placeholder="Contoh: Web Development"
+                                       style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;">
+                                <p id="category-error" style="color:#ef4444;font-size:12px;margin-top:4px;display:none;"></p>
+                            </div>
+                            <div style="display:flex;gap:12px;justify-content:flex-end;">
+                                <button type="button" id="cancel-category" style="background:#6b7280;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
+                                    Batal
+                                </button>
+                                <button type="button" id="submit-category" style="background:#2563eb;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
+                                    Buat
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <script>
+                    (function() {
+                        const categorySelect = document.getElementById('category-select');
+                        const categoryModal = document.getElementById('category-modal');
+                        const newCategoryInput = document.getElementById('new-category-input');
+                        const categoryError = document.getElementById('category-error');
+                        const submitBtn = document.getElementById('submit-category');
+                        const cancelBtn = document.getElementById('cancel-category');
+                        const newCategoryNameInput = document.getElementById('new-category-name');
+                        
+                        categorySelect.addEventListener('change', function(e) {
+                            if (this.value === '__new__') {
+                                categoryModal.style.display = 'flex';
+                                newCategoryInput.focus();
+                            }
+                        });
+                        
+                        cancelBtn.addEventListener('click', function() {
+                            categoryModal.style.display = 'none';
+                            categorySelect.value = '';
+                            newCategoryInput.value = '';
+                            categoryError.style.display = 'none';
+                        });
+                        
+                        submitBtn.addEventListener('click', function() {
+                            const categoryName = newCategoryInput.value.trim();
+                            if (!categoryName) {
+                                categoryError.textContent = 'Nama kategori tidak boleh kosong';
+                                categoryError.style.display = 'block';
+                                return;
+                            }
+                            if (categoryName.length > 100) {
+                                categoryError.textContent = 'Nama kategori maksimal 100 karakter';
+                                categoryError.style.display = 'block';
+                                return;
+                            }
+                            // Store the new category name in hidden input
+                            newCategoryNameInput.value = categoryName;
+                            categoryModal.style.display = 'none';
+                            // Update select display to show new category
+                            categorySelect.innerHTML = '<option value="">✓ Kategori baru: ' + categoryName + '</option>' + categorySelect.innerHTML;
+                            categorySelect.value = '';
+                            newCategoryInput.value = '';
+                            categoryError.style.display = 'none';
+                        });
+                        
+                        // Allow Enter key to submit
+                        newCategoryInput.addEventListener('keypress', function(e) {
+                            if (e.key === 'Enter') {
+                                submitBtn.click();
+                            }
+                        });
+                    })();
+                </script>
             </div>
             
             <div style="margin-bottom:24px;">
@@ -88,10 +183,10 @@
                 
                 <div>
                     <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga Diskon (Rp)</label>
-                    <input type="number" name="discount_price" value="{{ old('discount_price') }}" min="0"
+                    <input type="number" name="original_price" value="{{ old('original_price') }}" min="0"
                            style="width:100%;padding:12px;border:1px solid {{ $errors->has('discount_price') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
                            placeholder="Contoh: 100000">
-                    @error('discount_price')
+                    @error('original_price')
                         <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
                     @enderror
                 </div>
@@ -148,26 +243,18 @@
         <div style="margin-bottom:32px;">
             <h2 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;border-bottom:2px solid #e5e7eb;padding-bottom:8px;">Media</h2>
             
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <div style="display:grid;grid-template-columns:1fr;gap:24px;">
                 <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Gambar Utama</label>
-                    <input type="file" name="image" accept="image/*"
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('image') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
+                          <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Gambar Utama</label>
+                          <input type="file" name="image" accept="image/*"
+                              style="width:100%;padding:12px;border:1px solid {{ $errors->has('image') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
                     <p style="color:#6b7280;font-size:12px;margin-top:4px;">Format: JPEG, PNG, JPG, GIF. Maksimal 2MB</p>
                     @error('image')
                         <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
                     @enderror
                 </div>
                 
-                <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Thumbnail</label>
-                    <input type="file" name="thumbnail" accept="image/*"
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('thumbnail') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
-                    <p style="color:#6b7280;font-size:12px;margin-top:4px;">Format: JPEG, PNG, JPG, GIF. Maksimal 1MB</p>
-                    @error('thumbnail')
-                        <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                    @enderror
-                </div>
+
             </div>
         </div>
 

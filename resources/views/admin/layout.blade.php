@@ -5,6 +5,12 @@
 
 @section('head')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    /* Admin-specific SVG constraints to prevent oversized icons (pagination, helpers) */
+    main svg { max-width: 36px !important; max-height: 36px !important; }
+    /* More specific: pagination/icons inside admin lists */
+    main .pagination svg, main .page svg, main nav svg { max-width: 20px !important; max-height: 20px !important; }
+</style>
 @endsection
 
 @section('content')
@@ -15,6 +21,7 @@
         <nav style="width:100%;">
             <a href="{{ route('admin.dashboard') }}" style="display:block;padding:12px 32px;color:{{ request()->routeIs('admin.dashboard') ? '#2563eb' : '#374151' }};font-weight:{{ request()->routeIs('admin.dashboard') ? '600' : '500' }};text-decoration:none;border-radius:8px;margin-bottom:8px;{{ request()->routeIs('admin.dashboard') ? 'background:#e0e7ff;' : '' }}">Dashboard</a>
             <a href="{{ route('admin.ecourses.index') }}" style="display:block;padding:12px 32px;color:{{ request()->routeIs('admin.ecourses.*') ? '#2563eb' : '#374151' }};font-weight:{{ request()->routeIs('admin.ecourses.*') ? '600' : '500' }};text-decoration:none;border-radius:8px;margin-bottom:8px;{{ request()->routeIs('admin.ecourses.*') ? 'background:#e0e7ff;' : '' }}">E-course</a>
+            <a href="{{ route('admin.enrollments.index') }}" style="display:block;padding:12px 32px;color:{{ request()->routeIs('admin.enrollments.*') ? '#2563eb' : '#374151' }};font-weight:{{ request()->routeIs('admin.enrollments.*') ? '600' : '500' }};text-decoration:none;border-radius:8px;margin-bottom:8px;{{ request()->routeIs('admin.enrollments.*') ? 'background:#e0e7ff;' : '' }}">📚 Enrollments</a>
             <a href="{{ route('admin.podcasts.index') }}" style="display:block;padding:12px 32px;color:{{ request()->routeIs('admin.podcasts.*') ? '#2563eb' : '#374151' }};font-weight:{{ request()->routeIs('admin.podcasts.*') ? '600' : '500' }};text-decoration:none;border-radius:8px;margin-bottom:8px;{{ request()->routeIs('admin.podcasts.*') ? 'background:#e0e7ff;' : '' }}">Podcast</a>
             <a href="{{ route('admin.events.index') }}" style="display:block;padding:12px 32px;color:{{ request()->routeIs('admin.events.*') ? '#2563eb' : '#374151' }};font-weight:{{ request()->routeIs('admin.events.*') ? '600' : '500' }};text-decoration:none;border-radius:8px;margin-bottom:8px;{{ request()->routeIs('admin.events.*') ? 'background:#e0e7ff;' : '' }}">Event</a>
             <a href="{{ route('password.change.form') }}" style="display:block;padding:12px 32px;color:#374151;font-weight:500;text-decoration:none;border-radius:8px;margin-bottom:8px;">🔐 Ganti Password</a>
@@ -37,21 +44,43 @@
 
 <!-- Toast Notification -->
 @if(session('success'))
-<div id="toast" style="position:fixed;top:20px;right:20px;background:#10b981;color:white;padding:16px 24px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:1000;display:flex;align-items:center;gap:8px;">
-    <svg style="width:20px;height:20px;" fill="currentColor" viewBox="0 0 20 20">
+<div id="toast" style="position:fixed;top:20px;right:20px;background:#10b981;color:white;padding:16px 24px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:1000;display:flex;align-items:center;gap:8px;max-width:400px;animation:slideIn 0.3s ease-out;">
+    <svg style="width:20px;height:20px;flex-shrink:0;" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
     </svg>
-    {{ session('success') }}
+    <span style="flex:1;">{{ session('success') }}</span>
+    <button onclick="closeToast()" style="background:none;border:none;color:white;cursor:pointer;padding:0;margin-left:8px;opacity:0.8;">
+        <svg style="width:16px;height:16px;" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+    </button>
 </div>
+<style>
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+</style>
 <script>
-    setTimeout(() => {
-        const toast = document.getElementById('toast');
-        if (toast) {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateX(100%)';
-            setTimeout(() => toast.remove(), 300);
-        }
-    }, 3000);
+function closeToast() {
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => toast.remove(), 300);
+    }
+}
+
+setTimeout(() => {
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => toast.remove(), 300);
+    }
+}, 5000);
 </script>
 @endif
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\EcourseEnrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -71,6 +72,28 @@ class PaymentController extends Controller
                     'paid_at' => now(),
                     'payment_reference' => $paymentResult['reference']
                 ]);
+
+                // Create enrollments for purchased ecourses
+                $order->load('orderItems.course');
+                foreach ($order->orderItems as $item) {
+                    // Check if the purchased item is an ecourse
+                    if ($item->course && $item->course instanceof \App\Models\Ecourse) {
+                        // Create enrollment if not already exists
+                        $existingEnrollment = \App\Models\EcourseEnrollment::where('user_id', $order->user_id)
+                            ->where('ecourse_id', $item->course->id_course)
+                            ->first();
+
+                        if (!$existingEnrollment) {
+                            \App\Models\EcourseEnrollment::create([
+                                'user_id' => $order->user_id,
+                                'id_course' => $item->course->id_course,
+                                'status' => 'active',
+                                'is_locked' => true, // Default locked, admin must unlock
+                                'enrolled_at' => now(),
+                            ]);
+                        }
+                    }
+                }
 
                 DB::commit();
 

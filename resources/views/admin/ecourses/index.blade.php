@@ -14,6 +14,114 @@
     </a>
 </div>
 
+@if(isset($dbError) && $dbError)
+    <div style="background:#fff4f4;border-left:4px solid #f87171;padding:12px;border-radius:8px;margin-bottom:12px;color:#7f1d1d;">
+        <strong>Perhatian:</strong> Gagal memuat data e-course dari database. Periksa koneksi database atau pastikan tabel `course` tersedia.
+    </div>
+@endif
+
+@if(session()->has('ecourse_update_diff'))
+    @php $diff = session('ecourse_update_diff'); @endphp
+    <div style="background:#f0f9ff;border-left:4px solid #2563eb;padding:16px;border-radius:8px;margin-bottom:16px;">
+        <strong>Perubahan tersimpan untuk E-course ID {{ $diff['id'] }} — Perbandingan Sebelum / Sesudah:</strong>
+        <div style="margin-top:8px;overflow:auto;">
+            <table style="width:100%;border-collapse:collapse;margin-top:8px;">
+                <thead>
+                    <tr style="text-align:left;color:#374151;font-weight:600;">
+                        <th style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Field</th>
+                        <th style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Sebelum</th>
+                        <th style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Sesudah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $before = $diff['before'] ?? [];
+                        $after = $diff['after'] ?? [];
+                        $keys = array_unique(array_merge(array_keys($before), array_keys($after)));
+
+                        // Helper closure to produce friendly display values
+                        $formatValue = function($key, $value) {
+                            if (is_null($value) || $value === '') {
+                                return '-';
+                            }
+
+                            // Category id -> name
+                            if ($key === 'id_category') {
+                                $name = \Illuminate\Support\Facades\DB::table('category')
+                                    ->where('id_category', $value)
+                                    ->value('name');
+                                return $name ?? $value;
+                            }
+
+                            // Currency fields
+                            if (in_array($key, ['price', 'original_price', 'discount_price', 'discount'])) {
+                                // ensure numeric
+                                if (is_numeric($value)) {
+                                    return 'Rp ' . number_format($value, 0, ',', '.');
+                                }
+                                return $value;
+                            }
+
+                            // Boolean fields
+                            if (in_array($key, ['is_active', 'is_featured'])) {
+                                return ($value == 1 || $value === true || $value === '1') ? 'Ya' : 'Tidak';
+                            }
+
+                            // Timestamps
+                            if (strpos($key, '_at') !== false) {
+                                try {
+                                    return \Carbon\Carbon::parse($value)->format('d M Y H:i');
+                                } catch (\Throwable $e) {
+                                    return $value;
+                                }
+                            }
+
+                            return $value;
+                        };
+                    @endphp
+                    @foreach($keys as $key)
+                        @php
+                            $b = $before[$key] ?? null;
+                            $a = $after[$key] ?? null;
+
+                            // Friendly labels for common fields
+                            $labels = [
+                                'id' => 'ID',
+                                'name' => 'Judul',
+                                'id_category' => 'Kategori',
+                                'level' => 'Level',
+                                'price' => 'Harga',
+                                'original_price' => 'Harga Diskon',
+                                'discount_price' => 'Harga Diskon',
+                                'short_description' => 'Deskripsi Singkat',
+                                'description' => 'Deskripsi Lengkap',
+                                'duration' => 'Durasi',
+                                'total_lessons' => 'Total Pelajaran',
+                                'is_active' => 'Aktif',
+                                'is_featured' => 'Featured',
+                                'created_at' => 'Dibuat',
+                                'updated_at' => 'Diperbarui',
+                                'thumbnail' => 'Thumbnail',
+                                'image' => 'Gambar',
+                                'course_by' => 'Pembuat',
+                            ];
+
+                            $label = $labels[$key] ?? ucwords(str_replace('_', ' ', $key));
+                        @endphp
+                        @if($b != $a)
+                        <tr>
+                            <td style="padding:8px 12px;border-bottom:1px solid #f3f4f6;color:#111827;font-weight:600;">{{ $label }}</td>
+                            <td style="padding:8px 12px;border-bottom:1px solid #f3f4f6;color:#6b7280;">{{ $formatValue($key, $b) }}</td>
+                            <td style="padding:8px 12px;border-bottom:1px solid #f3f4f6;color:#0f172a;">{{ $formatValue($key, $a) }}</td>
+                        </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+@endif
+
 <!-- Filter Section -->
 <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04);padding:24px;margin-bottom:24px;">
     <form method="GET" style="display:flex;gap:16px;align-items:end;flex-wrap:wrap;">
@@ -62,8 +170,37 @@
                style="background:#6b7280;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin-left:8px;">
                 Reset
             </a>
+            <button type="button" onclick="openCategoryManager()" 
+                    style="background:#ef4444;color:white;padding:12px 20px;border:none;border-radius:8px;font-weight:600;margin-left:8px;cursor:pointer;">
+                Kelola Kategori
+            </button>
         </div>
     </form>
+</div>
+
+<!-- Category Manager Modal -->
+<div id="category-manager" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:8px;max-width:700px;width:100%;padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <h3 style="margin:0;font-size:1.25rem;color:#111827;">Kelola Kategori E-course</h3>
+            <button onclick="closeCategoryManager()" style="background:#f3f4f6;border:none;padding:8px 10px;border-radius:6px;cursor:pointer;">Tutup</button>
+        </div>
+        <div id="category-list" style="max-height:360px;overflow:auto;padding-right:8px;">
+            @foreach(\App\Models\Category::orderBy('name')->get() as $cat)
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #f3f4f6;">
+                    <div>{{ $cat->name }} <small style="color:#6b7280;margin-left:8px;">(ID: {{ $cat->id_category }})</small></div>
+                    <div>
+                        <button onclick="deleteCategory({{ $cat->id_category }})" style="background:#ef4444;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">
+                            Hapus
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <div style="text-align:right;margin-top:12px;">
+            <button onclick="closeCategoryManager()" style="background:#6b7280;color:white;padding:8px 12px;border-radius:6px;border:none;">Selesai</button>
+        </div>
+    </div>
 </div>
 
 <!-- E-course Table -->
@@ -86,9 +223,10 @@
                     @foreach($ecourses as $ecourse)
                     <tr style="border-bottom:1px solid #f3f4f6;">
                         <td style="padding:16px;">
-                            @if($ecourse->thumbnail)
-                                <img src="{{ Storage::url($ecourse->thumbnail) }}" 
-                                     alt="{{ $ecourse->title }}"
+                            @php $adminThumb = $ecourse->image_url ?? null; @endphp
+                            @if($adminThumb)
+                                <img src="{{ getEcourseImageUrl($adminThumb) }}" 
+                                     alt="{{ $ecourse->name }}"
                                      style="width:60px;height:40px;object-fit:cover;border-radius:6px;">
                             @else
                                 <div style="width:60px;height:40px;background:#e5e7eb;border-radius:6px;display:flex;align-items:center;justify-content:center;">
@@ -100,7 +238,7 @@
                         </td>
                         <td style="padding:16px;">
                             <div>
-                                <h3 style="font-weight:600;color:#111827;margin-bottom:4px;">{{ $ecourse->title }}</h3>
+                                <h3 style="font-weight:600;color:#111827;margin-bottom:4px;">{{ $ecourse->name }}</h3>
                                 <p style="color:#6b7280;font-size:14px;">{{ Str::limit($ecourse->short_description, 50) }}</p>
                             </div>
                         </td>
@@ -108,11 +246,25 @@
                             <span style="background:#e0e7ff;color:#3730a3;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:500;">
                                 {{-- Show display label if mapping exists, otherwise show stored value --}}
                                 @php
-                                    // If this ecourse belongs to Film or Content Creation, show combined label
-                                    if (in_array($ecourse->category, ['Film', 'Content Creation'])) {
+                                    // Normalize category value: it may be stored as a string/id or loaded as a Category model
+                                    $catValue = null;
+                                    if (is_object($ecourse->category)) {
+                                        // If relation is loaded as a Category model, prefer its name, then id
+                                        $catValue = $ecourse->category->name ?? ($ecourse->category->id ?? null);
+                                    } else {
+                                        $catValue = $ecourse->category;
+                                    }
+
+                                    // Show combined label for Film / Content Creation
+                                    if ($catValue && in_array($catValue, ['Film', 'Content Creation'])) {
                                         echo 'Film & Konten Kreator';
                                     } else {
-                                        echo isset($categories[$ecourse->category]) ? $categories[$ecourse->category] : $ecourse->category;
+                                        // If $categories mapping uses ids as keys, try to resolve; otherwise fall back to raw value
+                                        if ($catValue !== null && isset($categories[$catValue])) {
+                                            echo $categories[$catValue];
+                                        } else {
+                                            echo $catValue ?? '-';
+                                        }
                                     }
                                 @endphp
                             </span>
@@ -135,11 +287,11 @@
                         </td>
                         <td style="padding:16px;">
                             <div style="display:flex;flex-direction:column;gap:4px;">
-                                <button onclick="toggleActive({{ $ecourse->id }})" 
+                                <button onclick="toggleActive({{ $ecourse->id_course }})" 
                                         style="background:{{ $ecourse->is_active ? '#10b981' : '#ef4444' }};color:white;padding:4px 8px;border:none;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;border:none;">
                                     {{ $ecourse->is_active ? 'Aktif' : 'Tidak Aktif' }}
                                 </button>
-                                <button onclick="toggleFeatured({{ $ecourse->id }})" 
+                                <button onclick="toggleFeatured({{ $ecourse->id_course }})" 
                                         style="background:{{ $ecourse->is_featured ? '#f59e0b' : '#6b7280' }};color:white;padding:4px 8px;border:none;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;">
                                     {{ $ecourse->is_featured ? 'Featured' : 'Normal' }}
                                 </button>
@@ -147,7 +299,7 @@
                         </td>
                         <td style="padding:16px;">
                             <div style="display:flex;gap:8px;">
-                                <a href="{{ route('admin.ecourses.show', $ecourse) }}" 
+                                          <a href="{{ route('ecourse.show', $ecourse->id_course) }}" 
                                    style="background:#3b82f6;color:white;padding:8px;border-radius:6px;text-decoration:none;">
                                     <svg style="width:16px;height:16px;" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
@@ -162,7 +314,7 @@
                                 </a>
                                 <form method="POST" action="{{ route('admin.ecourses.destroy', $ecourse) }}" 
                                       style="display:inline;" 
-                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus e-course: {{ $ecourse->title }}?')">
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus e-course: {{ $ecourse->name }}?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
@@ -246,6 +398,33 @@ function toggleFeatured(id) {
         console.error('Error:', error);
         alert('Terjadi kesalahan. Silakan refresh halaman dan coba lagi.');
     });
+}
+
+function openCategoryManager() {
+    document.getElementById('category-manager').style.display = 'flex';
+}
+
+function closeCategoryManager() {
+    document.getElementById('category-manager').style.display = 'none';
+}
+
+function deleteCategory(id) {
+    if (!confirm('Hapus kategori ini? Pastikan tidak ada e-course menggunakan kategori ini.')) return;
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    fetch(`/admin/categories/${id}`, {
+        method: 'DELETE',
+        headers: { 'X-CSRF-TOKEN': token, 'Accept': 'application/json' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message || 'Kategori dihapus');
+            location.reload();
+        } else {
+            alert(data.message || 'Gagal menghapus kategori');
+        }
+    })
+    .catch(err => { console.error(err); alert('Terjadi kesalahan'); });
 }
 </script>
 @endsection

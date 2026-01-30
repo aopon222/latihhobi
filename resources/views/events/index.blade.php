@@ -14,31 +14,34 @@
     <!-- Event Categories -->
     <section class="event-categories">
         <div class="event-container">
+            <h2>Event Terbaru</h2>
             <div class="event-grid">
+                @php
+                    $featuredEvents = \App\Models\Event::published()->featured()->take(3)->get();
+                    if($featuredEvents->isEmpty()) {
+                        $featuredEvents = \App\Models\Event::published()->take(3)->get();
+                    }
+                @endphp
+                @foreach($featuredEvents as $event)
                 <div class="event-category">
                     <div class="event-icon">
-                        <span class="event-emoji">🏆</span>
+                        <span class="event-emoji">
+                            @if($event->type == 'workshop')
+                                💼
+                            @elseif($event->type == 'competition')
+                                🏆
+                            @elseif($event->type == 'seminar')
+                                🎓
+                            @else
+                                📅
+                            @endif
+                        </span>
                     </div>
-                    <h3>LHEC IV 2025</h3>
-                    <p>Kompetisi robotik tingkat nasional yang menantang kreativitas dan inovasi anak-anak Indonesia</p>
-                    <a href="#lhec" class="btn-event">Lihat Detail</a>
+                    <h3>{{ $event->title }}</h3>
+                    <p>{{ Str::limit($event->short_description ?? $event->description, 120) }}</p>
+                    <a href="{{ route('events.show', $event) }}" class="btn-event">Lihat Detail</a>
                 </div>
-                <div class="event-category">
-                    <div class="event-icon">
-                        <span class="event-emoji">💼</span>
-                    </div>
-                    <h3>WORKSHOP & BOOTCAMP</h3>
-                    <p>Program intensif untuk mengembangkan keterampilan dalam berbagai bidang teknologi dan kreativitas</p>
-                    <a href="#workshop" class="btn-event">Lihat Detail</a>
-                </div>
-                <div class="event-category">
-                    <div class="event-icon">
-                        <span class="event-emoji">🎉</span>
-                    </div>
-                    <h3>HOLIDAY FUN CLASS</h3>
-                    <p>Kelas seru selama liburan sekolah untuk mengisi waktu dengan kegiatan yang bermanfaat dan menyenangkan</p>
-                    <a href="#holiday" class="btn-event">Lihat Detail</a>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -58,7 +61,7 @@
                         <h4>{{ $event->title }}</h4>
                         <p>{{ Str::limit($event->short_description ?? $event->description, 100) }}</p>
                         <span class="event-status">
-                            @if($event->is_free)
+                            @if($event->price == 0 || $event->price == null)
                                 GRATIS
                             @else
                                 Rp{{ number_format($event->price, 0, ',', '.') }}

@@ -50,7 +50,12 @@ class AuthController extends Controller
             // Update last login
             Auth::user()->update(['login_terakhir' => now()]);
 
-            return redirect()->intended('/dashboard')->with('success', 'Login berhasil!');
+            // Redirect admin to admin dashboard, others to regular dashboard
+            $redirectTo = (Auth::user()->email === 'multimedia.latihhobi@gmail.com') 
+                ? '/admin/dashboard' 
+                : '/dashboard';
+
+            return redirect()->intended($redirectTo)->with('success', 'Login berhasil!');
         }
 
         return redirect()->back()
