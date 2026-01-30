@@ -25,17 +25,8 @@ class ImageHelper
             return Storage::disk('public')->url($imagePath);
         }
 
-        // Otherwise, try to get from public/images folder first, then fallback to storage
-        if (file_exists(public_path('images/' . $imagePath))) {
-            return asset('images/' . $imagePath);
-        }
-
-        // Try storage as last resort
-        if (Storage::disk('public')->exists($imagePath)) {
-            return Storage::disk('public')->url($imagePath);
-        }
-
-        // Return fallback
-        return asset('images/' . $fallback);
+        // Otherwise, image is in public/images folder (old images)
+        // Just return asset URL - Laravel will handle 404 if file doesn't exist
+        return asset('images/' . $imagePath);
     }
 }
