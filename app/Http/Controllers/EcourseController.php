@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ecourse;
 use App\Models\Category;
+use App\Models\EcourseEnrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -147,25 +148,34 @@ class EcourseController extends Controller
     public function show($id)
     {
         /**
-         * Show detail course
+         * Show detail course - bisa diakses oleh semua orang (login atau tidak)
+         * Konten kursus (materi, video) akan di-restrict di view jika user tidak memiliki akses
          */
         $course = Ecourse::findOrFail($id);
 
-        // Check if user has access (unlocked enrollment)
+        // Cek apakah user login dan memiliki akses
+        $enrollment = null;
+        $isAdmin = false;
+        
         if (auth()->check()) {
-            $enrollment = EcourseEnrollment::where('user_id', auth()->id())
-                ->where('id_course', $id)
-                ->where('is_locked', false)
-                ->first();
-
-            if (!$enrollment) {
-                return redirect()->back()->with('error', 'Anda tidak memiliki akses ke e-course ini. Silakan hubungi admin untuk mengaktifkan akses.');
+            $user = auth()->user();
+            
+            // Check if user is admin
+            if ((isset($user->role) && in_array($user->role, ['admin', 'super_admin'])) || 
+                (isset($user->is_admin) && $user->is_admin == 1)) {
+                $isAdmin = true;
             }
-        } else {
-            return redirect()->route('login')->with('error', 'Silakan login untuk mengakses e-course.');
+            
+            // Check enrollment jika bukan admin
+            if (!$isAdmin) {
+                $enrollment = EcourseEnrollment::where('user_id', $user->id)
+                    ->where('id_course', $id)
+                    ->where('is_locked', false)
+                    ->first();
+            }
         }
 
-        return view('ecourse.show', compact('course'));
+        return view('ecourse.show', compact('course', 'enrollment', 'isAdmin'));
     }
 
     public function addToCart($id)

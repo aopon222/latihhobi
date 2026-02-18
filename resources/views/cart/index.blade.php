@@ -84,8 +84,8 @@
                             <strong id="total-amount" class="text-primary">{{ 'Rp ' . number_format($total, 0, ',', '.') }}</strong>
                         </div>
                         
-                        <a href="{{ url('/checkout') }}" class="btn btn-primary btn-lg w-100">
-                            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                        <a href="javascript:void(0)" onclick="redirectToWhatsApp()" class="btn btn-primary btn-lg w-100">
+                            <i class="fa-brands fa-whatsapp me-2"></i>Proceed to Checkout via WhatsApp
                         </a>
                     </div>
                 </div>
@@ -277,6 +277,40 @@ function showAlert(type, message) {
     setTimeout(() => {
         alertDiv.remove();
     }, 5000);
+}
+
+function redirectToWhatsApp() {
+    // Get cart items and build message
+    const items = @json($cartItems ?? []);
+    const total = '{{ number_format($total ?? 0, 0, ',', '.') }}';
+    const userName = "{{ auth()->user()->name ?? 'Customer' }}";
+    const userPhone = "{{ auth()->user()->phone ?? '' }}";
+    
+    if (!items || items.length === 0) {
+        alert('Keranjang Anda kosong');
+        return;
+    }
+    
+    // Build WhatsApp message
+    let message = `Halo, saya ingin melakukan pemesanan:\n\n`;
+    message += `Nama: ${userName}\n`;
+    
+    items.forEach((item, index) => {
+        message += `${index + 1}. ${item.course.name} - Rp${number_format(item.course.price)}\n`;
+    });
+    
+    message += `\nTotal: Rp${total}\n`;
+    message += `\nMohon bantuannya untuk proses pemesanan.`;
+    
+    // WhatsApp API URL
+    const phoneNumber = '62895401070197'; // Nomor admin
+    const whatsappURL = `https://api.whatsapp.com/send/?phone=${phoneNumber}&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
+    
+    window.open(whatsappURL, '_blank');
+}
+
+function number_format(num) {
+    return num.toLocaleString('id-ID');
 }
 </script>
 @endpush

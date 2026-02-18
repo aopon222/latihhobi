@@ -1,17 +1,41 @@
 @extends('layout.app')
 @section('title', 'E-Course Film & Konten Kreator - LatihHobi')
 
+@section('head')
+    <style>
+        html {
+            overflow-x: hidden !important;
+            width: 100% !important;
+        }
+        body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+        }
+        main {
+            width: 100% !important;
+            overflow-x: hidden !important;
+        }
+    </style>
+@endsection
+
 @section('content')
     <style>
         .film-page {
             background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
             min-height: 100vh;
             padding: 120px 20px 60px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0;
         }
 
         .film-header {
             text-align: center;
             margin-bottom: 60px;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
 
         .film-header h1 {
@@ -23,14 +47,23 @@
         }
 
         .courses-container {
-            max-width: 1400px;
+            width: 100%;
             margin: 0 auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .courses-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0;
+            padding: 0;
         }
 
         .film-card {
@@ -44,6 +77,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            min-height: 480px;
         }
 
         .film-card:hover {
@@ -53,22 +87,22 @@
 
         .film-image-wrapper {
             width: 100%;
-            height: 260px !important;
-            max-height: 260px !important;
-            background: #2c3e50;
+            height: 240px;
+            background: #f0f0f0;
             position: relative;
             overflow: hidden;
             flex-shrink: 0;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .film-image-wrapper img {
-            width: 100% !important;
-            height: 100% !important;
-            max-height: 260px !important;
-            object-fit: cover !important;
-            aspect-ratio: 16 / 9 !important;
-            display: block !important;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: #f0f0f0;
         }
 
         .film-info {
@@ -76,6 +110,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
         }
 
         .film-title {
@@ -83,6 +118,8 @@
             font-weight: 700;
             color: #2c3e50;
             margin-bottom: 8px;
+            line-height: 1.3;
+            min-height: 50px;
         }
 
         .film-instructor {
@@ -95,6 +132,7 @@
             display: flex;
             align-items: baseline;
             gap: 10px;
+            margin-bottom: 15px;
         }
 
         .current-price {
@@ -107,6 +145,12 @@
             font-size: 0.95rem;
             color: #95a5a6;
             text-decoration: line-through;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            width: 100%;
         }
 
         .no-courses {
@@ -122,13 +166,29 @@
         }
 
         @media (max-width: 768px) {
+            .film-page {
+                padding: 100px 15px 40px;
+            }
+
+            .film-header {
+                padding: 0 15px;
+            }
+
             .film-header h1 {
                 font-size: 2.5rem;
+            }
+
+            .courses-container {
+                padding: 0 15px;
             }
 
             .courses-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
+            }
+
+            .film-card {
+                min-height: auto;
             }
         }
     </style>
@@ -165,7 +225,7 @@
                     @foreach ($coursesToShow as $course)
                         <div class="film-card">
                             <div class="film-image-wrapper">
-                                <img src="{{ getEcourseImageUrl($course->image_url) }}" alt="{{ $course->name }}" style="width:100%;height:260px;max-height:260px;object-fit:cover;aspect-ratio:16/9;display:block;">
+                                <img src="{{ getEcourseImageUrl($course->image_url) }}" alt="{{ $course->name }}">
                             </div>
                             <div class="film-info">
                                 <h3 class="film-title">{{ $course->name }}</h3>
