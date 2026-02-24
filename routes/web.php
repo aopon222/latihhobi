@@ -210,8 +210,12 @@ Route::get('/inforobot', function () {
 })->name('inforobot');
 
 // Test route for error alert notification
-Route::get('/test-error', function () {
-    \Illuminate\Support\Facades\Notification::route('mail', env('ADMIN_EMAIL', 'admin@latihhobi.com'))
-        ->notify(new \App\Notifications\ErrorAlert(new \Exception('Test error for notification')));
-    return 'Test notification sent!';
+Route::get('/test-error-alert', function () {
+    try {
+        \Illuminate\Support\Facades\Notification::route('mail', env('ADMIN_EMAIL', 'admin@latihhobi.com'))
+            ->notify(new \App\Notifications\ErrorAlert(new \Exception('Test error alert dari aplikasi LatihHobi')));
+        return 'Email notifikasi error telah dikirim ke: ' . env('ADMIN_EMAIL', 'admin@latihhobi.com');
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
 });
