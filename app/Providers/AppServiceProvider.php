@@ -15,6 +15,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('files', function ($app) {
             return new \Illuminate\Filesystem\Filesystem();
         });
+
+        // Register custom exception handler
+        $this->app->singleton(
+            \Illuminate\Contracts\Debug\ExceptionHandler::class,
+            \App\Exceptions\Handler::class
+        );
     }
 
     /**

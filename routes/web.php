@@ -208,3 +208,10 @@ Route::get('/ekskul/tahsin-tahfidz', function () {
 Route::get('/inforobot', function () {
     return view('inforobot');
 })->name('inforobot');
+
+// Test route for error alert notification
+Route::get('/test-error', function () {
+    \Illuminate\Support\Facades\Notification::route('mail', env('ADMIN_EMAIL', 'admin@latihhobi.com'))
+        ->notify(new \App\Notifications\ErrorAlert(new \Exception('Test error for notification')));
+    return 'Test notification sent!';
+});

@@ -1,0 +1,163 @@
+erDiagram
+    users ||--o{ cart : "has"
+    users ||--o{ orders : "places"
+    users ||--o{ ecourse_enrollments : "enrolls in"
+    category ||--o{ course : "contains"
+    course ||--o{ cart_items : "added to"
+    course ||--o{ order_items : "ordered in"
+    course ||--o{ ecourse_enrollments : "enrolled by"
+    cart ||--o{ cart_items : "contains"
+    orders ||--o{ order_items : "contains"
+    coupon ||--o{ orders : "applied to"
+
+    users {
+        bigint id PK
+        string name
+        date ttl
+        text alamat
+        string kota
+        string provinsi
+        string kode_pos
+        string email UK
+        timestamp email_verified_at
+        string password
+        enum role
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    category {
+        int id_category PK
+        string name
+        string icon
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    course {
+        int id_course PK
+        int id_category FK
+        string name
+        string course_by
+        decimal price
+        string image_url
+        string level
+        string original_price
+        string image_thumbnail
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    cart {
+        int id_cart PK
+        bigint id_user FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    cart_items {
+        int id_cart_items PK
+        int id_cart FK
+        int id_course FK
+        int quantity
+        decimal price
+        decimal sub_total
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    coupon {
+        int id_coupon PK
+        string code UK
+        text description
+        enum discount_type
+        decimal discount_value
+        decimal min_order_amount
+        decimal max_discount
+        datetime start_date
+        datetime end_date
+        int usage_limit
+        int used_count
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    orders {
+        int id_order PK
+        bigint id_user FK
+        int id_coupon FK
+        string coupon_code
+        decimal discount_amount
+        decimal subtotal
+        decimal total_amount
+        datetime order_date
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    order_items {
+        int id_order_item PK
+        int id_order FK
+        int id_course FK
+        string course_name
+        decimal price
+        int quantity
+        decimal subtotal
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    ecourse_enrollments {
+        bigint id PK
+        bigint user_id FK
+        int id_course FK
+        string status
+        timestamp enrolled_at
+        timestamp completed_at
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    podcasts {
+        bigint id PK
+        string title
+        text description
+        string youtube_id UK
+        string thumbnail_url
+        string duration
+        string host
+        string guest
+        text topics
+        date published_date
+        int views
+        boolean is_featured
+        boolean is_active
+        int sort_order
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    events {
+        bigint id PK
+        string title
+        string slug UK
+        text description
+        string short_description
+        string link
+        string type
+        datetime start_date
+        datetime end_date
+        datetime registration_start
+        datetime registration_end
+        string location
+        text location_details
+        int max_participants
+        int current_participants
+        decimal price
+        string image
+        boolean is_featured
+        boolean is_active
+        string status
+        timestamp created_at
+        timestamp updated_at
+    }
