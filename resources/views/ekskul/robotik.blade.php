@@ -639,23 +639,6 @@
                 <div class="info-value">Ekstrakurikuler Robotik</div>
             </div>
             <div class="info-row">
-                <div class="info-label">Materi</div>
-                <div class="info-value">
-                    <ul>
-                        <li>Level Introduction : (Arthuro, Brush Gear, Sains Roket Cup, Animasi Sky Hipboo)</li>
-                        <li>Level 1 : (Robo Fan, Firefly, Sains Granat, Animasi Sharkbite)</li>
-                        <li>Level 2 : (Hemparan, Robodust, Lapindo, Animasi Dino Taco)</li>
-                        <li>Level 3 : (Avoider, Sains Volcano, Animasi Cat and Mouse)</li>
-                        <li>Level 4 : (Smart Lamp, Sains Roket, Animasi Frankong)</li>
-                        <li>Level 5 : (Soccer Bot,Sains Tenaga Kimia, Animasi Dance)</li>
-                        <li>Level 6 : (SGH, Animasi Car Parking, Simulasi Thinkercad)</li>
-                        <li>Level 7 : (SDL, Simulasi Thinkercad, Sains)</li>
-                        <li>Level 8 : (SLGA, Simulasi Thinkercad ,Elektronika Dasar)</li>
-                        <li>Level 9 : (SGH 2.0, Simulasi Thinkercad, Sains)</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="info-row">
                 <div class="info-label">Biaya</div>
                 <div class="info-value">
                     <ul>
