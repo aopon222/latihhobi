@@ -58,6 +58,23 @@ class EcourseCategoryViewService
 @extends('layout.app')
 @section('title', 'E-Course {$categoryName} - LatihHobi')
 
+@section('head')
+    <style>
+        html {
+            overflow-x: hidden !important;
+            width: 100% !important;
+        }
+        body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+        }
+        main {
+            width: 100% !important;
+            overflow-x: hidden !important;
+        }
+    </style>
+@endsection
+
 @section('content')
     <style>
         .ecourse-category-page {
@@ -101,6 +118,7 @@ class EcourseCategoryViewService
             display: flex;
             flex-direction: column;
             height: 100%;
+            min-height: 480px;
         }
 
         .course-card:hover {
@@ -110,17 +128,21 @@ class EcourseCategoryViewService
 
         .course-image-wrapper {
             width: 100%;
-            height: 260px !important;
-            max-height: 260px !important;
-            background: #2c3e50;
+            height: 240px;
+            background: #f0f0f0;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .course-image-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            display: block;
+            background: #f0f0f0;
         }
 
         .course-info {
@@ -206,9 +228,8 @@ class EcourseCategoryViewService
                     @foreach(\$courseList as \$course)
                         <div class="course-card">
                             <div class="course-image-wrapper">
-                                <img src="{{ asset('images/' . (\$course->image_url ?? 'placeholder-gallery-1.svg')) }}" 
-                                     alt="{{ \$course->name }}" 
-                                     onerror="this.src='{{ asset('images/placeholder-gallery-1.svg') }}'">
+                                <img src="{{ getEcourseImageUrl(\$course->image_url) }}" 
+                                     alt="{{ \$course->name }}">
                             </div>
                             <div class="course-info">
                                 <div>

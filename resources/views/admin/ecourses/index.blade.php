@@ -223,11 +223,15 @@
                     @foreach($ecourses as $ecourse)
                     <tr style="border-bottom:1px solid #f3f4f6;">
                         <td style="padding:16px;">
-                            @php $adminThumb = $ecourse->image_url ?? null; @endphp
+                            @php 
+                                $adminThumb = $ecourse->image_url ?? null;
+                                $thumbDebug = \App\Helpers\ImageHelper::debugImagePath($adminThumb);
+                            @endphp
                             @if($adminThumb)
                                 <img src="{{ getEcourseImageUrl($adminThumb) }}" 
                                      alt="{{ $ecourse->name }}"
-                                     style="width:120px;height:80px;object-fit:cover;border-radius:6px;">
+                                     style="width:120px;height:80px;object-fit:cover;border-radius:6px;"
+                                     title="Path: {{ $adminThumb }} | Storage: {{ $thumbDebug['storage_exists'] ? '✓' : '✗' }} | Public: {{ $thumbDebug['public_exists'] ? '✓' : '✗' }}">
                             @else
                                 <div style="width:120px;height:80px;background:#e5e7eb;border-radius:6px;display:flex;align-items:center;justify-content:center;">
                                     <svg style="width:40px;height:40px;color:#9ca3af;" fill="currentColor" viewBox="0 0 20 20">

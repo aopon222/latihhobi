@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'mailjet'),
 
     /*
     |--------------------------------------------------------------------------
@@ -47,6 +47,16 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+        ],
+
+        'mailjet' => [
+            'transport' => 'smtp',
+            'host' => 'in-v3.mailjet.com',
+            'port' => 587,
+            'encryption' => 'tls',
+            'username' => env('MAILJET_API_KEY'),
+            'password' => env('MAILJET_SECRET_KEY'),
+            'timeout' => null,
         ],
 
         'ses' => [

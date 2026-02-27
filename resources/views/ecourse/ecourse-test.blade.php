@@ -53,17 +53,21 @@
 
         .course-image-wrapper {
             width: 100%;
-            height: 260px !important;
-            max-height: 260px !important;
-            background: #2c3e50;
+            height: 240px;
+            background: #f0f0f0;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .course-image-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            display: block;
+            background: #f0f0f0;
         }
 
         .course-info {

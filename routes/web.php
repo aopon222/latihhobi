@@ -44,6 +44,10 @@ Route::get('/ecourse/category/{slug}', [EcourseController::class, 'category'])->
 Route::get('/ecourse/{id}', [EcourseController::class, 'show'])->name('ecourse.show');
 Route::post('/ecourse/{id}/add-to-cart', [EcourseController::class, 'addToCart'])->name('ecourse.addToCart')->middleware('auth');
 
+// E-Course: Learn (halaman belajar untuk siswa enrolled)
+Route::get('/ecourse/{id}/learn', [EcourseController::class, 'learn'])->name('ecourse.learn')->middleware('auth');
+Route::post('/ecourse/material/{materialId}/complete', [EcourseController::class, 'markComplete'])->name('ecourse.material.complete')->middleware('auth');
+
 // Web cart page (show items)
 Route::get('/cart', [App\Http\Controllers\WebCartController::class, 'index'])->name('cart.index')->middleware('auth');
 Route::get('/cart-data', [App\Http\Controllers\WebCartController::class, 'getCartData'])->name('cart.data');
@@ -176,6 +180,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Category management (delete only if unused)
     Route::delete('categories/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])
         ->name('categories.destroy');
+
+    // E-course material management routes
+    Route::post('ecourses/weeks/{weekId}', [App\Http\Controllers\Admin\EcourseController::class, 'updateWeek'])->name('ecourses.updateWeek');
+    Route::post('ecourses/weeks/{weekId}/materials', [App\Http\Controllers\Admin\EcourseController::class, 'storeMaterial'])->name('ecourses.storeMaterial');
+    Route::get('ecourses/weeks/{weekId}', [App\Http\Controllers\Admin\EcourseController::class, 'showWeek'])->name('ecourses.showWeek');
+    Route::get('ecourses/materials/{materialId}', [App\Http\Controllers\Admin\EcourseController::class, 'showMaterial'])->name('ecourses.showMaterial');
+    Route::put('ecourses/materials/{materialId}', [App\Http\Controllers\Admin\EcourseController::class, 'updateMaterial'])->name('ecourses.updateMaterial');
+    Route::delete('ecourses/materials/{materialId}', [App\Http\Controllers\Admin\EcourseController::class, 'destroyMaterial'])->name('ecourses.destroyMaterial');
 
     // Discounts overview - show all e-courses that have a discount (original_price > price)
     Route::get('discounts', function () {

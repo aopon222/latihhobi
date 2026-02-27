@@ -17,6 +17,7 @@ class Ecourse extends Model
         'original_price',
         'image_url',
         'level',
+        'total_weeks',
     ];
 
     // Laravel otomatis pakai created_at dan updated_at
@@ -50,5 +51,28 @@ class Ecourse extends Model
     public function enrollments()
     {
         return $this->hasMany(\App\Models\EcourseEnrollment::class, 'ecourse_id', 'id_course');
+    }
+
+    /**
+     * Weeks relation - each week contains materials
+     */
+    public function weeks()
+    {
+        return $this->hasMany(\App\Models\EcourseWeek::class, 'ecourse_id', 'id_course')->orderBy('week_number');
+    }
+
+    /**
+     * Get all materials across all weeks
+     */
+    public function allMaterials()
+    {
+        return $this->hasManyThrough(
+            \App\Models\EcourseMaterial::class,
+            \App\Models\EcourseWeek::class,
+            'ecourse_id',
+            'week_id',
+            'id_course',
+            'id'
+        );
     }
 }

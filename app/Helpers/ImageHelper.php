@@ -29,4 +29,41 @@ class ImageHelper
         // Just return asset URL - Laravel will handle 404 if file doesn't exist
         return asset('images/' . $imagePath);
     }
+
+    /**
+     * Debug helper to check if image file exists in storage or public
+     * 
+     * @param string|null $imagePath
+     * @return array
+     */
+    public static function debugImagePath(?string $imagePath): array
+    {
+        $result = [
+            'path' => $imagePath,
+            'storage_exists' => false,
+            'public_exists' => false,
+            'storage_path' => null,
+            'public_path' => null,
+            'final_url' => null,
+        ];
+
+        if (!$imagePath) {
+            return $result;
+        }
+
+        // Check storage path
+        $storagePath = storage_path('app/public/' . $imagePath);
+        $result['storage_exists'] = file_exists($storagePath);
+        $result['storage_path'] = $storagePath;
+
+        // Check public path (for old images)
+        $publicPath = public_path('images/' . $imagePath);
+        $result['public_exists'] = file_exists($publicPath);
+        $result['public_path'] = $publicPath;
+
+        // Get final URL
+        $result['final_url'] = self::getEcourseImageUrl($imagePath);
+
+        return $result;
+    }
 }

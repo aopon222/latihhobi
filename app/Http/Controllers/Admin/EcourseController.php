@@ -136,6 +136,7 @@ class EcourseController extends Controller
             'price' => $validated['price'] ?? $request->input('price'),
             'original_price' => $validated['original_price'] ?? $request->input('original_price'),
             'level' => $validated['level'] ?? $request->input('level'),
+            'total_weeks' => $validated['total_weeks'] ?? $request->input('total_weeks', 4),
         ];
 
         // Handle uploaded image file if present and set image_url
@@ -148,6 +149,17 @@ class EcourseController extends Controller
 
         $ecourse = Ecourse::create($data);
 
+        // Create weeks based on total_weeks
+        $totalWeeks = $data['total_weeks'] ?? 4;
+        for ($i = 1; $i <= $totalWeeks; $i++) {
+            \App\Models\EcourseWeek::create([
+                'ecourse_id' => $ecourse->id_course,
+                'week_number' => $i,
+                'title' => 'Minggu ke-' . $i,
+                'description' => 'Materi untuk minggu ke-' . $i,
+            ]);
+        }
+
         return redirect()->route('admin.ecourses.index')
             ->with('success', 'E-course berhasil dibuat!');
     }
@@ -158,7 +170,7 @@ class EcourseController extends Controller
     public function show(Ecourse $ecourse)
     {
         // Only eager-load relations that have corresponding tables to avoid QueryException
-        $relations = ['enrollments'];
+        $relations = ['enrollments', 'weeks.materials'];
         try {
             if (Schema::hasTable('course_content') || Schema::hasTable('ecourse_lessons')) {
                 $relations[] = 'lessons';
@@ -186,7 +198,124 @@ class EcourseController extends Controller
             $enrollmentsTableExists = false;
         }
 
-        return view('admin.ecourses.show', compact('ecourse', 'lessonsTableExists', 'enrollmentsTableExists'));
+        try {
+            $weeksTableExists = Schema::hasTable('ecourse_weeks');
+        } catch (\Throwable $e) {
+            $weeksTableExists = false;
+        }
+
+        return view('admin.ecourses.show', compact('ecourse', 'lessonsTableExists', 'enrollmentsTableExists', 'weeksTableExists'));
+    }
+
+    /**
+     * Show week information (for AJAX)
+     */
+    public function showWeek($weekId)
+    {
+        $week = \App\Models\EcourseWeek::findOrFail($weekId);
+        return response()->json($week);
+    }
+
+    /**
+     * Show material information (for AJAX)
+     */
+    public function showMaterial($materialId)
+    {
+        $material = \App\Models\EcourseMaterial::findOrFail($materialId);
+        return response()->json($material);
+    }
+
+    /**
+     * Update week information
+     */
+    public function updateWeek(Request $request, $weekId)
+    {
+        $week = \App\Models\EcourseWeek::findOrFail($weekId);
+        
+        $week->update([
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'week' => $week]);
+        }
+
+        return redirect()->back()->with('success', 'Minggu berhasil diperbarui!');
+    }
+
+    /**
+     * Add material to a week
+     */
+    public function storeMaterial(Request $request, $weekId)
+    {
+        $week = \App\Models\EcourseWeek::findOrFail($weekId);
+
+        $data = [
+            'week_id' => $week->id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'type' => $request->type,
+            'video_url' => $request->video_url,
+            'sort_order' => $request->sort_order ?? 0,
+        ];
+
+        // Handle file upload
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('ecourse_materials', 'public');
+            $data['file_path'] = $path;
+            $data['file_name'] = $request->file('file')->getClientOriginalName();
+        }
+
+        \App\Models\EcourseMaterial::create($data);
+
+        return redirect()->back()->with('success', 'Materi berhasil ditambahkan!');
+    }
+
+    /**
+     * Update material
+     */
+    public function updateMaterial(Request $request, $materialId)
+    {
+        $material = \App\Models\EcourseMaterial::findOrFail($materialId);
+
+        $data = [
+            'title' => $request->title,
+            'description' => $request->description,
+            'type' => $request->type,
+            'video_url' => $request->video_url,
+            'sort_order' => $request->sort_order ?? 0,
+        ];
+
+        // Handle file upload
+        if ($request->hasFile('file')) {
+            if ($material->file_path) {
+                Storage::disk('public')->delete($material->file_path);
+            }
+            $path = $request->file('file')->store('ecourse_materials', 'public');
+            $data['file_path'] = $path;
+            $data['file_name'] = $request->file('file')->getClientOriginalName();
+        }
+
+        $material->update($data);
+
+        return redirect()->back()->with('success', 'Materi berhasil diperbarui!');
+    }
+
+    /**
+     * Delete material
+     */
+    public function destroyMaterial($materialId)
+    {
+        $material = \App\Models\EcourseMaterial::findOrFail($materialId);
+
+        if ($material->file_path) {
+            Storage::disk('public')->delete($material->file_path);
+        }
+
+        $material->delete();
+
+        return redirect()->back()->with('success', 'Materi berhasil dihapus!');
     }
 
     /**

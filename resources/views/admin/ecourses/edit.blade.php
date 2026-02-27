@@ -45,23 +45,54 @@
             <h3 style="margin:0 0 8px 0;font-weight:700;color:#111827;">Nilai Saat Ini (sebelum perubahan)</h3>
             <div style="display:flex;gap:16px;flex-wrap:wrap;">
                 <div style="min-width:200px;">
-                    <strong>Judul:</strong>
-                    <div>{{ $ecourse->name }}</div>
+                    <span style="font-size:12px;color:#6b7280;">Nama:</span>
+                    <div style="font-weight:600;">{{ $ecourse->name }}</div>
                 </div>
-                <div style="min-width:160px;">
-                    <strong>Kategori:</strong>
-                    <div>@php echo is_object($ecourse->category) ? ($ecourse->category->name ?? '-') : ($ecourse->category ?? ($ecourse->id_category ?? '-')); @endphp</div>
+                <div style="min-width:150px;">
+                    <span style="font-size:12px;color:#6b7280;">Harga:</span>
+                    <div style="font-weight:600;">Rp {{ number_format($ecourse->price, 0, ',', '.') }}</div>
                 </div>
-                <div style="min-width:160px;">
-                    <strong>Level:</strong>
-                    <div>{{ $ecourse->level ?? '-' }}</div>
-                </div>
-                <div style="min-width:160px;">
-                    <strong>Harga:</strong>
-                    <div>Rp {{ number_format($ecourse->price ?? 0, 0, ',', '.') }}</div>
+                <div style="min-width:150px;">
+                    <span style="font-size:12px;color:#6b7280;">Level:</span>
+                    <div style="font-weight:600;">{{ $ecourse->level ?? '-' }}</div>
                 </div>
             </div>
         </div>
+
+        <!-- Current Image Display with Debug Info -->
+        @php 
+            $adminMain = $ecourse->image_url ?? null;
+            $mainDebug = \App\Helpers\ImageHelper::debugImagePath($adminMain);
+        @endphp
+        @if($adminMain)
+        <div style="margin-bottom:24px;padding:16px;border:1px solid #e5e7eb;border-radius:8px;background:#f0fdf4;">
+            <h4 style="margin:0 0 12px 0;font-weight:600;color:#166534;">Gambar Saat Ini</h4>
+            <div style="display:flex;gap:16px;align-items:start;">
+                <img src="{{ getEcourseImageUrl($adminMain) }}" 
+                     alt="Current Image"
+                     style="width:200px;height:150px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;">
+                <div style="flex:1;">
+                    <div style="font-size:13px;margin-bottom:4px;">
+                        <strong>Path di Database:</strong> {{ $adminMain }}
+                    </div>
+                    <div style="font-size:13px;margin-bottom:4px;color:{{ $mainDebug['storage_exists'] ? '#166534' : '#dc2626' }};">
+                        <strong>Storage (course_images):</strong> {{ $mainDebug['storage_exists'] ? '✓ Ditemukan' : '✗ Tidak Ditemukan' }}
+                    </div>
+                    <div style="font-size:13px;margin-bottom:4px;color:{{ $mainDebug['public_exists'] ? '#166534' : '#dc2626' }};">
+                        <strong>Public (images):</strong> {{ $mainDebug['public_exists'] ? '✓ Ditemukan' : '✗ Tidak Ditemukan' }}
+                    </div>
+                    <div style="font-size:13px;margin-bottom:8px;background:#e0e7ff;padding:8px;border-radius:4px;">
+                        <strong>URL Akhir:</strong> <span style="word-break:break-all;">{{ $mainDebug['final_url'] }}</span>
+                    </div>
+                    @if(!$mainDebug['storage_exists'] && !$mainDebug['public_exists'])
+                    <div style="background:#fef2f2;border:1px solid #fecaca;padding:8px;border-radius:4px;color:#dc2626;font-size:13px;">
+                        ⚠️ <strong>Peringatan:</strong> File gambar tidak ditemukan! Silakan upload ulang gambar.
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @endif
         
         <!-- Basic Information -->
         <div style="margin-bottom:32px;">
@@ -80,278 +111,89 @@
                 
                 <div>
                     <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Kategori *</label>
-                    <div style="display:flex;gap:8px;align-items:flex-start;">
-                        <div style="flex:1;">
-                            <select name="id_category" id="category-select"
-                                    style="width:100%;padding:12px;border:1px solid {{ $errors->has('id_category') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
-                                <option value="">Pilih Kategori atau Buat Baru</option>
-                                @foreach($categories as $value => $label)
-                                    <option value="{{ $value }}" {{ old('id_category', is_object($ecourse->category) ? ($ecourse->category->id_category ?? '') : $ecourse->id_category) == $value ? 'selected' : '' }}>
-                                        {{ $label }}
-                                    </option>
-                                @endforeach
-                                <option value="__new__" style="color:#2563eb;font-weight:600;">+ Buat Kategori Baru</option>
-                            </select>
-                            @error('id_category')
-                                <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    
-                    <!-- Hidden input for new category name -->
-                    <input type="hidden" name="new_category_name" id="new-category-name" value="">
-                    
-                    <!-- Modal for creating new category -->
-                    <div id="category-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
-                        <div style="background:white;border-radius:12px;padding:32px;max-width:400px;width:90%;">
-                            <h3 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;">Buat Kategori Baru</h3>
-                            <div style="margin-bottom:24px;">
-                                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Nama Kategori *</label>
-                                <input type="text" id="new-category-input" placeholder="Contoh: Web Development"
-                                       style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;">
-                                <p id="category-error" style="color:#ef4444;font-size:12px;margin-top:4px;display:none;"></p>
-                            </div>
-                            <div style="display:flex;gap:12px;justify-content:flex-end;">
-                                <button type="button" id="cancel-category" style="background:#6b7280;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
-                                    Batal
-                                </button>
-                                <button type="button" id="submit-category" style="background:#2563eb;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
-                                    Buat
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    (function() {
-                        const categorySelect = document.getElementById('category-select');
-                        const categoryModal = document.getElementById('category-modal');
-                        const newCategoryInput = document.getElementById('new-category-input');
-                        const categoryError = document.getElementById('category-error');
-                        const submitBtn = document.getElementById('submit-category');
-                        const cancelBtn = document.getElementById('cancel-category');
-                        const newCategoryNameInput = document.getElementById('new-category-name');
-                        
-                        categorySelect.addEventListener('change', function(e) {
-                            if (this.value === '__new__') {
-                                categoryModal.style.display = 'flex';
-                                newCategoryInput.focus();
-                            }
-                        });
-                        
-                        cancelBtn.addEventListener('click', function() {
-                            categoryModal.style.display = 'none';
-                            categorySelect.value = '';
-                            newCategoryInput.value = '';
-                            categoryError.style.display = 'none';
-                        });
-                        
-                        submitBtn.addEventListener('click', function() {
-                            const categoryName = newCategoryInput.value.trim();
-                            if (!categoryName) {
-                                categoryError.textContent = 'Nama kategori tidak boleh kosong';
-                                categoryError.style.display = 'block';
-                                return;
-                            }
-                            if (categoryName.length > 100) {
-                                categoryError.textContent = 'Nama kategori maksimal 100 karakter';
-                                categoryError.style.display = 'block';
-                                return;
-                            }
-                            // Store the new category name in hidden input
-                            newCategoryNameInput.value = categoryName;
-                            categoryModal.style.display = 'none';
-                            // Update select display to show new category
-                            categorySelect.innerHTML = '<option value="">✓ Kategori baru: ' + categoryName + '</option>' + categorySelect.innerHTML;
-                            categorySelect.value = '';
-                            newCategoryInput.value = '';
-                            categoryError.style.display = 'none';
-                        });
-                        
-                        // Allow Enter key to submit
-                        newCategoryInput.addEventListener('keypress', function(e) {
-                            if (e.key === 'Enter') {
-                                submitBtn.click();
-                            }
-                        });
-                    })();
-                </script>
-            </div>
-            
-            <div style="margin-bottom:24px;">
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Deskripsi Singkat *</label>
-                <textarea name="short_description" required rows="3"
-                          style="width:100%;padding:12px;border:1px solid {{ $errors->has('short_description') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;resize:vertical;"
-                          placeholder="Deskripsi singkat untuk preview (maksimal 500 karakter)">{{ old('short_description', $ecourse->short_description) }}</textarea>
-                @error('short_description')
-                    <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                @enderror
-            </div>
-            
-            <div style="margin-bottom:24px;">
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Deskripsi Lengkap *</label>
-                <textarea name="description" required rows="6"
-                          style="width:100%;padding:12px;border:1px solid {{ $errors->has('description') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;resize:vertical;"
-                          placeholder="Deskripsi detail tentang e-course ini">{{ old('description', $ecourse->description) }}</textarea>
-                @error('description')
-                    <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                @enderror
-            </div>
-        </div>
-
-        <!-- Course Details -->
-        <div style="margin-bottom:32px;">
-            <h2 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;border-bottom:2px solid #e5e7eb;padding-bottom:8px;">Detail Kursus</h2>
-            
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:24px;margin-bottom:24px;">
-                <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga Asli (Rp) *</label>
-                    <input type="number" id="original_price_input" name="original_price" value="{{ old('original_price', $ecourse->original_price ?? $ecourse->price) }}" required min="0"
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('original_price') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
-                           placeholder="Contoh: 500000">
-                    <p style="color:#6b7280;font-size:12px;margin-top:4px;">Harga normal sebelum diskon</p>
-                    @error('original_price')
+                    <select name="id_category" required
+                            style="width:100%;padding:12px;border:1px solid {{ $errors->has('id_category') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
+                        <option value="">Pilih Kategori</option>
+                        @foreach($categories as $value => $label)
+                            <option value="{{ $value }}" {{ old('id_category', $ecourse->id_category) == $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('id_category')
                         <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
                     @enderror
                 </div>
-                
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
                 <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Diskon (Rp)</label>
-                    <input type="number" id="discount_input" value="{{ old('discount', ($ecourse->original_price && $ecourse->price) ? max(0, floatval($ecourse->original_price) - floatval($ecourse->price)) : 0) }}" min="0"
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Instruktur/Pembuat</label>
+                    <input type="text" name="course_by" value="{{ old('course_by', $ecourse->course_by) }}"
                            style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
-                           placeholder="Contoh: 150000">
-                    <p style="color:#6b7280;font-size:12px;margin-top:4px;">Isi hanya jika ada diskon. Contoh: harga asli 500000, harga sekarang 350000 -> masukkan 150000 di sini.</p>
-                </div>
-                
-                <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga Jual (Rp) *</label>
-                    <input type="number" id="price_input" name="price" value="{{ old('price', $ecourse->price) }}" required min="0" readonly
-                           style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;background:#f9fafb;cursor:not-allowed;"
-                           placeholder="Auto-calculated">
-                    <p style="color:#10b981;font-size:12px;margin-top:4px;font-weight:600;">Otomatis = Harga Asli - Diskon</p>
-                    @error('price')
-                        <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                    @enderror
-                </div>
-                
-                <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Durasi *</label>
-                    <input type="text" name="duration" value="{{ old('duration', $ecourse->duration) }}" required
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('duration') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
-                           placeholder="Contoh: 4 Minggu">
-                    @error('duration')
-                        <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                    @enderror
-                </div>
-                
-                <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Total Pelajaran *</label>
-                    <input type="number" name="total_lessons" value="{{ old('total_lessons', $ecourse->total_lessons) }}" required min="1"
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('total_lessons') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
-                           placeholder="Contoh: 12">
-                    @error('total_lessons')
-                        <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                    @enderror
+                           placeholder="Nama instruktur">
                 </div>
                 
                 <div>
                     <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Level *</label>
                     <select name="level" required
-                            style="width:100%;padding:12px;border:1px solid {{ $errors->has('level') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
+                            style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;">
                         <option value="">Pilih Level</option>
-                        @foreach($levels as $value => $label)
-                            <option value="{{ $value }}" {{ old('level', $ecourse->level) == $value ? 'selected' : '' }}>
-                                {{ $label }}
+                        @foreach($levels as $level)
+                            <option value="{{ $level }}" {{ old('level', $ecourse->level) == $level ? 'selected' : '' }}>
+                                {{ $level }}
                             </option>
                         @endforeach
                     </select>
-                    @error('level')
-                        <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                    @enderror
+                </div>
+            </div>
+            
+            <div>
+                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Deskripsi Singkat</label>
+                <textarea name="short_description" rows="2"
+                          style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+                          placeholder="Deskripsi singkat e-course">{{ old('short_description', $ecourse->short_description) }}</textarea>
+            </div>
+        </div>
+
+        <!-- Pricing -->
+        <div style="margin-bottom:32px;">
+            <h2 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;border-bottom:2px solid #e5e7eb;padding-bottom:8px;">Harga</h2>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;">
+                <div>
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga Normal (Rp) *</label>
+                    <input type="number" id="original_price_input" name="original_price" value="{{ old('original_price', $ecourse->original_price) }}" required min="0"
+                           style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+                           placeholder="Harga normal">
                 </div>
                 
                 <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Video Demo (URL)</label>
-                    <input type="url" name="demo_video" value="{{ old('demo_video', $ecourse->demo_video) }}"
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('demo_video') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
-                           placeholder="https://youtube.com/watch?v=...">
-                    @error('demo_video')
-                        <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                    @enderror
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Diskon (Rp)</label>
+                    <input type="number" id="discount_input" name="discount" value="{{ old('discount', $ecourse->original_price - $ecourse->price) }}" min="0"
+                           style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+                           placeholder="Jumlah diskon">
                 </div>
-            </div>
-        </div>
-
-        <!-- Current Media -->
-        @php $adminMain = $ecourse->image_url ?? null; @endphp
-        @if($adminMain)
-        <div style="margin-bottom:32px;">
-            <h2 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;border-bottom:2px solid #e5e7eb;padding-bottom:8px;">Media Saat Ini</h2>
-            
-            <div style="display:grid;grid-template-columns:1fr;gap:24px;">
-                @if($adminMain)
+                
                 <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Gambar Utama Saat Ini</label>
-                    <img src="{{ getEcourseImageUrl($adminMain) }}" 
-                         alt="Current Image"
-                         style="width:100%;max-width:300px;height:200px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;">
-                </div>
-                @endif
-            </div>
-        </div>
-        @endif
-
-        <!-- Upload New Media -->
-        <div style="margin-bottom:32px;">
-            <h2 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;border-bottom:2px solid #e5e7eb;padding-bottom:8px;">Upload Media Baru</h2>
-            
-            <div style="display:grid;grid-template-columns:1fr;gap:24px;">
-                <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Gambar Utama Baru</label>
-                    <input type="file" name="image" accept="image/*"
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('image') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;">
-                    <p style="color:#6b7280;font-size:12px;margin-top:4px;">Biarkan kosong jika tidak ingin mengubah. Format: JPEG, PNG, JPG, GIF. Maksimal 2MB</p>
-                    @error('image')
-                        <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                    @enderror
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga Akhir (Rp)</label>
+                    <input type="number" id="price_input" name="price" value="{{ old('price', $ecourse->price) }}" required min="0"
+                           style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;background:#f9fafb;"
+                           readonly>
                 </div>
             </div>
         </div>
 
-        <!-- Course Content -->
+        <!-- Image Upload -->
         <div style="margin-bottom:32px;">
-            <h2 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;border-bottom:2px solid #e5e7eb;padding-bottom:8px;">Konten Kursus</h2>
+            <h2 style="font-size:1.25rem;font-weight:600;color:#374151;margin-bottom:16px;border-bottom:2px solid #e5e7eb;padding-bottom:8px;">Gambar Cover</h2>
             
-            <div style="margin-bottom:24px;">
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Prasyarat</label>
-                <textarea name="prerequisites" rows="4"
-                          style="width:100%;padding:12px;border:1px solid {{ $errors->has('prerequisites') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;resize:vertical;"
-                          placeholder="Masukkan setiap prasyarat di baris baru">{{ old('prerequisites', is_array($ecourse->prerequisites) ? implode("\n", $ecourse->prerequisites) : '') }}</textarea>
-                <p style="color:#6b7280;font-size:12px;margin-top:4px;">Pisahkan setiap prasyarat dengan baris baru</p>
-                @error('prerequisites')
-                    <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                @enderror
-            </div>
-            
-            <div style="margin-bottom:24px;">
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Hasil Pembelajaran</label>
-                <textarea name="learning_outcomes" rows="4"
-                          style="width:100%;padding:12px;border:1px solid {{ $errors->has('learning_outcomes') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;resize:vertical;"
-                          placeholder="Masukkan setiap hasil pembelajaran di baris baru">{{ old('learning_outcomes', is_array($ecourse->learning_outcomes) ? implode("\n", $ecourse->learning_outcomes) : '') }}</textarea>
-                <p style="color:#6b7280;font-size:12px;margin-top:4px;">Pisahkan setiap hasil pembelajaran dengan baris baru</p>
-                @error('learning_outcomes')
-                    <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
-                @enderror
-            </div>
-            
-            <div style="margin-bottom:24px;">
-                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Tools yang Dibutuhkan</label>
-                <textarea name="tools_needed" rows="4"
-                          style="width:100%;padding:12px;border:1px solid {{ $errors->has('tools_needed') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;resize:vertical;"
-                          placeholder="Masukkan setiap tool di baris baru">{{ old('tools_needed', is_array($ecourse->tools_needed) ? implode("\n", $ecourse->tools_needed) : '') }}</textarea>
-                <p style="color:#6b7280;font-size:12px;margin-top:4px;">Pisahkan setiap tool dengan baris baru</p>
-                @error('tools_needed')
+            <div>
+                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Upload Gambar Baru (Opsional)</label>
+                <input type="file" name="image" accept="image/*"
+                       style="width:100%;padding:12px;border:2px dashed #d1d5db;border-radius:8px;font-size:14px;background:#f9fafb;">
+                <p style="color:#6b7280;font-size:12px;margin-top:4px;">Format yang didukung: JPEG, PNG, JPG, GIF. Maksimal 2MB.</p>
+                @error('image')
                     <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
                 @enderror
             </div>

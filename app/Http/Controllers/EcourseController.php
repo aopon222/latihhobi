@@ -220,4 +220,113 @@ class EcourseController extends Controller
         $message = 'Course berhasil ditambahkan ke keranjang. <a href="' . route('cart.index') . '">Lihat Keranjang</a>';
         return redirect()->back()->with('success', $message);
     }
+
+    /**
+     * Halaman belajar untuk siswa yang sudah enroll
+     */
+    public function learn($id)
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu');
+        }
+
+        $user = auth()->user();
+        $course = Ecourse::with(['weeks.materials'])->findOrFail($id);
+
+        // Cek enrollment
+        $enrollment = EcourseEnrollment::where('user_id', $user->id)
+            ->where('id_course', $id)
+            ->where('is_locked', false)
+            ->first();
+
+        // Admin bisa akses semua course
+        $isAdmin = false;
+        if ((isset($user->role) && in_array($user->role, ['admin', 'super_admin'])) || 
+            (isset($user->is_admin) && $user->is_admin == 1)) {
+            $isAdmin = true;
+        }
+
+        // Jika bukan admin dan tidak enrollment, redirect
+        if (!$isAdmin && !$enrollment) {
+            return redirect()->route('ecourse.show', $id)
+                ->with('error', 'Anda belum terdaftar di course ini');
+        }
+
+        // Ambil progress user
+        $progressData = \App\Models\EcourseMaterialProgress::where('user_id', $user->id)
+            ->whereIn('material_id', $course->allMaterials->pluck('id'))
+            ->pluck('is_completed', 'material_id')
+            ->toArray();
+
+        // Hitung progress keseluruhan
+        $totalMaterials = $course->allMaterials->count();
+        $completedMaterials = count(array_filter($progressData));
+        $progressPercent = $totalMaterials > 0 ? round(($completedMaterials / $totalMaterials) * 100) : 0;
+
+        return view('ecourse.learn', compact('course', 'enrollment', 'progressData', 'progressPercent', 'isAdmin'));
+    }
+
+    /**
+     * Tandai materi selesai/belum selesai
+     */
+    public function markComplete(Request $request, $materialId)
+    {
+        if (!auth()->check()) {
+            return response()->json(['error' => 'Silakan login terlebih dahulu'], 401);
+        }
+
+        $user = auth()->user();
+        $material = \App\Models\EcourseMaterial::findOrFail($materialId);
+
+        // Cek enrollment
+        $enrollment = EcourseEnrollment::where('user_id', $user->id)
+            ->where('id_course', $material->week->ecourse_id)
+            ->where('is_locked', false)
+            ->first();
+
+        // Admin bisa akses semua
+        $isAdmin = false;
+        if ((isset($user->role) && in_array($user->role, ['admin', 'super_admin'])) || 
+            (isset($user->is_admin) && $user->is_admin == 1)) {
+            $isAdmin = true;
+        }
+
+        if (!$isAdmin && !$enrollment) {
+            return response()->json(['error' => 'Anda tidak memiliki akses'], 403);
+        }
+
+        $isCompleted = $request->input('is_completed', true);
+
+        $progress = \App\Models\EcourseMaterialProgress::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'material_id' => $materialId,
+            ],
+            [
+                'is_completed' => $isCompleted,
+                'completed_at' => $isCompleted ? now() : null,
+            ]
+        );
+
+        // Hitung ulang progress
+        $course = \App\Models\Ecourse::find($material->week->ecourse_id);
+        $allMaterials = $course->allMaterials;
+        
+        $progressData = \App\Models\EcourseMaterialProgress::where('user_id', $user->id)
+            ->whereIn('material_id', $allMaterials->pluck('id'))
+            ->pluck('is_completed', 'material_id')
+            ->toArray();
+
+        $totalMaterials = $allMaterials->count();
+        $completedMaterials = count(array_filter($progressData));
+        $progressPercent = $totalMaterials > 0 ? round(($completedMaterials / $totalMaterials) * 100) : 0;
+
+        return response()->json([
+            'success' => true,
+            'is_completed' => $isCompleted,
+            'progress_percent' => $progressPercent,
+            'completed_count' => $completedMaterials,
+            'total_count' => $totalMaterials,
+        ]);
+    }
 }

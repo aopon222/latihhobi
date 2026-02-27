@@ -66,9 +66,16 @@
         <!-- Course Image -->
         <div>
             @if($ecourse->image_url)
+                @php $showDebugInfo = \App\Helpers\ImageHelper::debugImagePath($ecourse->image_url); @endphp
                 <img src="{{ getEcourseImageUrl($ecourse->image_url) }}" 
                      alt="{{ $ecourse->name }}"
                      style="width:100%;height:200px;object-fit:cover;border-radius:12px;border:1px solid #e5e7eb;">
+                <!-- Debug Info -->
+                <div style="margin-top:8px;padding:8px;background:#f3f4f6;border-radius:4px;font-size:11px;">
+                    <div style="color:#6b7280;">Path: {{ $ecourse->image_url }}</div>
+                    <div style="color:{{ $showDebugInfo['storage_exists'] ? '#10b981' : '#ef4444' }};">Storage: {{ $showDebugInfo['storage_exists'] ? '✓' : '✗' }}</div>
+                    <div style="color:{{ $showDebugInfo['public_exists'] ? '#10b981' : '#ef4444' }};">Public: {{ $showDebugInfo['public_exists'] ? '✓' : '✗' }}</div>
+                </div>
             @else
                 <div style="width:100%;height:200px;background:#f3f4f6;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid #e5e7eb;">
                     <svg style="width:64px;height:64px;color:#9ca3af;" fill="currentColor" viewBox="0 0 20 20">
@@ -199,6 +206,75 @@
             </div>
         </div>
         @endif
+
+        <!-- Materi Pembelajaran -->
+        <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04);padding:32px;margin-bottom:24px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+                <h2 style="font-size:1.5rem;font-weight:700;color:#111827;margin:0;">Materi Pembelajaran</h2>
+                <a href="{{ route('admin.ecourses.edit', $ecourse) }}" style="background:#10b981;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:8px;">
+                    <svg style="width:20px;height:20px;" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                    </svg>
+                    Tambah Minggu
+                </a>
+            </div>
+
+            @if($ecourse->weeks && $ecourse->weeks->count() > 0)
+                @foreach($ecourse->weeks as $week)
+                <div style="border:1px solid #e5e7eb;border-radius:8px;padding:24px;margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                        <h3 style="font-size:1.25rem;font-weight:600;color:#111827;margin:0;">{{ $week->title }}</h3>
+                        <div style="display:flex;gap:8px;">
+                            <button onclick="editWeek({{ $week->id }})" style="background:#f59e0b;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:600;border:none;cursor:pointer;">
+                                Edit Minggu
+                            </button>
+                            <button onclick="addMaterial({{ $week->id }})" style="background:#10b981;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:600;border:none;cursor:pointer;">
+                                Tambah Materi
+                            </button>
+                        </div>
+                    </div>
+
+                    <p style="color:#6b7280;margin-bottom:16px;">{{ $week->description }}</p>
+
+                    @if($week->materials && $week->materials->count() > 0)
+                        <div style="space-y:12px;">
+                            @foreach($week->materials as $material)
+                            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid #e5e7eb;border-radius:6px;">
+                                <div>
+                                    <h4 style="font-weight:600;color:#111827;margin:0 0 4px 0;">{{ $material->title }}</h4>
+                                    <p style="color:#6b7280;margin:0;font-size:14px;">{{ $material->description }}</p>
+                                    <p style="color:#9ca3af;margin:4px 0 0 0;font-size:12px;">Tipe: {{ $material->type }} | Urutan: {{ $material->sort_order }}</p>
+                                </div>
+                                <div style="display:flex;gap:8px;">
+                                    @if($material->video_url)
+                                        <a href="{{ $material->video_url }}" target="_blank" style="background:#dc2626;color:white;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:12px;font-weight:600;">
+                                            Video
+                                        </a>
+                                    @endif
+                                    @if($material->file_path)
+                                        <a href="{{ Storage::url($material->file_path) }}" target="_blank" style="background:#6b7280;color:white;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:12px;font-weight:600;">
+                                            File
+                                        </a>
+                                    @endif
+                                    <button onclick="editMaterial({{ $material->id }})" style="background:#f59e0b;color:white;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:12px;font-weight:600;border:none;cursor:pointer;">
+                                        Edit
+                                    </button>
+                                    <button onclick="deleteMaterial({{ $material->id }})" style="background:#dc2626;color:white;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:12px;font-weight:600;border:none;cursor:pointer;">
+                                        Hapus
+                                    </button>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p style="color:#9ca3af;font-style:italic;">Belum ada materi untuk minggu ini.</p>
+                    @endif
+                </div>
+                @endforeach
+            @else
+                <p style="color:#9ca3af;font-style:italic;">Belum ada minggu pembelajaran.</p>
+            @endif
+        </div>
     </div>
 
     <!-- Sidebar -->
@@ -323,6 +399,180 @@ function toggleFeatured(id) {
         }
     })
     .catch(error => console.error('Error:', error));
+}
+</script>
+
+<!-- Modal for Adding/Editing Week -->
+<div id="weekModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+    <div style="background:white;padding:32px;border-radius:12px;width:500px;max-width:90%;">
+        <h3 id="weekModalTitle" style="font-size:1.5rem;font-weight:700;color:#111827;margin-bottom:24px;">Edit Minggu</h3>
+        <form id="weekForm" method="POST">
+            @csrf
+            <div style="margin-bottom:16px;">
+                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Judul Minggu</label>
+                <input type="text" name="title" id="weekTitle" required style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;">
+            </div>
+            <div style="margin-bottom:24px;">
+                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Deskripsi</label>
+                <textarea name="description" id="weekDescription" rows="3" style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;"></textarea>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;">
+                <button type="button" onclick="closeWeekModal()" style="background:#6b7280;color:white;padding:12px 24px;border-radius:8px;font-weight:600;border:none;cursor:pointer;">Batal</button>
+                <button type="submit" style="background:#10b981;color:white;padding:12px 24px;border-radius:8px;font-weight:600;border:none;cursor:pointer;">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for Adding/Editing Material -->
+<div id="materialModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+    <div style="background:white;padding:32px;border-radius:12px;width:600px;max-width:90%;">
+        <h3 id="materialModalTitle" style="font-size:1.5rem;font-weight:700;color:#111827;margin-bottom:24px;">Tambah Materi</h3>
+        <form id="materialForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div style="margin-bottom:16px;">
+                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Judul Materi</label>
+                <input type="text" name="title" id="materialTitle" required style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;">
+            </div>
+            <div style="margin-bottom:16px;">
+                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Deskripsi</label>
+                <textarea name="description" id="materialDescription" rows="2" style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                <div>
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Tipe</label>
+                    <select name="type" id="materialType" style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;">
+                        <option value="video">Video</option>
+                        <option value="pdf">PDF</option>
+                        <option value="document">Dokumen</option>
+                        <option value="quiz">Kuis</option>
+                        <option value="assignment">Tugas</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Urutan</label>
+                    <input type="number" name="sort_order" id="materialSortOrder" value="0" style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;">
+                </div>
+            </div>
+            <div style="margin-bottom:16px;">
+                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Video URL</label>
+                <input type="url" name="video_url" id="materialVideoUrl" placeholder="https://youtube.com/..." style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;">
+            </div>
+            <div style="margin-bottom:24px;">
+                <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">File Materi</label>
+                <input type="file" name="file" id="materialFile" style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;">
+            </div>
+            <div style="display:flex;gap:12px;justify-content:flex-end;">
+                <button type="button" onclick="closeMaterialModal()" style="background:#6b7280;color:white;padding:12px 24px;border-radius:8px;font-weight:600;border:none;cursor:pointer;">Batal</button>
+                <button type="submit" style="background:#10b981;color:white;padding:12px 24px;border-radius:8px;font-weight:600;border:none;cursor:pointer;">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function editWeek(weekId) {
+    // Fetch week data and populate modal
+    fetch(`/admin/ecourses/weeks/${weekId}`, {
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('weekTitle').value = data.title;
+        document.getElementById('weekDescription').value = data.description;
+        document.getElementById('weekForm').action = `/admin/ecourses/weeks/${weekId}`;
+        
+        // Add method override for PUT
+        let methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'PUT';
+        document.getElementById('weekForm').appendChild(methodInput);
+        
+        document.getElementById('weekModal').style.display = 'flex';
+    });
+}
+
+function addMaterial(weekId) {
+    document.getElementById('materialModalTitle').innerText = 'Tambah Materi';
+    document.getElementById('materialForm').reset();
+    document.getElementById('materialForm').action = `/admin/ecourses/weeks/${weekId}/materials`;
+    
+    // Remove method override if exists
+    let methodInput = document.querySelector('#materialForm input[name="_method"]');
+    if (methodInput) methodInput.remove();
+    
+    document.getElementById('materialModal').style.display = 'flex';
+}
+
+function editMaterial(materialId) {
+    fetch(`/admin/ecourses/materials/${materialId}`, {
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('materialModalTitle').innerText = 'Edit Materi';
+        document.getElementById('materialTitle').value = data.title;
+        document.getElementById('materialDescription').value = data.description || '';
+        document.getElementById('materialType').value = data.type;
+        document.getElementById('materialSortOrder').value = data.sort_order;
+        document.getElementById('materialVideoUrl').value = data.video_url || '';
+        document.getElementById('materialForm').action = `/admin/ecourses/materials/${materialId}`;
+        
+        // Add method override for PUT
+        let methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'PUT';
+        document.getElementById('materialForm').appendChild(methodInput);
+        
+        document.getElementById('materialModal').style.display = 'flex';
+    });
+}
+
+function deleteMaterial(materialId) {
+    if (confirm('Apakah Anda yakin ingin menghapus materi ini?')) {
+        fetch(`/admin/ecourses/materials/${materialId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+}
+
+function closeWeekModal() {
+    document.getElementById('weekModal').style.display = 'none';
+    // Remove method override
+    let methodInput = document.querySelector('#weekForm input[name="_method"]');
+    if (methodInput) methodInput.remove();
+}
+
+function closeMaterialModal() {
+    document.getElementById('materialModal').style.display = 'none';
+    // Remove method override
+    let methodInput = document.querySelector('#materialForm input[name="_method"]');
+    if (methodInput) methodInput.remove();
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target == document.getElementById('weekModal')) {
+        closeWeekModal();
+    }
+    if (event.target == document.getElementById('materialModal')) {
+        closeMaterialModal();
+    }
 }
 </script>
 @endsection
