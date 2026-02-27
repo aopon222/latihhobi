@@ -176,6 +176,26 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Category management (delete only if unused)
     Route::delete('categories/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])
         ->name('categories.destroy');
+
+    // Discounts overview - show all e-courses that have a discount (original_price > price)
+    Route::get('discounts', function () {
+        $all = \App\Models\Ecourse::all();
+
+        $discounts = $all->filter(function ($e) {
+            $orig = $e->original_price;
+            if (is_null($orig) || $orig === '') return false;
+            $origVal = is_numeric($orig) ? (float) $orig : (float) preg_replace('/[^0-9\.]/', '', $orig);
+            $priceVal = (float) $e->price;
+            return $origVal > $priceVal;
+        })->map(function ($e) {
+            $orig = is_numeric($e->original_price) ? (float) $e->original_price : (float) preg_replace('/[^0-9\.]/', '', $e->original_price);
+            $price = (float) $e->price;
+            $e->discount_amount = $orig - $price;
+            return $e;
+        })->values();
+
+        return view('admin.discounts', compact('discounts'));
+    })->name('discounts.index');
 });
 
 // Ekskul Routes

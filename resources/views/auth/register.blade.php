@@ -36,11 +36,17 @@
                 <div style="margin-bottom:18px;">
                     <input id="email" name="email" type="email" style="width:100%;padding:12px;border-radius:10px;border:1px solid #d1d5db;font-size:1rem;" value="{{ old('email') }}" required placeholder="Email">
                 </div>
-                <div style="margin-bottom:18px;">
-                    <input id="password" name="password" type="password" style="width:100%;padding:12px;border-radius:10px;border:1px solid #d1d5db;font-size:1rem;" required placeholder="Password">
+                <div style="margin-bottom:18px;position:relative;">
+                    <input id="password" name="password" type="password" style="width:100%;padding:12px 46px 12px 12px;border-radius:10px;border:1px solid #d1d5db;font-size:1rem;" required placeholder="Password">
+                    <button type="button" id="togglePassword" aria-label="Tampilkan password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#6b7280;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;">
+                        <span id="togglePasswordIcon" style="font-size:1.1rem;line-height:1;">👁️</span>
+                    </button>
                 </div>
-                <div style="margin-bottom:18px;">
-                    <input id="password_confirmation" name="password_confirmation" type="password" style="width:100%;padding:12px;border-radius:10px;border:1px solid #d1d5db;font-size:1rem;" required placeholder="Confirm Password">
+                <div style="margin-bottom:18px;position:relative;">
+                    <input id="password_confirmation" name="password_confirmation" type="password" style="width:100%;padding:12px 46px 12px 12px;border-radius:10px;border:1px solid #d1d5db;font-size:1rem;" required placeholder="Confirm Password">
+                    <button type="button" id="togglePasswordConfirmation" aria-label="Tampilkan konfirmasi password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#6b7280;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;">
+                        <span id="togglePasswordConfirmationIcon" style="font-size:1.1rem;line-height:1;">👁️</span>
+                    </button>
                 </div>
                 <button type="submit" style="width:100%;background:#2563eb;color:#fff;padding:14px 0;border:none;border-radius:10px;font-weight:700;font-size:1.1rem;box-shadow:0 2px 8px rgba(37,99,235,0.08);margin-bottom:8px;">Create account</button>
             </form>
@@ -53,4 +59,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function setupPasswordToggle(inputId, buttonId, iconId, showLabel, hideLabel) {
+            const input = document.getElementById(inputId);
+            const button = document.getElementById(buttonId);
+            const icon = document.getElementById(iconId);
+
+            if (!input || !button || !icon) {
+                return;
+            }
+
+            button.addEventListener('click', function () {
+                const isHidden = input.type === 'password';
+                input.type = isHidden ? 'text' : 'password';
+                icon.textContent = isHidden ? '🙈' : '👁️';
+                button.setAttribute('aria-label', isHidden ? hideLabel : showLabel);
+            });
+        }
+
+        setupPasswordToggle('password', 'togglePassword', 'togglePasswordIcon', 'Tampilkan password', 'Sembunyikan password');
+        setupPasswordToggle('password_confirmation', 'togglePasswordConfirmation', 'togglePasswordConfirmationIcon', 'Tampilkan konfirmasi password', 'Sembunyikan konfirmasi password');
+    });
+</script>
 @endsection

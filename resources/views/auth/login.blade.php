@@ -33,8 +33,11 @@
                 <div style="margin-bottom:18px;">
                     <input id="email" name="email" type="email" style="width:100%;padding:12px;border-radius:10px;border:1px solid #d1d5db;font-size:1rem;" value="{{ old('email') }}" required autofocus placeholder="Email">
                 </div>
-                <div style="margin-bottom:18px;">
-                    <input id="password" name="password" type="password" style="width:100%;padding:12px;border-radius:10px;border:1px solid #d1d5db;font-size:1rem;" required placeholder="Password">
+                <div style="margin-bottom:18px;position:relative;">
+                    <input id="password" name="password" type="password" style="width:100%;padding:12px 46px 12px 12px;border-radius:10px;border:1px solid #d1d5db;font-size:1rem;" required placeholder="Password">
+                    <button type="button" id="togglePassword" aria-label="Tampilkan password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#6b7280;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;">
+                        <span id="togglePasswordIcon" style="font-size:1.1rem;line-height:1;">👁️</span>
+                    </button>
                 </div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
                     <label style="display:flex;align-items:center;font-size:1rem;">
@@ -53,4 +56,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('togglePassword');
+        const toggleIcon = document.getElementById('togglePasswordIcon');
+
+        if (!passwordInput || !toggleButton || !toggleIcon) {
+            return;
+        }
+
+        toggleButton.addEventListener('click', function () {
+            const isHidden = passwordInput.type === 'password';
+            passwordInput.type = isHidden ? 'text' : 'password';
+            toggleIcon.textContent = isHidden ? '🙈' : '👁️';
+            toggleButton.setAttribute('aria-label', isHidden ? 'Sembunyikan password' : 'Tampilkan password');
+        });
+    });
+</script>
 @endsection

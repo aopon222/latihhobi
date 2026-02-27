@@ -54,6 +54,25 @@
             </div>
             
             <!-- Quick Actions -->
+            @php
+                $totalDiscount = 0;
+                $ecoursesAll = \App\Models\Ecourse::all();
+                foreach ($ecoursesAll as $ecd) {
+                    $orig = $ecd->original_price;
+                    // normalize original price (remove non-numeric chars)
+                    $origVal = 0;
+                    if (is_numeric($orig)) {
+                        $origVal = (float) $orig;
+                    } elseif (!empty($orig)) {
+                        $origVal = (float) preg_replace('/[^0-9\.]/', '', $orig);
+                    }
+                    $priceVal = (float) $ecd->price;
+                    if ($origVal > $priceVal) {
+                        $totalDiscount += ($origVal - $priceVal);
+                    }
+                }
+            @endphp
+
             <div style="margin-top:24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
                 <a href="{{ route('admin.ecourses.create') }}" style="background:#2563eb;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;">
                     + Tambah E-course
@@ -67,6 +86,12 @@
                 <a href="{{ route('admin.events.index') }}" style="background:#7c3aed;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;">
                     Kelola Event
                 </a>
+                <div style="background:transparent;padding:0;margin-left:8px;">
+                    <a href="{{ route('admin.discounts.index') }}" style="background:#a78bfa;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;">
+                        Total Diskon
+                        <span style="background:rgba(255,255,255,0.12);padding:6px 10px;border-radius:6px;font-weight:700;">Rp {{ number_format($totalDiscount,0,',','.') }}</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Recent E-courses (quick manage) -->

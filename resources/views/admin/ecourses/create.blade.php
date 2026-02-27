@@ -172,21 +172,31 @@
             
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:24px;margin-bottom:24px;">
                 <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga (Rp) *</label>
-                    <input type="number" name="price" value="{{ old('price') }}" required min="0"
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('price') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
-                           placeholder="Contoh: 150000">
-                    @error('price')
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga Asli (Rp) *</label>
+                    <input type="number" id="original_price_input" name="original_price" value="{{ old('original_price') }}" required min="0"
+                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('original_price') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
+                           placeholder="Contoh: 500000">
+                    <p style="color:#6b7280;font-size:12px;margin-top:4px;">Harga normal sebelum diskon</p>
+                    @error('original_price')
                         <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
                     @enderror
                 </div>
                 
                 <div>
-                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga Diskon (Rp)</label>
-                    <input type="number" name="original_price" value="{{ old('original_price') }}" min="0"
-                           style="width:100%;padding:12px;border:1px solid {{ $errors->has('discount_price') ? '#ef4444' : '#d1d5db' }};border-radius:8px;font-size:14px;"
-                           placeholder="Contoh: 100000">
-                    @error('original_price')
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Diskon (Rp)</label>
+                    <input type="number" id="discount_input" value="{{ old('discount', 0) }}" min="0"
+                           style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+                           placeholder="Contoh: 150000">
+                    <p style="color:#6b7280;font-size:12px;margin-top:4px;">Isi hanya jika ada diskon. Contoh: harga asli 500000, diskon 150000 -> harga jual 350000.</p>
+                </div>
+                
+                <div>
+                    <label style="display:block;font-weight:600;color:#374151;margin-bottom:8px;">Harga Jual (Rp) *</label>
+                    <input type="number" id="price_input" name="price" value="{{ old('price') }}" required min="0" readonly
+                           style="width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;background:#f9fafb;cursor:not-allowed;"
+                           placeholder="Auto-calculated">
+                    <p style="color:#10b981;font-size:12px;margin-top:4px;font-weight:600;">Otomatis = Harga Asli - Diskon</p>
+                    @error('price')
                         <p style="color:#ef4444;font-size:12px;margin-top:4px;">{{ $message }}</p>
                     @enderror
                 </div>
@@ -328,4 +338,26 @@
         </div>
     </form>
 </div>
+
+<script>
+(function() {
+    const originalPriceInput = document.getElementById('original_price_input');
+    const discountInput = document.getElementById('discount_input');
+    const priceInput = document.getElementById('price_input');
+    
+    function calculatePrice() {
+        const originalPrice = parseFloat(originalPriceInput.value) || 0;
+        const discount = parseFloat(discountInput.value) || 0;
+        const finalPrice = Math.max(0, originalPrice - discount);
+        priceInput.value = finalPrice;
+    }
+    
+    // Calculate on page load
+    calculatePrice();
+    
+    // Recalculate when inputs change
+    originalPriceInput.addEventListener('input', calculatePrice);
+    discountInput.addEventListener('input', calculatePrice);
+})();
+</script>
 @endsection
